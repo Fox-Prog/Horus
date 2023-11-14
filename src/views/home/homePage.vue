@@ -16,7 +16,36 @@
     <!-- Formulaire -->
     <div class="card">
       <v-form id="form" v-model="form" @submit.prevent="newLine()">
-        <h2>Matin</h2>
+        <v-dialog v-model="dialog">
+          <template v-slot:activator="{ props }">
+            <v-btn
+              v-bind="props"
+              class="mb-5"
+              variant="flat"
+              color="#291F43"
+              size="60"
+              block
+              ><h2>
+                {{ dayDate.toLocaleDateString() }}
+              </h2></v-btn
+            >
+          </template>
+
+          <v-container>
+            <v-row justify="space-around">
+              <v-date-picker
+                id="date-picker"
+                color="#3C2E69"
+                bg-color="#1B1525"
+                elevation="24"
+                hide-header
+                v-model="dayDate"
+                @update:model-value="dialog = false"
+              ></v-date-picker>
+            </v-row>
+          </v-container>
+        </v-dialog>
+
         <div id="morning">
           <field v-model="HstrM"></field>
           <h2>h</h2>
@@ -29,7 +58,6 @@
 
         <v-divider class="my-1"></v-divider>
 
-        <h2>Après-midi</h2>
         <div id="afternoon">
           <field v-model="HstrA"></field>
           <h2>h</h2>
@@ -40,13 +68,32 @@
           <field v-model="MstpA"></field>
         </div>
 
-        <v-divider class="my-5"></v-divider>
+        <v-divider class="my-1"></v-divider>
+
+        <formLine
+          v-for="form in formList"
+          :key="form.id"
+          :id="form.id"
+          @sendData="dataReceived"
+        ></formLine>
+
+        <v-btn
+          class="mb-5"
+          variant="outlined"
+          color="#6e56cf"
+          rounded="lg"
+          prepend-icon="mdi mdi-plus-circle-outline"
+          block
+          @click="newForm"
+          >Ajouter une session</v-btn
+        >
 
         <v-btn
           :disabled="!form"
           type="submit"
           variant="elevated"
           color="#3C2E69"
+          size="60"
           block
           >Valider</v-btn
         >
@@ -55,10 +102,17 @@
   </section>
 </template>
 
+<!-- ___________________________________ SETUP ___________________________________ -->
+
 <script setup>
 import { ref, computed, onMounted, onBeforeUnmount } from "vue";
 import { useStore } from "vuex";
 const store = useStore();
+
+import field from "@/components/input_field.vue";
+import ligne from "@/components/ligne_horaire.vue";
+import { addLineVuex, addLineLocal } from "@/views/home/functions.js";
+import formLine from "@/components/formLine.vue";
 
 const totalHours = computed(() => {
   if (durationTab.value.length > 0) {
@@ -67,11 +121,34 @@ const totalHours = computed(() => {
   return 0;
 });
 
-const form = ref(false);
+const formList = ref([{ id: 0 }]);
+const formData = ref([{ id: 0, status: false }]);
 
-import field from "@/components/input_field.vue";
-import ligne from "@/components/ligne_horaire.vue";
-import { addLineVuex, addLineLocal } from "@/views/home/functions.js";
+function dataReceived(data) {
+  console.log("received: ", data);
+
+  // const nbrForm = formList.length;
+
+  formData.value = formData.value.map((f) => {
+    if (f.id === data.id) {
+      return data;
+    } else {
+      return f;
+    }
+  });
+
+  console.log("formData:", formData.value);
+}
+
+function newForm() {
+  const newID = formList.value[formList.value.length - 1].id + 1;
+  formData.value.push({ id: newID, status: false });
+  formList.value.push({ id: newID });
+
+  console.log("formData.value:", formData.value);
+}
+
+const form = ref(false);
 
 // Matin
 const HstrM = ref("");
@@ -85,9 +162,13 @@ const MstrA = ref("");
 const HstpA = ref("");
 const MstpA = ref("");
 
+// Date
+const dialog = ref(false);
+const dayDate = ref(new Date());
+
+// Display lines
 const savedLine = computed(() => store.state.lines);
 const durationTab = computed(() => savedLine.value.map((line) => line.Dtt));
-console.log("durationTab:", durationTab.value);
 
 // Création de l'objet ligne horaire
 function newLine() {
@@ -171,6 +252,8 @@ onBeforeUnmount(() => {
 });
 </script>
 
+<!-- ___________________________________ Style ___________________________________ -->
+
 <style>
 section {
   display: flex;
@@ -213,5 +296,13 @@ h3 {
   display: flex;
   align-items: center;
   margin-top: 10px;
+}
+
+#date-picker {
+  border: solid 5px rgb(86, 70, 139);
+}
+#date-picker .v-btn {
+  background-color: rgb(27, 21, 37);
+  color: rgb(226, 221, 254);
 }
 </style>
