@@ -1,28 +1,95 @@
 <template>
   <v-form v-model="form">
     <div id="line">
-      <field v-model="Hstr" @input="checkForm"></field>
+      <field class="selector" v-model="Hstr" :contents="HH"></field>
       <h2>h</h2>
-      <field v-model="Mstr" @input="checkForm"></field>
+      <field class="selector" v-model="Mstr" :contents="MM"></field>
       <div style="width: 40px"></div>
-      <field v-model="Hstp" @input="checkForm"></field>
+      <field class="selector" v-model="Hstp" :contents="HH2"></field>
       <h2>h</h2>
-      <field v-model="Mstp" @input="checkForm"></field>
+      <field class="selector" v-model="Mstp" :contents="MM2"></field>
     </div>
   </v-form>
+  <h2>{{ MM2 }}</h2>
 </template>
 
 <script setup>
-import { ref, defineEmits, defineProps } from "vue";
+import { ref, defineEmits, defineProps, watch } from "vue";
 import field from "@/components/input_field.vue";
 const props = defineProps(["id"]);
 const emit = defineEmits(["sendData"]);
 
 const form = ref(false);
-const Hstr = ref("");
-const Mstr = ref("");
-const Hstp = ref("");
-const Mstp = ref("");
+const Hstr = ref(null);
+const Mstr = ref(null);
+const Hstp = ref(null);
+const Mstp = ref(null);
+
+const HH = [
+  "00",
+  "01",
+  "02",
+  "03",
+  "04",
+  "05",
+  "06",
+  "07",
+  "08",
+  "09",
+  "10",
+  "11",
+  "12",
+  "13",
+  "14",
+  "15",
+  "16",
+  "17",
+  "18",
+  "19",
+  "20",
+  "21",
+  "22",
+  "23",
+];
+const MM = [
+  "00",
+  "05",
+  "10",
+  "15",
+  "20",
+  "25",
+  "30",
+  "35",
+  "40",
+  "45",
+  "50",
+  "55",
+];
+
+const HH2 = ref(HH);
+const MM2 = ref(MM);
+
+function calc_HH_contents() {
+  if (Hstr.value) {
+    HH2.value = HH.slice(parseInt(Hstr.value));
+  }
+
+  if (Hstp.value) {
+    Hstp.value = Hstr.value > Hstp.value ? Hstr.value : Hstp.value;
+  }
+}
+
+function calc_MM_contents() {
+  if (Hstr.value === Hstp.value) {
+    if (Mstr.value) {
+      MM2.value = MM.slice(MM.indexOf(Mstr.value));
+    }
+
+    if (Mstp.value) {
+      Mstp.value = Mstr.value > Mstp.value ? Mstr.value : Mstp.value;
+    }
+  }
+}
 
 function checkForm() {
   if (Hstr.value && Mstr.value && Hstp.value && Mstp.value) {
@@ -41,6 +108,12 @@ function checkForm() {
     });
   }
 }
+
+watch([Hstr, Mstr, Hstp, Mstp], () => {
+  calc_HH_contents();
+  calc_MM_contents();
+  checkForm();
+});
 </script>
 
 <style>
@@ -48,5 +121,9 @@ function checkForm() {
   display: flex;
   align-items: center;
   margin-top: 10px;
+}
+
+.selector {
+  min-width: 85px;
 }
 </style>

@@ -1,18 +1,6 @@
 <template>
   <section>
-    <h1>Calculateur d'horaires</h1>
-
-    <v-divider class="my-5"></v-divider>
-
-    <div class="card" v-if="savedLine.length > 0">
-      <ligne v-for="line in savedLine" :key="line.id" :line="line"></ligne>
-      <div id="total">
-        <h3 id="total-hours">{{ totalHours }}</h3>
-      </div>
-    </div>
-
-    <v-divider class="my-5"></v-divider>
-
+    <h1 id="title">Calculateur d'horaires</h1>
     <!-- Formulaire -->
     <div class="card">
       <v-form id="form" v-model="form" @submit.prevent="newLine()">
@@ -46,30 +34,6 @@
           </v-container>
         </v-dialog>
 
-        <div id="morning">
-          <field v-model="HstrM"></field>
-          <h2>h</h2>
-          <field v-model="MstrM"></field>
-          <div style="width: 40px"></div>
-          <field v-model="HstpM"></field>
-          <h2>h</h2>
-          <field v-model="MstpM"></field>
-        </div>
-
-        <v-divider class="my-1"></v-divider>
-
-        <div id="afternoon">
-          <field v-model="HstrA"></field>
-          <h2>h</h2>
-          <field v-model="MstrA"></field>
-          <div style="width: 40px"></div>
-          <field v-model="HstpA"></field>
-          <h2>h</h2>
-          <field v-model="MstpA"></field>
-        </div>
-
-        <v-divider class="my-1"></v-divider>
-
         <formLine
           v-for="form in formList"
           :key="form.id"
@@ -99,6 +63,18 @@
         >
       </v-form>
     </div>
+
+    <v-divider class="my-5"></v-divider>
+
+    <!-- Lignes -->
+    <div class="card" v-if="savedLine.length > 0">
+      <ligne v-for="line in savedLine" :key="line.id" :line="line"></ligne>
+      <div id="total">
+        <h3 id="total-hours">{{ totalHours }}</h3>
+      </div>
+    </div>
+
+    <v-divider class="my-5"></v-divider>
   </section>
 </template>
 
@@ -109,10 +85,9 @@ import { ref, computed, onMounted, onBeforeUnmount } from "vue";
 import { useStore } from "vuex";
 const store = useStore();
 
-import field from "@/components/input_field.vue";
 import ligne from "@/components/ligne_horaire.vue";
-import { addLineVuex, addLineLocal } from "@/views/home/functions.js";
 import formLine from "@/components/formLine.vue";
+import { addLineVuex, addLineLocal } from "@/views/home/functions.js";
 
 const totalHours = computed(() => {
   if (durationTab.value.length > 0) {
@@ -121,46 +96,32 @@ const totalHours = computed(() => {
   return 0;
 });
 
-const formList = ref([{ id: 0 }]);
-const formData = ref([{ id: 0, status: false }]);
+const formList = computed(() => store.state.forms);
 
 function dataReceived(data) {
-  console.log("received: ", data);
+  // Update formData
+  store.dispatch("updateForm", data);
 
-  // const nbrForm = formList.length;
+  checkGlobalTrue();
+}
 
-  formData.value = formData.value.map((f) => {
-    if (f.id === data.id) {
-      return data;
-    } else {
-      return f;
-    }
-  });
-
-  console.log("formData:", formData.value);
+// Check global form
+function checkGlobalTrue() {
+  const globalTrue = formList.value.every((f) => f.status === true);
+  if (globalTrue) {
+    form.value = true;
+  } else {
+    form.value = false;
+  }
 }
 
 function newForm() {
   const newID = formList.value[formList.value.length - 1].id + 1;
-  formData.value.push({ id: newID, status: false });
-  formList.value.push({ id: newID });
-
-  console.log("formData.value:", formData.value);
+  store.dispatch("addForm", { id: newID, status: false });
+  checkGlobalTrue();
 }
 
 const form = ref(false);
-
-// Matin
-const HstrM = ref("");
-const MstrM = ref("");
-const HstpM = ref("");
-const MstpM = ref("");
-
-// Après-midi
-const HstrA = ref("");
-const MstrA = ref("");
-const HstpA = ref("");
-const MstpA = ref("");
 
 // Date
 const dialog = ref(false);
@@ -172,38 +133,29 @@ const durationTab = computed(() => savedLine.value.map((line) => line.Dtt));
 
 // Création de l'objet ligne horaire
 function newLine() {
-  let Dm = durationTime(HstrM.value, MstrM.value, HstpM.value, MstpM.value);
-  let Da = durationTime(HstrA.value, MstrA.value, HstpA.value, MstpA.value);
+  const hourly = formList.value.map((f) => {
+    return {
+      id: Date.now(),
+      Hstr: f.Hstr,
+      Mstr: f.Mstr,
+      Hstp: f.Hstp,
+      Mstp: f.Mstp,
+    };
+  });
 
-  let line = {
+  const durations = formList.value.map((f) => {
+    return durationTime(f.Hstr, f.Mstr, f.Hstp, f.Mstp);
+  });
+
+  const line = {
     id: Date.now(),
-    HstrM: HstrM.value,
-    MstrM: MstrM.value,
-    HstpM: HstpM.value,
-    MstpM: MstpM.value,
-    HstrA: HstrA.value,
-    MstrA: MstrA.value,
-    HstpA: HstpA.value,
-    MstpA: MstpA.value,
-    Dtt: addTime([Dm, Da]),
+    date: dayDate.value,
+    hourly: hourly,
+    Dtt: addTime(durations),
   };
 
   addLineVuex(store, line);
   addLineLocal(line);
-  durationTab.value.push(line.Dtt);
-
-  resetFields();
-}
-
-function resetFields() {
-  HstrM.value = "";
-  MstrM.value = "";
-  HstpM.value = "";
-  MstpM.value = "";
-  HstrA.value = "";
-  MstrA.value = "";
-  HstpA.value = "";
-  MstpA.value = "";
 }
 
 // Calcul durée entre 2 horaires
@@ -230,9 +182,11 @@ function addTime(tab) {
   });
 
   const Htt = Math.floor(sum / 60);
+  const sendHtt = Htt < 10 ? `0${Htt}` : Htt;
   const Mtt = sum % 60;
+  const sendMtt = Mtt < 10 ? `0${Mtt}` : Mtt;
 
-  return `${Htt}:${Mtt}`;
+  return `${sendHtt}:${sendMtt}`;
 }
 
 function shortcut(event) {
@@ -245,7 +199,7 @@ function shortcut(event) {
 }
 
 onMounted(() => {
-  window.addEventListener("heydown", shortcut, { passive: true });
+  window.addEventListener("keydown", shortcut, { passive: true });
 });
 onBeforeUnmount(() => {
   window.removeEventListener("keydown", shortcut);
@@ -266,6 +220,10 @@ h1,
 h2,
 h3 {
   color: rgb(186, 167, 255);
+}
+
+#title {
+  margin-bottom: 20px;
 }
 
 .card {

@@ -1,21 +1,36 @@
 <template>
-  <v-text-field
+  <v-select
     class="mx-2"
     density="compact"
     variant="solo-filled"
     bg-color="#291F43"
-    :rules="[required, size]"
-  ></v-text-field>
+    :items="contents"
+    menu-icon="none"
+    :menu-props="menuProps"
+  ></v-select>
 </template>
 
 <script setup>
-function required(v) {
-  return !!v || false;
-}
+import { ref, defineProps, watch } from "vue";
+const props = defineProps(["contents"]);
 
-function size(v) {
-  return v.length > 2 ? "2 max" : true;
-}
+const contents = ref(props.contents);
+
+const menuProps = {
+  class: "custom-menu-props",
+};
+
+watch(
+  () => props.contents,
+  (newContents) => {
+    contents.value = newContents;
+  }
+);
 </script>
 
-<style></style>
+<style>
+/* .custom-menu-props .v-list-item {
+  color: rgb(226, 221, 254);
+  background-color: rgb(58, 49, 82);
+} */
+</style>
