@@ -8,15 +8,32 @@
       <field class="selector" v-model="Hstp" :contents="HH2"></field>
       <h2>h</h2>
       <field class="selector" v-model="Mstp" :contents="MM2"></field>
+      <v-btn
+        v-if="removeState"
+        id="deleteForm"
+        icon="mdi mdi-close"
+        color="red"
+        variant="text"
+        rounded="lg"
+        density="compact"
+        @click="removeForm"
+      ></v-btn>
     </div>
   </v-form>
 </template>
 
 <script setup>
-import { ref, defineEmits, defineProps, watch } from "vue";
+import { ref, defineEmits, defineProps, watch, computed } from "vue";
 import field from "@/components/input_field.vue";
 const props = defineProps(["id", "reset"]);
 const emit = defineEmits(["sendData", "fieldsEmpty"]);
+
+import { useStore } from "vuex";
+const store = useStore();
+
+const removeState = computed(() => {
+  return props.id === 0 ? false : true;
+});
 
 const form = ref(false);
 const Hstr = ref(null);
@@ -106,6 +123,11 @@ function checkForm() {
   }
 }
 
+function removeForm() {
+  const index = store.state.forms.findIndex((f) => f.id === props.id);
+  store.dispatch("removeForm", index);
+}
+
 function resetData() {
   Hstr.value = null;
   Mstr.value = null;
@@ -137,5 +159,11 @@ watch([Hstr, Mstr, Hstp, Mstp], () => {
 
 .selector {
   min-width: 85px;
+}
+
+#deleteForm {
+  position: absolute;
+  top: 6px;
+  right: -45px;
 }
 </style>
