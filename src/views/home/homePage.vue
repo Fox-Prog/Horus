@@ -39,7 +39,6 @@
           :key="form.id"
           :id="form.id"
           :reset="resetFields"
-          @sendData="dataReceived"
           @fieldsEmpty="fieldsRes"
         ></formLine>
 
@@ -83,7 +82,7 @@
 <!-- ___________________________________ SETUP ___________________________________ -->
 
 <script setup>
-import { ref, computed, onMounted, onBeforeUnmount } from "vue";
+import { ref, computed, onMounted, onBeforeUnmount, watch } from "vue";
 import { useStore } from "vuex";
 const store = useStore();
 
@@ -100,15 +99,9 @@ const totalHours = computed(() => {
 
 const formList = computed(() => store.state.forms);
 
-function dataReceived(data) {
-  // Update formData
-  store.dispatch("updateForm", data);
-
-  checkGlobalTrue();
-}
-
 // Check global form
 function checkGlobalTrue() {
+  console.log(store.state.forms);
   const globalTrue = formList.value.every((f) => f.status === true);
   if (globalTrue) {
     form.value = true;
@@ -116,6 +109,10 @@ function checkGlobalTrue() {
     form.value = false;
   }
 }
+watch(formList.value, () => {
+  console.log("check");
+  checkGlobalTrue();
+});
 
 // New form
 function newForm() {
@@ -249,6 +246,12 @@ h3 {
   border-radius: 5px;
   box-shadow: 0px 0px 20px 0px rgba(105, 88, 173, 0.095);
   padding: 10px;
+}
+#total {
+  margin-top: 20px;
+  padding: 0px 5px 0px 5px;
+  border-radius: 3px;
+  background-color: rgb(71, 56, 118);
 }
 #total-hours {
   color: rgb(226, 221, 254);

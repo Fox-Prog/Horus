@@ -14,7 +14,7 @@
         @click="remove"
       ></v-btn>
     </v-fade-transition>
-    <div id="total">
+    <div id="total-hour-line">
       <h3>{{ line.date.toLocaleDateString() }}</h3>
       <h3 id="sum">{{ sum }}</h3>
     </div>
@@ -60,7 +60,7 @@ function remove() {
   flex-direction: column;
   width: 150px;
 }
-#total {
+#total-hour-line {
   display: flex;
   flex-direction: column;
   margin-right: 10px;

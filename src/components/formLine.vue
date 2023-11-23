@@ -26,7 +26,7 @@
 import { ref, defineEmits, defineProps, watch, computed } from "vue";
 import field from "@/components/input_field.vue";
 const props = defineProps(["id", "reset"]);
-const emit = defineEmits(["sendData", "fieldsEmpty"]);
+const emit = defineEmits(["fieldsEmpty"]);
 
 import { useStore } from "vuex";
 const store = useStore();
@@ -107,7 +107,7 @@ function calc_MM_contents() {
 
 function checkForm() {
   if (Hstr.value && Mstr.value && Hstp.value && Mstp.value) {
-    emit("sendData", {
+    store.dispatch("updateForm", {
       id: props.id,
       status: true,
       Hstr: Hstr.value,
@@ -116,7 +116,7 @@ function checkForm() {
       Mstp: Mstp.value,
     });
   } else {
-    emit("sendData", {
+    store.dispatch("updateForm", {
       id: props.id,
       status: false,
     });
