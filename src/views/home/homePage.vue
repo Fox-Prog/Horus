@@ -38,7 +38,9 @@
           v-for="form in formList"
           :key="form.id"
           :id="form.id"
+          :reset="resetFields"
           @sendData="dataReceived"
+          @fieldsEmpty="fieldsRes"
         ></formLine>
 
         <v-btn
@@ -115,10 +117,22 @@ function checkGlobalTrue() {
   }
 }
 
+// New form
 function newForm() {
   const newID = formList.value[formList.value.length - 1].id + 1;
   store.dispatch("addForm", { id: newID, status: false });
   checkGlobalTrue();
+}
+
+// Reset form
+const resetFields = ref(false);
+function resetForm() {
+  store.state.forms = [{ id: 0, status: false }];
+  resetFields.value = true;
+}
+
+function fieldsRes() {
+  resetFields.value = false;
 }
 
 const form = ref(false);
@@ -156,6 +170,7 @@ function newLine() {
 
   addLineVuex(store, line);
   addLineLocal(line);
+  resetForm();
 }
 
 // Calcul durée entre 2 horaires

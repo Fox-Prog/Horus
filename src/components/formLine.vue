@@ -10,14 +10,13 @@
       <field class="selector" v-model="Mstp" :contents="MM2"></field>
     </div>
   </v-form>
-  <h2>{{ MM2 }}</h2>
 </template>
 
 <script setup>
 import { ref, defineEmits, defineProps, watch } from "vue";
 import field from "@/components/input_field.vue";
-const props = defineProps(["id"]);
-const emit = defineEmits(["sendData"]);
+const props = defineProps(["id", "reset"]);
+const emit = defineEmits(["sendData", "fieldsEmpty"]);
 
 const form = ref(false);
 const Hstr = ref(null);
@@ -71,11 +70,10 @@ const MM2 = ref(MM);
 
 function calc_HH_contents() {
   if (Hstr.value) {
-    HH2.value = HH.slice(parseInt(Hstr.value));
-  }
-
-  if (Hstp.value) {
+    HH2.value = HH.slice(HH.indexOf(Hstr.value));
     Hstp.value = Hstr.value > Hstp.value ? Hstr.value : Hstp.value;
+  } else {
+    HH2.value = HH;
   }
 }
 
@@ -83,11 +81,10 @@ function calc_MM_contents() {
   if (Hstr.value === Hstp.value) {
     if (Mstr.value) {
       MM2.value = MM.slice(MM.indexOf(Mstr.value));
-    }
-
-    if (Mstp.value) {
       Mstp.value = Mstr.value > Mstp.value ? Mstr.value : Mstp.value;
     }
+  } else {
+    MM2.value = MM;
   }
 }
 
@@ -108,6 +105,21 @@ function checkForm() {
     });
   }
 }
+
+function resetData() {
+  Hstr.value = null;
+  Mstr.value = null;
+  Hstp.value = null;
+  Mstp.value = null;
+}
+
+watch(
+  () => props.reset,
+  () => {
+    resetData();
+    emit("fieldsEmpty", true);
+  }
+);
 
 watch([Hstr, Mstr, Hstp, Mstp], () => {
   calc_HH_contents();

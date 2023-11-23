@@ -40,9 +40,11 @@ const Dtt = ref(props.line.Dtt);
 const sum = ref(Dtt.value.replace(":", "h"));
 
 import { removeLineLocal } from "@/views/home/functions.js";
+
 function remove() {
-  store.dispatch("removeLine", props.line);
-  console.log("remove: ", props.line);
+  const index = store.state.lines.findIndex((l) => l === props.line);
+
+  store.dispatch("removeLine", index);
   removeLineLocal(props.line);
 }
 </script>
