@@ -4,6 +4,7 @@
       <v-btn
         v-if="cancel"
         class="me-3"
+        style="height: 100%"
         id="remove-btn"
         size="60"
         icon="mdi mdi-close"
@@ -39,7 +40,7 @@ const hourly = ref(props.line.hourly);
 const Dtt = ref(props.line.Dtt);
 const sum = ref(Dtt.value.replace(":", "h"));
 
-import { removeLineLocal } from "@/views/home/functions.js";
+import { removeLineLocal } from "@/functions/bdd_functions.js";
 
 function remove() {
   const index = store.state.lines.findIndex((l) => l === props.line);

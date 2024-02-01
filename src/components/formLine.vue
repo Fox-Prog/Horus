@@ -26,7 +26,7 @@
 import { ref, defineEmits, defineProps, watch, computed } from "vue";
 import field from "@/components/input_field.vue";
 const props = defineProps(["id", "reset"]);
-const emit = defineEmits(["fieldsEmpty"]);
+const emit = defineEmits(["fieldsEmpty", "fieldOK"]);
 
 import { useStore } from "vuex";
 const store = useStore();
@@ -115,6 +115,7 @@ function checkForm() {
       Hstp: Hstp.value,
       Mstp: Mstp.value,
     });
+    emit("fieldOK", true);
   } else {
     store.dispatch("updateForm", {
       id: props.id,
@@ -158,7 +159,7 @@ watch([Hstr, Mstr, Hstp, Mstp], () => {
 }
 
 .selector {
-  min-width: 85px;
+  min-width: 40px;
 }
 
 #deleteForm {

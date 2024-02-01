@@ -1,6 +1,6 @@
 <template>
-  <v-app id="main">
-    <v-main>
+  <v-app>
+    <v-main id="main">
       <router-view></router-view>
     </v-main>
   </v-app>
@@ -9,7 +9,7 @@
 <script setup>
 import "@mdi/font/css/materialdesignicons.css";
 import { onMounted } from "vue";
-import { getLinesLocal } from "@/views/home/functions.js";
+import { getLinesLocal } from "@/functions/bdd_functions.js";
 import { useStore } from "vuex";
 const store = useStore();
 
@@ -46,6 +46,12 @@ onMounted(() => {
 
 <style>
 #main {
+  text-align: center;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
   background-color: rgb(27, 21, 37);
 }
 </style>
