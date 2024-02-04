@@ -67,14 +67,16 @@
 
   <v-divider class="my-5"></v-divider>
 
-  <!-- Calendar vue -->
-  <calendar
-    v-for="month in reelMonth"
-    :key="month.id"
-    :month="month"
-  ></calendar>
-
-  <v-divider class="my-5"></v-divider>
+  <div class="monthCard-container" v-for="year in yearList" :key="year.id">
+    <h1>{{ year[0].name }}</h1>
+    <monthCard
+      id="monthCard"
+      v-for="month in monthList(year.slice(1))"
+      :key="month"
+      :month="month"
+    ></monthCard>
+    <v-divider class="my-5" thickness="4"></v-divider>
+  </div>
 </template>
 
 <!-- ___________________________________ SETUP ___________________________________ -->
@@ -86,7 +88,7 @@ const store = useStore();
 
 // import ligne from "@/components/ligne_horaire.vue";
 import formLine from "@/components/formLine.vue";
-import calendar from "@/components/month_card.vue";
+import monthCard from "@/components/month_card.vue";
 import { addLineVuex, addLineLocal } from "@/functions/bdd_functions.js";
 import { addTime } from "@/functions/time_functions.js";
 
@@ -171,21 +173,44 @@ function durationTime(Hstr, Mstr, Hstp, Mstp) {
   return `${hours}:${minutes}`;
 }
 
-// Affichage en mois
-const monthList = computed(() =>
-  savedLine.value.map((l) => {
-    return l.date.getMonth();
-  })
-);
+// Regroupement par année
+const yearList = computed(() => {
+  const groups = {};
 
-const reelMonth = computed(() =>
-  monthList.value.reduce((acc, curr) => {
+  savedLine.value.forEach((obj) => {
+    const year = obj.date.getFullYear();
+    if (!groups[year]) {
+      groups[year] = [
+        {
+          name: year,
+        },
+      ];
+    }
+    groups[year].push(obj);
+  });
+
+  return groups;
+});
+
+// Regroupement par mois + tri croissant
+function monthList(year) {
+  const monthList = year.map((l) => {
+    try {
+      return l.date.getMonth();
+    } catch (error) {
+      console.log(error);
+    }
+  });
+
+  const uniqueMonth = monthList.reduce((acc, curr) => {
     if (!acc.includes(curr)) {
       acc.push(curr);
     }
     return acc;
-  }, [])
-);
+  }, []);
+
+  return uniqueMonth.sort((a, b) => a - b);
+}
 
 function shortcut(event) {
   switch (event.key) {
@@ -257,5 +282,9 @@ h3 {
 #date-picker .v-btn {
   background-color: rgb(27, 21, 37);
   color: rgb(226, 221, 254);
+}
+
+.monthCard-container {
+  width: 100%;
 }
 </style>

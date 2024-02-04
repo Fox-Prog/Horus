@@ -62,7 +62,7 @@ const totalHours = computed(() => {
 </script>
 
 <style>
-/* .card-calendar {
+.card-calendar {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -70,15 +70,5 @@ const totalHours = computed(() => {
   border-radius: 5px;
   box-shadow: 0px 0px 20px 0px rgba(105, 88, 173, 0.095);
   padding: 10px;
-  width: 95%;
-} */
-.card-calendar {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  background-color: rgb(24, 17, 27);
-  border-radius: 5px;
-  box-shadow: 0px 0px 20px 0px rgba(105, 88, 173, 0.095);
-  padding: 10px;
-  width: 95%;
 }
 </style>

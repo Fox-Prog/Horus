@@ -16,7 +16,10 @@
       ></v-btn>
     </v-fade-transition>
     <div id="total-hour-line">
-      <h3>{{ line.date.toLocaleDateString() }}</h3>
+      <div id="day">
+        <h3 class="mr-2">{{ dayName }}</h3>
+        <h3>{{ line.date.getDate() }}</h3>
+      </div>
       <h3 id="sum">{{ sum }}</h3>
     </div>
     <div id="h3-container">
@@ -29,12 +32,11 @@
 </template>
 
 <script setup>
-import { defineProps, ref } from "vue";
+import { computed, defineProps, ref } from "vue";
 import { useStore } from "vuex";
 const store = useStore();
 const props = defineProps(["line"]);
 const cancel = ref(false);
-
 const hourly = ref(props.line.hourly);
 
 const Dtt = ref(props.line.Dtt);
@@ -48,18 +50,37 @@ function remove() {
   store.dispatch("removeLine", index);
   removeLineLocal(props.line);
 }
+
+const listDay = [
+  "0",
+  "Lundi",
+  "Mardi",
+  "Mercredi",
+  "Jeudi",
+  "Vendredi",
+  "Samedi",
+  "Dimanche",
+];
+
+const dayName = computed(() => {
+  const day = new Date(props.line.date).getDay();
+  return listDay[day];
+});
 </script>
 
 <style>
 #line {
   position: relative;
   display: flex;
-  margin-bottom: 5px;
+  margin-bottom: 10px;
 }
 #h3-container {
   display: flex;
   flex-direction: column;
   width: 150px;
+}
+#day {
+  display: flex;
 }
 #total-hour-line {
   display: flex;
@@ -69,6 +90,7 @@ function remove() {
   border-radius: 3px;
   background-color: rgb(71, 56, 118);
   align-items: center;
+  min-width: 120px;
 }
 #sum {
   color: rgb(226, 221, 254);

@@ -1,39 +1,39 @@
 <template>
   <v-form v-model="form">
-    <div id="line">
-      <field class="selector" v-model="Hstr" :contents="HH"></field>
-      <h2>h</h2>
-      <field class="selector" v-model="Mstr" :contents="MM"></field>
+    <div id="lines">
+      <div class="formLine">
+        <field class="selector" v-model="Hstr" :contents="HH"></field>
+        <h2>h</h2>
+        <field class="selector" v-model="Mstr" :contents="MM"></field>
+      </div>
       <div style="width: 40px"></div>
-      <field class="selector" v-model="Hstp" :contents="HH2"></field>
-      <h2>h</h2>
-      <field class="selector" v-model="Mstp" :contents="MM2"></field>
+      <div class="formLine">
+        <field class="selector" v-model="Hstp" :contents="HH2"></field>
+        <h2>h</h2>
+        <field class="selector" v-model="Mstp" :contents="MM2"></field>
+      </div>
       <v-btn
-        v-if="removeState"
         id="deleteForm"
         icon="mdi mdi-close"
         color="red"
         variant="text"
         rounded="lg"
         density="compact"
-        @click="removeForm"
+        @click="id === 0 ? resetData() : removeForm()"
       ></v-btn>
     </div>
   </v-form>
+  <v-divider class="my-2"></v-divider>
 </template>
 
 <script setup>
-import { ref, defineEmits, defineProps, watch, computed } from "vue";
+import { ref, defineEmits, defineProps, watch } from "vue";
 import field from "@/components/input_field.vue";
 const props = defineProps(["id", "reset"]);
 const emit = defineEmits(["fieldsEmpty", "fieldOK"]);
 
 import { useStore } from "vuex";
 const store = useStore();
-
-const removeState = computed(() => {
-  return props.id === 0 ? false : true;
-});
 
 const form = ref(false);
 const Hstr = ref(null);
@@ -152,19 +152,35 @@ watch([Hstr, Mstr, Hstp, Mstp], () => {
 </script>
 
 <style>
-#line {
+#lines {
+  position: relative;
   display: flex;
   align-items: center;
   margin-top: 10px;
 }
 
+.formLine {
+  display: flex;
+}
+
 .selector {
-  min-width: 40px;
+  min-width: 85px;
 }
 
 #deleteForm {
   position: absolute;
-  top: 6px;
-  right: -45px;
+  top: 8%;
+  left: 102%;
+}
+
+@media screen and (max-width: 600px) {
+  #lines {
+    flex-direction: column;
+  }
+  #deleteForm {
+    position: absolute;
+    top: 30%;
+    left: 111%;
+  }
 }
 </style>
