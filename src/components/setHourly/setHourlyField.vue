@@ -19,7 +19,7 @@
         variant="text"
         rounded="lg"
         density="compact"
-        @click="id === 0 ? resetData() : removeForm()"
+        @click="resetData"
       ></v-btn>
     </div>
   </v-form>
@@ -27,19 +27,16 @@
 </template>
 
 <script setup>
-import { ref, defineEmits, defineProps, watch } from "vue";
+import { ref, defineEmits, defineProps, watch, onMounted } from "vue";
 import field from "@/components/input_field.vue";
-const props = defineProps(["id", "reset"]);
+const props = defineProps(["id", "reset", "hourly"]);
 const emit = defineEmits(["fieldsEmpty", "fieldOK"]);
 
-import { useStore } from "vuex";
-const store = useStore();
-
 const form = ref(false);
-const Hstr = ref(null);
-const Mstr = ref(null);
-const Hstp = ref(null);
-const Mstp = ref(null);
+const Hstr = ref(props.hourly.Hstr);
+const Mstr = ref(props.hourly.Mstr);
+const Hstp = ref(props.hourly.Hstp);
+const Mstp = ref(props.hourly.Mstp);
 
 const HH = [
   "00",
@@ -105,30 +102,6 @@ function calc_MM_contents() {
   }
 }
 
-function checkForm() {
-  if (Hstr.value && Mstr.value && Hstp.value && Mstp.value) {
-    store.dispatch("updateForm", {
-      id: props.id,
-      status: true,
-      Hstr: Hstr.value,
-      Mstr: Mstr.value,
-      Hstp: Hstp.value,
-      Mstp: Mstp.value,
-    });
-    emit("fieldOK", true);
-  } else {
-    store.dispatch("updateForm", {
-      id: props.id,
-      status: false,
-    });
-  }
-}
-
-function removeForm() {
-  const index = store.state.forms.findIndex((f) => f.id === props.id);
-  store.dispatch("removeForm", index);
-}
-
 function resetData() {
   Hstr.value = null;
   Mstr.value = null;
@@ -147,40 +120,13 @@ watch(
 watch([Hstr, Mstr, Hstp, Mstp], () => {
   calc_HH_contents();
   calc_MM_contents();
-  checkForm();
+});
+onMounted(() => {
+  calc_HH_contents();
+  calc_MM_contents();
 });
 </script>
 
 <style>
-#lines {
-  position: relative;
-  display: flex;
-  align-items: center;
-  margin-top: 10px;
-}
-
-.formLine {
-  display: flex;
-}
-
-.selector {
-  min-width: 85px;
-}
-
-#deleteForm {
-  position: absolute;
-  top: 8%;
-  left: 102%;
-}
-
-@media screen and (max-width: 600px) {
-  #lines {
-    flex-direction: column;
-  }
-  #deleteForm {
-    position: absolute;
-    top: 30%;
-    left: 111%;
-  }
-}
+@import url("../styles.css");
 </style>

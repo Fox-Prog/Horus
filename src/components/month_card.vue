@@ -23,7 +23,7 @@ import { ref, defineProps, computed } from "vue";
 const props = defineProps(["month"]);
 import { useStore } from "vuex";
 const store = useStore();
-import ligne from "@/components/ligne_horaire.vue";
+import ligne from "@/components/hourlyLine.vue";
 import { addTime } from "@/functions/time_functions.js";
 
 const display = ref(false);

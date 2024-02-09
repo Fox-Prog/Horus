@@ -1,8 +1,6 @@
 <template>
-  <h1 id="title">Calculateur d'horaires</h1>
-  <!-- Formulaire -->
   <div class="card-home">
-    <v-form id="form" v-model="form" @submit.prevent="newLine()">
+    <v-form class="form" v-model="form" @submit.prevent="newLine()">
       <v-dialog v-model="dialog">
         <template v-slot:activator="{ props }">
           <v-btn
@@ -33,14 +31,14 @@
         </v-container>
       </v-dialog>
 
-      <formLine
+      <entryHourlyField
         v-for="form in formList"
         :key="form.id"
         :id="form.id"
         :reset="resetFields"
         @fieldsEmpty="fieldsRes"
         @fieldOK="checkGlobalTrue"
-      ></formLine>
+      ></entryHourlyField>
 
       <v-btn
         class="mb-5"
@@ -64,33 +62,15 @@
       >
     </v-form>
   </div>
-
-  <v-divider class="my-5"></v-divider>
-
-  <div class="monthCard-container" v-for="year in yearList" :key="year.id">
-    <h1>{{ year[0].name }}</h1>
-    <monthCard
-      id="monthCard"
-      v-for="month in monthList(year.slice(1))"
-      :key="month"
-      :month="month"
-    ></monthCard>
-    <v-divider class="my-5" thickness="4"></v-divider>
-  </div>
 </template>
 
-<!-- ___________________________________ SETUP ___________________________________ -->
-
 <script setup>
-import { ref, computed, onMounted, onBeforeUnmount, watch } from "vue";
-import { useStore } from "vuex";
-const store = useStore();
-
-// import ligne from "@/components/ligne_horaire.vue";
-import formLine from "@/components/formLine.vue";
-import monthCard from "@/components/month_card.vue";
+import { onMounted, onBeforeUnmount, watch, computed, ref } from "vue";
+import entryHourlyField from "@/components/newHourly/newHourlyField.vue";
 import { addLineVuex, addLineLocal } from "@/functions/bdd_functions.js";
 import { addTime } from "@/functions/time_functions.js";
+import { useStore } from "vuex";
+const store = useStore();
 
 const formList = computed(() => store.state.forms);
 
@@ -106,6 +86,8 @@ function checkGlobalTrue() {
 watch(formList.value, () => {
   checkGlobalTrue();
 });
+
+const form = ref(false);
 
 // New form
 function newForm() {
@@ -125,14 +107,9 @@ function fieldsRes() {
   resetFields.value = false;
 }
 
-const form = ref(false);
-
 // Date
 const dialog = ref(false);
 const dayDate = ref(new Date());
-
-// Display lines
-const savedLine = computed(() => store.state.lines);
 
 // Création de l'objet ligne horaire
 function newLine() {
@@ -173,45 +150,6 @@ function durationTime(Hstr, Mstr, Hstp, Mstp) {
   return `${hours}:${minutes}`;
 }
 
-// Regroupement par année
-const yearList = computed(() => {
-  const groups = {};
-
-  savedLine.value.forEach((obj) => {
-    const year = obj.date.getFullYear();
-    if (!groups[year]) {
-      groups[year] = [
-        {
-          name: year,
-        },
-      ];
-    }
-    groups[year].push(obj);
-  });
-
-  return groups;
-});
-
-// Regroupement par mois + tri croissant
-function monthList(year) {
-  const monthList = year.map((l) => {
-    try {
-      return l.date.getMonth();
-    } catch (error) {
-      console.log(error);
-    }
-  });
-
-  const uniqueMonth = monthList.reduce((acc, curr) => {
-    if (!acc.includes(curr)) {
-      acc.push(curr);
-    }
-    return acc;
-  }, []);
-
-  return uniqueMonth.sort((a, b) => a - b);
-}
-
 function shortcut(event) {
   switch (event.key) {
     case "Enter":
@@ -220,7 +158,6 @@ function shortcut(event) {
       }
   }
 }
-
 // HOOK
 onMounted(() => {
   window.addEventListener("keydown", shortcut, { passive: true });
@@ -230,61 +167,6 @@ onBeforeUnmount(() => {
 });
 </script>
 
-<!-- ___________________________________ Style ___________________________________ -->
-
 <style>
-h1,
-h2,
-h3 {
-  color: rgb(186, 167, 255);
-}
-
-#title {
-  margin-bottom: 20px;
-}
-
-.card-home {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background-color: rgb(24, 17, 27);
-  border-radius: 5px;
-  box-shadow: 0px 0px 20px 0px rgba(105, 88, 173, 0.095);
-  padding: 10px;
-  width: fit-content;
-  max-width: 100%;
-}
-#total-hours {
-  color: rgb(226, 221, 254);
-}
-
-#form {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  max-width: 100%;
-}
-
-#morning {
-  display: flex;
-  align-items: center;
-  margin-top: 10px;
-}
-#afternoon {
-  display: flex;
-  align-items: center;
-  margin-top: 10px;
-}
-
-#date-picker {
-  border: solid 5px rgb(86, 70, 139);
-}
-#date-picker .v-btn {
-  background-color: rgb(27, 21, 37);
-  color: rgb(226, 221, 254);
-}
-
-.monthCard-container {
-  width: 100%;
-}
+@import url("../styles.css");
 </style>

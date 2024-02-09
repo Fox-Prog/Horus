@@ -1,19 +1,31 @@
 <template>
-  <div id="line" @mouseover="cancel = true" @mouseleave="cancel = false">
+  <div
+    id="line"
+    @mouseover="touch ? pass : (setBtn = true)"
+    @mouseleave="touch ? pass : (setBtn = false)"
+    @click="touch ? showTouchBtn() : pass"
+  >
     <v-fade-transition>
-      <v-btn
-        v-if="cancel"
-        class="me-3"
-        style="height: 100%"
-        id="remove-btn"
-        size="60"
-        icon="mdi mdi-close"
-        variant="flat"
-        color="red"
-        rounded="sm"
-        block
-        @click="remove"
-      ></v-btn>
+      <div v-if="setBtn" id="set-btn-container">
+        <v-btn
+          block
+          size="56px"
+          rounded="0"
+          icon="mdi mdi-close"
+          variant="flat"
+          color="red"
+          @click="remove"
+        ></v-btn>
+        <v-btn
+          block
+          size="56px"
+          rounded="0"
+          icon="mdi mdi-pen"
+          variant="flat"
+          color="blue"
+          @click="dialog = true"
+        ></v-btn>
+      </div>
     </v-fade-transition>
     <div id="total-hour-line">
       <div id="day">
@@ -29,6 +41,11 @@
     </div>
   </div>
   <v-divider></v-divider>
+
+  <div class="overlay-background" v-if="dialog"></div>
+  <v-dialog style="width: 100%; height: 100%" v-model="dialog">
+    <setHourly :line="props.line"></setHourly>
+  </v-dialog>
 </template>
 
 <script setup>
@@ -36,13 +53,20 @@ import { computed, defineProps, ref } from "vue";
 import { useStore } from "vuex";
 const store = useStore();
 const props = defineProps(["line"]);
-const cancel = ref(false);
+const setBtn = ref(false);
 const hourly = ref(props.line.hourly);
 
 const Dtt = ref(props.line.Dtt);
 const sum = ref(Dtt.value.replace(":", "h"));
 
 import { removeLineLocal } from "@/functions/bdd_functions.js";
+
+function showTouchBtn() {
+  setBtn.value = true;
+  setTimeout(() => {
+    setBtn.value = false;
+  }, 2000);
+}
 
 function remove() {
   const index = store.state.lines.findIndex((l) => l === props.line);
@@ -65,6 +89,19 @@ const listDay = [
 const dayName = computed(() => {
   const day = new Date(props.line.date).getDay();
   return listDay[day];
+});
+
+// Set hourly
+import setHourly from "@/components/setHourly/setHourlyForm.vue";
+const dialog = ref(false);
+
+// Touch or not
+const touch = computed(() => {
+  if ("ontouchstart" in window) {
+    return true;
+  } else {
+    return false;
+  }
 });
 </script>
 
@@ -95,8 +132,25 @@ const dayName = computed(() => {
 #sum {
   color: rgb(226, 221, 254);
 }
-
-#remove-btn {
+#set-btn-container {
   position: absolute;
+  display: flex;
+  width: 50%;
+  height: 100%;
+}
+.overlay-background {
+  position: absolute;
+  backdrop-filter: blur(30px);
+  background-color: rgba(
+    27,
+    21,
+    37,
+    0.558
+  ); /* Ajustez l'opacité (dernier paramètre) */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1; /* Assurez-vous que le fond est au-dessus de tout le reste */
 }
 </style>
