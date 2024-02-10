@@ -1,3 +1,13 @@
+// Convertion minutes en heures
+export function minsToHours(sum) {
+  const Htt = Math.floor(sum / 60);
+  const sendHtt = Htt < 10 ? `0${Htt}` : Htt;
+  const Mtt = sum % 60;
+  const sendMtt = Mtt < 10 ? `0${Mtt}` : Mtt;
+
+  return `${sendHtt} : ${sendMtt}`;
+}
+
 // Addition d'horaires
 export function addTime(tab) {
   let tabMinutes = [];
@@ -9,12 +19,7 @@ export function addTime(tab) {
     return acc + val;
   });
 
-  const Htt = Math.floor(sum / 60);
-  const sendHtt = Htt < 10 ? `0${Htt}` : Htt;
-  const Mtt = sum % 60;
-  const sendMtt = Mtt < 10 ? `0${Mtt}` : Mtt;
-
-  return `${sendHtt} : ${sendMtt}`;
+  return minsToHours(sum);
 }
 
 // Calcul durée entre 2 horaires

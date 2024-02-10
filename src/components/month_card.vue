@@ -11,6 +11,10 @@
 
   <v-expand-transition>
     <div v-if="display" class="card-calendar">
+      <recapBoard
+        :tth="totalHours"
+        :avgDays="averageDays(durations, totalHours)"
+      ></recapBoard>
       <ligne v-for="line in content" :key="line.id" :line="line"></ligne>
     </div>
   </v-expand-transition>
@@ -19,12 +23,18 @@
 </template>
 
 <script setup>
+// Import vue fonctions
 import { ref, defineProps, computed } from "vue";
 const props = defineProps(["month"]);
+// Import store
 import { useStore } from "vuex";
 const store = useStore();
+// Import components
 import ligne from "@/components/hourlyLine.vue";
+import recapBoard from "@/components/recapBoard.vue";
+// Import js fonctions
 import { addTime } from "@/functions/time_functions.js";
+import { averageDays } from "@/functions/recap_functions";
 
 const display = ref(false);
 
@@ -52,10 +62,11 @@ const content = computed(() =>
   })
 );
 
-const durationTab = computed(() => content.value.map((l) => l.Dtt));
+const durations = computed(() => content.value.map((l) => l.Dtt));
+
 const totalHours = computed(() => {
-  if (durationTab.value.length > 0) {
-    return addTime(durationTab.value).replace(":", "h");
+  if (durations.value.length > 0) {
+    return addTime(durations.value).replace(":", "h");
   }
   return 0;
 });

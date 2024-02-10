@@ -33,7 +33,7 @@
         <h3 class="mr-2">{{ dayName }}</h3>
         <h3>{{ line.date.getDate() }}</h3>
       </div>
-      <h3 id="sum">{{ sum }}</h3>
+      <h3 class="title-light">{{ sum }}</h3>
     </div>
     <div id="h3-container">
       <h3 v-for="h in hourly" :key="h.id">
@@ -70,14 +70,13 @@ function showTouchBtn() {
 }
 
 const listDay = [
-  "0",
+  "Dimanche",
   "Lundi",
   "Mardi",
   "Mercredi",
   "Jeudi",
   "Vendredi",
   "Samedi",
-  "Dimanche",
 ];
 
 const dayName = computed(() => {
@@ -122,9 +121,6 @@ const touch = computed(() => {
   background-color: rgb(71, 56, 118);
   align-items: center;
   min-width: 120px;
-}
-#sum {
-  color: rgb(226, 221, 254);
 }
 #set-btn-container {
   position: absolute;

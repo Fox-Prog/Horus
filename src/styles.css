@@ -1,3 +1,18 @@
+/* _____________________ MAIN _____________________ */
+h1,
+h2,
+h3 {
+  color: rgb(186, 167, 255);
+}
+
+.title-light {
+  color: rgb(254, 223, 221);
+}
+
+.title-flex {
+  display: flex;
+  align-items: center;
+}
 /* _____________________ FORM _____________________ */
 .card-home {
   display: flex;

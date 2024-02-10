@@ -72,20 +72,9 @@ function monthList(year) {
 <!-- ___________________________________ Style ___________________________________ -->
 
 <style>
-h1,
-h2,
-h3 {
-  color: rgb(186, 167, 255);
-}
-
 #title {
   margin-bottom: 20px;
 }
-
-#total-hours {
-  color: rgb(226, 221, 254);
-}
-
 #morning {
   display: flex;
   align-items: center;
