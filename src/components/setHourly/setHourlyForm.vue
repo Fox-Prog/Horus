@@ -51,7 +51,7 @@
         rounded="lg"
         prepend-icon="mdi mdi-plus-circle-outline"
         block
-        @click="newForm"
+        @click="forms.push(newForm(forms))"
         >Ajouter une session</v-btn
       >
 
@@ -69,12 +69,20 @@
 </template>
 
 <script setup>
-import { defineProps, defineEmits, ref, onMounted, onBeforeUnmount } from "vue";
+import {
+  defineProps,
+  defineEmits,
+  ref,
+  onMounted,
+  onBeforeUnmount,
+  watch,
+} from "vue";
 const content = defineProps(["line"]);
 const emit = defineEmits(["setDone"]);
 import entryHourlyField from "@/components/hourlyField.vue";
 import { addLine, removeLine } from "@/functions/bdd_functions.js";
 import { addTime } from "@/functions/time_functions.js";
+import { newForm } from "@/functions/forms_functions";
 import { useStore } from "vuex";
 const store = useStore();
 const dialog = ref(false);
@@ -84,18 +92,9 @@ const dayDate = ref(new Date(content.line.date));
 
 // FORMS
 const forms = ref([]);
-
-function newForm() {
-  const newID =
-    forms.value.reduce((maxID, f) => {
-      return Math.max(maxID, f.id);
-    }, 0) + 1;
-  const newForm = {
-    id: newID,
-    status: false,
-  };
-  forms.value.push(newForm);
-}
+watch(forms.value, () => {
+  checkGlobalTrue();
+});
 
 function getForms() {
   content.line.hourly.forEach((h) => {

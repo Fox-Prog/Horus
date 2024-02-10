@@ -48,7 +48,7 @@
         rounded="lg"
         prepend-icon="mdi mdi-plus-circle-outline"
         block
-        @click="newForm"
+        @click="forms.push(newForm(forms))"
         >Ajouter une session</v-btn
       >
 
@@ -70,6 +70,7 @@ import { onMounted, onBeforeUnmount, ref, watch } from "vue";
 import entryHourlyField from "@/components/hourlyField.vue";
 import { addLine } from "@/functions/bdd_functions.js";
 import { addTime } from "@/functions/time_functions.js";
+import { newForm } from "@/functions/forms_functions";
 import { useStore } from "vuex";
 const store = useStore();
 
@@ -90,18 +91,6 @@ const forms = ref([{ id: 1, status: false }]);
 watch(forms.value, () => {
   checkGlobalTrue();
 });
-
-function newForm() {
-  const newID =
-    forms.value.reduce((maxID, f) => {
-      return Math.max(maxID, f.id);
-    }, 0) + 1;
-  const newForm = {
-    id: newID,
-    status: false,
-  };
-  forms.value.push(newForm);
-}
 
 function setForms(data) {
   const index = forms.value.findIndex((f) => f.id === data.id);
