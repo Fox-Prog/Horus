@@ -1,6 +1,6 @@
 <template>
   <div class="card-home">
-    <v-form class="form" v-model="form" @submit.prevent="newLine()">
+    <v-form class="form" v-model="formDone" @submit.prevent="newLine()">
       <v-dialog v-model="dialog">
         <template v-slot:activator="{ props }">
           <v-btn
@@ -32,12 +32,13 @@
       </v-dialog>
 
       <entryHourlyField
-        v-for="form in formList"
+        v-for="form in forms"
         :key="form.id"
         :id="form.id"
         :reset="resetFields"
-        @fieldsEmpty="fieldsRes"
-        @fieldOK="checkGlobalTrue"
+        :data="[null, null, null, null]"
+        @data="setForms"
+        @remove="removeForm"
       ></entryHourlyField>
 
       <v-btn
@@ -52,7 +53,7 @@
       >
 
       <v-btn
-        :disabled="!form"
+        :disabled="!formDone"
         type="submit"
         variant="elevated"
         color="#3C2E69"
@@ -65,46 +66,61 @@
 </template>
 
 <script setup>
-import { onMounted, onBeforeUnmount, watch, computed, ref } from "vue";
-import entryHourlyField from "@/components/newHourly/newHourlyField.vue";
-import { addLineVuex, addLineLocal } from "@/functions/bdd_functions.js";
+import { onMounted, onBeforeUnmount, ref, watch } from "vue";
+import entryHourlyField from "@/components/hourlyField.vue";
+import { addLine } from "@/functions/bdd_functions.js";
 import { addTime } from "@/functions/time_functions.js";
 import { useStore } from "vuex";
 const store = useStore();
 
-const formList = computed(() => store.state.forms);
-
 // Check global form
 function checkGlobalTrue() {
-  const globalTrue = formList.value.every((f) => f.status === true);
+  const globalTrue = forms.value.every((f) => f.status === true);
   if (globalTrue) {
-    form.value = true;
+    formDone.value = true;
   } else {
-    form.value = false;
+    formDone.value = false;
   }
 }
-watch(formList.value, () => {
+
+const formDone = ref(false);
+
+// FORMS
+const forms = ref([{ id: 1, status: false }]);
+watch(forms.value, () => {
   checkGlobalTrue();
 });
 
-const form = ref(false);
-
-// New form
 function newForm() {
-  const newID = formList.value[formList.value.length - 1].id + 1;
-  store.dispatch("addForm", { id: newID, status: false });
+  const newID =
+    forms.value.reduce((maxID, f) => {
+      return Math.max(maxID, f.id);
+    }, 0) + 1;
+  const newForm = {
+    id: newID,
+    status: false,
+  };
+  forms.value.push(newForm);
+}
+
+function setForms(data) {
+  const index = forms.value.findIndex((f) => f.id === data.id);
+  if (index !== -1) {
+    forms.value[index] = data;
+  }
   checkGlobalTrue();
+}
+
+function removeForm(id) {
+  const index = forms.value.findIndex((f) => f.id === id);
+  forms.value.splice(index, 1);
 }
 
 // Reset form
 const resetFields = ref(false);
 function resetForm() {
-  store.state.forms = [{ id: 0, status: false }];
+  forms.value = [{ id: 0, status: false }];
   resetFields.value = true;
-}
-
-function fieldsRes() {
-  resetFields.value = false;
 }
 
 // Date
@@ -113,7 +129,7 @@ const dayDate = ref(new Date());
 
 // Création de l'objet ligne horaire
 function newLine() {
-  const hourly = formList.value.map((f) => {
+  const hourly = forms.value.map((f) => {
     return {
       id: Date.now(),
       Hstr: f.Hstr,
@@ -123,8 +139,8 @@ function newLine() {
     };
   });
 
-  const durations = formList.value.map((f) => {
-    return durationTime(f.Hstr, f.Mstr, f.Hstp, f.Mstp);
+  const durations = forms.value.map((f) => {
+    return f.duration;
   });
 
   const line = {
@@ -133,27 +149,14 @@ function newLine() {
     hourly: hourly,
     Dtt: addTime(durations),
   };
-  addLineVuex(store, line);
-  addLineLocal(line);
+  addLine(store, line, 1);
   resetForm();
-}
-
-// Calcul durée entre 2 horaires
-function durationTime(Hstr, Mstr, Hstp, Mstp) {
-  const start = new Date(`2000-01-01T${Hstr}:${Mstr}:00`);
-  const stop = new Date(`2000-01-01T${Hstp}:${Mstp}:00`);
-  const diff = stop - start;
-
-  const hours = Math.floor(diff / 3600000);
-  const minutes = Math.floor((diff % 3600000) / 60000);
-
-  return `${hours}:${minutes}`;
 }
 
 function shortcut(event) {
   switch (event.key) {
     case "Enter":
-      if (form.value === true) {
+      if (formDone.value === true) {
         newLine();
       }
   }

@@ -14,7 +14,7 @@
           icon="mdi mdi-close"
           variant="flat"
           color="red"
-          @click="remove"
+          @click="removeLine(store, props.line)"
         ></v-btn>
         <v-btn
           block
@@ -24,6 +24,7 @@
           variant="flat"
           color="blue"
           @click="dialog = true"
+          @setDone="dialog = false"
         ></v-btn>
       </div>
     </v-fade-transition>
@@ -59,20 +60,13 @@ const hourly = ref(props.line.hourly);
 const Dtt = ref(props.line.Dtt);
 const sum = ref(Dtt.value.replace(":", "h"));
 
-import { removeLineLocal } from "@/functions/bdd_functions.js";
+import { removeLine } from "@/functions/bdd_functions.js";
 
 function showTouchBtn() {
   setBtn.value = true;
   setTimeout(() => {
     setBtn.value = false;
   }, 2000);
-}
-
-function remove() {
-  const index = store.state.lines.findIndex((l) => l === props.line);
-
-  store.dispatch("removeLine", index);
-  removeLineLocal(props.line);
 }
 
 const listDay = [

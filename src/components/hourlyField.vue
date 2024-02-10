@@ -19,7 +19,7 @@
         variant="text"
         rounded="lg"
         density="compact"
-        @click="resetData"
+        @click="id === 1 ? resetData() : removeForm()"
       ></v-btn>
     </div>
   </v-form>
@@ -29,14 +29,15 @@
 <script setup>
 import { ref, defineEmits, defineProps, watch, onMounted } from "vue";
 import field from "@/components/input_field.vue";
-const props = defineProps(["id", "reset", "hourly"]);
-const emit = defineEmits(["fieldsEmpty", "fieldOK"]);
+import { durationTime } from "@/functions/time_functions.js";
+const props = defineProps(["id", "reset", "data"]);
+const emit = defineEmits(["data", "remove"]);
 
 const form = ref(false);
-const Hstr = ref(props.hourly.Hstr);
-const Mstr = ref(props.hourly.Mstr);
-const Hstp = ref(props.hourly.Hstp);
-const Mstp = ref(props.hourly.Mstp);
+const Hstr = ref(props.data[0]);
+const Mstr = ref(props.data[1]);
+const Hstp = ref(props.data[2]);
+const Mstp = ref(props.data[3]);
 
 const HH = [
   "00",
@@ -102,6 +103,31 @@ function calc_MM_contents() {
   }
 }
 
+function checkForm() {
+  if (Hstr.value && Mstr.value && Hstp.value && Mstp.value) {
+    const data = {
+      id: props.id,
+      status: true,
+      Hstr: Hstr.value,
+      Mstr: Mstr.value,
+      Hstp: Hstp.value,
+      Mstp: Mstp.value,
+      duration: durationTime(Hstr.value, Mstr.value, Hstp.value, Mstp.value),
+    };
+    emit("data", data);
+  } else {
+    const data = {
+      id: props.id,
+      status: false,
+    };
+    emit("data", data);
+  }
+}
+
+function removeForm() {
+  emit("remove", props.id);
+}
+
 function resetData() {
   Hstr.value = null;
   Mstr.value = null;
@@ -113,20 +139,19 @@ watch(
   () => props.reset,
   () => {
     resetData();
-    emit("fieldsEmpty", true);
   }
 );
 
 watch([Hstr, Mstr, Hstp, Mstp], () => {
   calc_HH_contents();
   calc_MM_contents();
+  checkForm();
 });
 onMounted(() => {
-  calc_HH_contents();
-  calc_MM_contents();
+  checkForm();
 });
 </script>
 
 <style>
-@import url("../styles.css");
+@import url("styles.css");
 </style>

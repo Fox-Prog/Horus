@@ -1,3 +1,4 @@
+// Addition d'horaires
 export function addTime(tab) {
   let tabMinutes = [];
   for (const d of tab) {
@@ -14,4 +15,16 @@ export function addTime(tab) {
   const sendMtt = Mtt < 10 ? `0${Mtt}` : Mtt;
 
   return `${sendHtt} : ${sendMtt}`;
+}
+
+// Calcul durée entre 2 horaires
+export function durationTime(Hstr, Mstr, Hstp, Mstp) {
+  const start = new Date(`2000-01-01T${Hstr}:${Mstr}:00`);
+  const stop = new Date(`2000-01-01T${Hstp}:${Mstp}:00`);
+  const diff = stop - start;
+
+  const hours = Math.floor(diff / 3600000);
+  const minutes = Math.floor((diff % 3600000) / 60000);
+
+  return `${hours}:${minutes}`;
 }

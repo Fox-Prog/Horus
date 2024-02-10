@@ -9,8 +9,11 @@ const indexedDB =
 
 // Add into vuex
 
-export function addLineVuex(store, line) {
+export function addLine(store, line, mode) {
   store.dispatch("addLine", line);
+  if (mode === 1) {
+    addLineLocal(line);
+  }
 }
 
 // Add into indexedDB
@@ -36,6 +39,40 @@ export function addLineLocal(line) {
     };
   } catch (err) {
     console.log("Error with IndexedDB: ", err);
+  }
+}
+
+// Remove into vuex
+export function removeLine(store, line) {
+  const index = store.state.lines.findIndex((l) => l === line);
+
+  store.dispatch("removeLine", index);
+  removeLineLocal(line);
+}
+
+// Remove into IndexedDB
+
+export function removeLineLocal(lineToRemove) {
+  try {
+    const request = indexedDB.open("horusDB", 1);
+
+    request.onerror = (err) => {
+      console.error("Error with IndexedDB: ", err);
+    };
+
+    request.onsuccess = () => {
+      const db = request.result;
+      const transaction = db.transaction("lines", "readwrite");
+      const linesDB = transaction.objectStore("lines");
+
+      linesDB.delete(lineToRemove.id);
+
+      transaction.oncomplete = () => {
+        db.close();
+      };
+    };
+  } catch (err) {
+    console.error("Error with IndexedDB: ", err);
   }
 }
 
@@ -66,7 +103,7 @@ export async function getLinesLocal(store) {
         requestAllData.onsuccess = () => {
           const data = requestAllData.result;
           for (let line of data) {
-            addLineVuex(store, line);
+            addLine(store, line, 2);
           }
           resolve();
         };
@@ -76,30 +113,4 @@ export async function getLinesLocal(store) {
       reject(err);
     }
   });
-}
-
-// Remove into IndexDB
-
-export function removeLineLocal(lineToRemove) {
-  try {
-    const request = indexedDB.open("horusDB", 1);
-
-    request.onerror = (err) => {
-      console.error("Error with IndexedDB: ", err);
-    };
-
-    request.onsuccess = () => {
-      const db = request.result;
-      const transaction = db.transaction("lines", "readwrite");
-      const linesDB = transaction.objectStore("lines");
-
-      linesDB.delete(lineToRemove.id);
-
-      transaction.oncomplete = () => {
-        db.close();
-      };
-    };
-  } catch (err) {
-    console.error("Error with IndexedDB: ", err);
-  }
 }
