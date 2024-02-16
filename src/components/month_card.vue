@@ -30,7 +30,7 @@ const props = defineProps(["month"]);
 import { useStore } from "vuex";
 const store = useStore();
 // Import components
-import ligne from "@/components/hourlyLine.vue";
+import ligne from "@/components/hourly/hourlyLine.vue";
 import recapBoard from "@/components/recapBoard.vue";
 // Import js fonctions
 import { addTime } from "@/functions/time_functions.js";

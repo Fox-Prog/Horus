@@ -8,6 +8,13 @@ export function minsToHours(sum) {
   return `${sendHtt} : ${sendMtt}`;
 }
 
+// Convertion heures en décimal
+export function hoursToHdec(h) {
+  const hTom = parseInt(h.split(":")[0]);
+  const mm = parseFloat(h.split(":")[1] / 60);
+  return hTom + mm;
+}
+
 // Addition d'horaires
 export function addTime(tab) {
   let tabMinutes = [];

@@ -53,6 +53,6 @@ const props = defineProps(["tth", "avgDays"]);
 .recap-2-container {
   text-align: left;
   margin: 0 20px 0 20px;
-  width: 50%;
+  width: 100%;
 }
 </style>

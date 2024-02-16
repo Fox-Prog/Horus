@@ -1,6 +1,10 @@
 <template>
   <div class="card-home">
-    <v-form class="form" v-model="formDone" @submit.prevent="updateLine()">
+    <clientField
+      :clientName="content.mode === 2 ? content.line.client.name : null"
+      @selected="handleSelectedClient"
+    ></clientField>
+    <v-form class="form" v-model="formDone" @submit.prevent="createLine()">
       <v-dialog v-model="dialog">
         <template v-slot:activator="{ props }">
           <v-btn
@@ -35,8 +39,9 @@
         v-for="form in forms"
         :key="form.id"
         :id="form.id"
+        :reset="resetFields"
         :data="
-          form.status === true
+          content.mode === 2
             ? [form.Hstr, form.Mstr, form.Hstp, form.Mstp, null]
             : [null, null, null, null]
         "
@@ -69,32 +74,66 @@
 </template>
 
 <script setup>
+// Import vue fonctions
 import {
-  defineProps,
-  defineEmits,
-  ref,
   onMounted,
   onBeforeUnmount,
+  ref,
   watch,
+  defineProps,
+  defineEmits,
 } from "vue";
-const content = defineProps(["line"]);
+const content = defineProps(["line", "mode"]);
 const emit = defineEmits(["setDone"]);
-import entryHourlyField from "@/components/hourlyField.vue";
+// Import components
+import entryHourlyField from "@/components/hourly/hourlyField.vue";
+import clientField from "@/components/client/clientField.vue";
+// Import js fonctions
 import { addLine, removeLine } from "@/functions/bdd_functions.js";
 import { addTime } from "@/functions/time_functions.js";
 import { newForm } from "@/functions/forms_functions";
+// Import store
 import { useStore } from "vuex";
 const store = useStore();
-const dialog = ref(false);
+
 const formDone = ref(false);
 
-const dayDate = ref(new Date(content.line.date));
+// Date
+const dialog = ref(false);
+const dayDate = ref(
+  content.mode === 2 ? new Date(content.line.date) : new Date()
+);
+
+// Client
+const clientSelected = ref(content.mode === 2 ? content.line.client : null);
+function handleSelectedClient(data) {
+  clientSelected.value = data;
+  checkGlobalTrue();
+}
+
+// Check global form
+function checkGlobalTrue() {
+  const globalTrue = forms.value.every((f) => f.status === true);
+  if (globalTrue && clientSelected.value !== null) {
+    formDone.value = true;
+  } else {
+    formDone.value = false;
+  }
+}
 
 // FORMS
 const forms = ref([]);
 watch(forms.value, () => {
   checkGlobalTrue();
 });
+
+function initForms() {
+  if (content.mode === 2) {
+    getForms();
+  } else {
+    forms.value.push({ id: 1, status: false });
+  }
+}
 
 function getForms() {
   content.line.hourly.forEach((h) => {
@@ -125,16 +164,15 @@ function removeForm(id) {
   forms.value.splice(index, 1);
 }
 
-function checkGlobalTrue() {
-  const globalTrue = forms.value.every((f) => f.status === true);
-  if (globalTrue) {
-    formDone.value = true;
-  } else {
-    formDone.value = false;
-  }
+// Reset form
+const resetFields = ref(false);
+function resetForm() {
+  forms.value = [{ id: 1, status: false }];
+  resetFields.value = true;
 }
 
-function updateLine() {
+// Création de l'objet ligne horaire
+function createLine() {
   const hourly = forms.value.map((f) => {
     return {
       id: Date.now(),
@@ -154,10 +192,17 @@ function updateLine() {
     date: dayDate.value,
     hourly: hourly,
     Dtt: addTime(durations),
+    client: {
+      name: clientSelected.value.name,
+      th: clientSelected.value.th,
+      chrg: clientSelected.value.chrg,
+    },
   };
-
   addLine(store, line, 1);
-  removeLine(store, content.line);
+  if (content.mode === 2) {
+    removeLine(store, content.line);
+  }
+  resetForm();
   emit("setDone");
 }
 
@@ -165,14 +210,15 @@ function shortcut(event) {
   switch (event.key) {
     case "Enter":
       if (formDone.value === true) {
-        updateLine();
+        createLine();
       }
   }
 }
-
+// HOOK
 onMounted(() => {
+  initForms();
+  checkGlobalTrue();
   window.addEventListener("keydown", shortcut, { passive: true });
-  getForms();
 });
 onBeforeUnmount(() => {
   window.removeEventListener("keydown", shortcut);

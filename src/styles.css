@@ -1,7 +1,8 @@
 /* _____________________ MAIN _____________________ */
 h1,
 h2,
-h3 {
+h3,
+h4 {
   color: rgb(186, 167, 255);
 }
 
@@ -70,4 +71,20 @@ h3 {
     top: 30%;
     left: 111%;
   }
+}
+
+.overlay-background {
+  position: absolute;
+  backdrop-filter: blur(30px);
+  background-color: rgba(
+    27,
+    21,
+    37,
+    0.558
+  ); /* Ajustez l'opacité (dernier paramètre) */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1; /* Assurez-vous que le fond est au-dessus de tout le reste */
 }

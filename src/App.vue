@@ -9,7 +9,7 @@
 <script setup>
 import "@mdi/font/css/materialdesignicons.css";
 import { onMounted } from "vue";
-import { getLinesLocal } from "@/functions/bdd_functions.js";
+import { getLinesLocal, getClientsLocal } from "@/functions/bdd_functions.js";
 import { useStore } from "vuex";
 const store = useStore();
 
@@ -32,6 +32,9 @@ function initIndexedDB() {
       const db = request.result;
       const linesTable = db.createObjectStore("lines", { keyPath: "id" });
       linesTable.createIndex("lines", ["lines"], { unique: false });
+
+      const clientsTable = db.createObjectStore("clients", { keyPath: "id" });
+      clientsTable.createIndex("clients", ["clients"], { unique: false });
     };
   } catch (err) {
     console.error("Error with IndexedDB: ", err);
@@ -41,6 +44,7 @@ function initIndexedDB() {
 onMounted(() => {
   initIndexedDB();
   getLinesLocal(store);
+  getClientsLocal(store);
 });
 </script>
 

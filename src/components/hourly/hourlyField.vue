@@ -27,11 +27,14 @@
 </template>
 
 <script setup>
+// Import vue fonctions
 import { ref, defineEmits, defineProps, watch, onMounted } from "vue";
-import field from "@/components/input_field.vue";
-import { durationTime } from "@/functions/time_functions.js";
 const props = defineProps(["id", "reset", "data"]);
 const emit = defineEmits(["data", "remove"]);
+// Import components
+import field from "@/components/input_field.vue";
+// Import js fonctions
+import { durationTime } from "@/functions/time_functions.js";
 
 const form = ref(false);
 const Hstr = ref(props.data[0]);

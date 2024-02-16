@@ -9,7 +9,7 @@
       <div v-if="setBtn" id="set-btn-container">
         <v-btn
           block
-          size="56px"
+          size="100%"
           rounded="0"
           icon="mdi mdi-close"
           variant="flat"
@@ -18,7 +18,7 @@
         ></v-btn>
         <v-btn
           block
-          size="56px"
+          size="100%"
           rounded="0"
           icon="mdi mdi-pen"
           variant="flat"
@@ -34,6 +34,7 @@
         <h3>{{ line.date.getDate() }}</h3>
       </div>
       <h3 class="title-light">{{ sum }}</h3>
+      <h4>{{ profit }}€</h4>
     </div>
     <div id="h3-container">
       <h3 v-for="h in hourly" :key="h.id">
@@ -45,22 +46,29 @@
 
   <div class="overlay-background" v-if="dialog"></div>
   <v-dialog style="width: 100%; height: 100%" v-model="dialog">
-    <setHourly :line="props.line"></setHourly>
+    <setHourly :mode="2" :line="props.line"></setHourly>
   </v-dialog>
 </template>
 
 <script setup>
+// Import vue fonctions
 import { computed, defineProps, ref } from "vue";
+const props = defineProps(["line"]);
+// Import store
 import { useStore } from "vuex";
 const store = useStore();
-const props = defineProps(["line"]);
+// Import js fonctions
+import { removeLine } from "@/functions/bdd_functions.js";
+import { calcProfit } from "@/functions/money_functions.js";
+// Import components
+import setHourly from "@/components/hourly/hourlyForm.vue";
+
 const setBtn = ref(false);
 const hourly = ref(props.line.hourly);
 
 const Dtt = ref(props.line.Dtt);
 const sum = ref(Dtt.value.replace(":", "h"));
-
-import { removeLine } from "@/functions/bdd_functions.js";
+const profit = calcProfit(Dtt.value, props.line.client);
 
 function showTouchBtn() {
   setBtn.value = true;
@@ -85,7 +93,6 @@ const dayName = computed(() => {
 });
 
 // Set hourly
-import setHourly from "@/components/setHourly/setHourlyForm.vue";
 const dialog = ref(false);
 
 // Touch or not
@@ -127,20 +134,5 @@ const touch = computed(() => {
   display: flex;
   width: 50%;
   height: 100%;
-}
-.overlay-background {
-  position: absolute;
-  backdrop-filter: blur(30px);
-  background-color: rgba(
-    27,
-    21,
-    37,
-    0.558
-  ); /* Ajustez l'opacité (dernier paramètre) */
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 1; /* Assurez-vous que le fond est au-dessus de tout le reste */
 }
 </style>

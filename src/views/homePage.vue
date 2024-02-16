@@ -1,7 +1,7 @@
 <template>
   <h1 id="title">Calculateur d'horaires</h1>
 
-  <hourlyForm></hourlyForm>
+  <hourlyForm :mode="1"></hourlyForm>
 
   <v-divider class="my-5"></v-divider>
 
@@ -23,11 +23,30 @@ import { computed } from "vue";
 import { useStore } from "vuex";
 const store = useStore();
 
-import hourlyForm from "@/components/newHourly/newHourlyForm.vue";
+import hourlyForm from "@/components/hourly/hourlyForm.vue";
 import monthCard from "@/components/month_card.vue";
 
 // Display lines
 const savedLine = computed(() => store.state.lines);
+
+// Regroupement par client
+// const clientList = computed(() => {
+//   const groups = {};
+
+//   savedLine.value.forEach((obj) => {
+//     const client = obj.client.name;
+//     if (!groups[client]) {
+//       groups[client] = [
+//         {
+//           name: client,
+//         },
+//       ];
+//     }
+//     groups[client].push(obj);
+//   });
+
+//   return groups;
+// });
 
 // Regroupement par année
 const yearList = computed(() => {
