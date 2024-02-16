@@ -5,21 +5,45 @@
 
   <v-divider class="my-5"></v-divider>
 
-  <div class="monthCard-container" v-for="year in yearList" :key="year.id">
-    <h1>{{ year[0].name }}</h1>
-    <monthCard
-      v-for="month in monthList(year.slice(1))"
-      :key="month"
-      :month="month"
-    ></monthCard>
-    <v-divider class="my-5" thickness="4"></v-divider>
+  <div class="monthCard-container" v-if="displayMode === 'year'">
+    <div v-for="year in yearFocus(savedLine)" :key="year.id">
+      <h1>{{ year[0].name }}</h1>
+      <monthCard
+        v-for="month in monthFocus(year.slice(1))"
+        :key="month"
+        :month="month"
+      ></monthCard>
+      <v-divider class="my-5" thickness="4"></v-divider>
+    </div>
+  </div>
+
+  <div class="monthCard-container" v-if="displayMode === 'client'">
+    <div v-for="client in clientFocus(savedLine)" :key="client">
+      <h1>{{ client[0].name }}</h1>
+      <div v-for="year in yearFocus(client.slice(1))" :key="year.id">
+        <h1>{{ year[0].name }}</h1>
+        <monthCard
+          v-for="month in monthFocus(year.slice(1))"
+          :key="month"
+          :month="month"
+        ></monthCard>
+      </div>
+    </div>
   </div>
 </template>
 
 <!-- ___________________________________ SETUP ___________________________________ -->
 
 <script setup>
-import { computed } from "vue";
+// Import vue fonctions
+import { computed, ref } from "vue";
+// Import js fonctions
+import {
+  yearFocus,
+  monthFocus,
+  clientFocus,
+} from "@/functions/sort_functions.js";
+// Import store
 import { useStore } from "vuex";
 const store = useStore();
 
@@ -28,64 +52,7 @@ import monthCard from "@/components/month_card.vue";
 
 // Display lines
 const savedLine = computed(() => store.state.lines);
-
-// Regroupement par client
-// const clientList = computed(() => {
-//   const groups = {};
-
-//   savedLine.value.forEach((obj) => {
-//     const client = obj.client.name;
-//     if (!groups[client]) {
-//       groups[client] = [
-//         {
-//           name: client,
-//         },
-//       ];
-//     }
-//     groups[client].push(obj);
-//   });
-
-//   return groups;
-// });
-
-// Regroupement par année
-const yearList = computed(() => {
-  const groups = {};
-
-  savedLine.value.forEach((obj) => {
-    const year = obj.date.getFullYear();
-    if (!groups[year]) {
-      groups[year] = [
-        {
-          name: year,
-        },
-      ];
-    }
-    groups[year].push(obj);
-  });
-
-  return groups;
-});
-
-// Regroupement par mois + tri croissant
-function monthList(year) {
-  const monthList = year.map((l) => {
-    try {
-      return l.date.getMonth();
-    } catch (error) {
-      console.log(error);
-    }
-  });
-
-  const uniqueMonth = monthList.reduce((acc, curr) => {
-    if (!acc.includes(curr)) {
-      acc.push(curr);
-    }
-    return acc;
-  }, []);
-
-  return uniqueMonth.sort((a, b) => a - b);
-}
+const displayMode = ref("client");
 </script>
 
 <!-- ___________________________________ Style ___________________________________ -->
