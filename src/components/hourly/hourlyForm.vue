@@ -92,6 +92,7 @@ import clientField from "@/components/client/clientField.vue";
 import { addLine, removeLine } from "@/functions/bdd_functions.js";
 import { addTime } from "@/functions/time_functions.js";
 import { newForm } from "@/functions/forms_functions";
+import { calcCA, calcBNF } from "@/functions/money_functions";
 // Import store
 import { useStore } from "vuex";
 const store = useStore();
@@ -187,15 +188,22 @@ function createLine() {
     return f.duration;
   });
 
+  const dtt = addTime(durations);
+
+  const ca = calcCA(dtt, clientSelected.value.th);
+  const bnf = calcBNF(ca, clientSelected.value.chrg);
+
   const line = {
     id: Date.now(),
     date: dayDate.value,
     hourly: hourly,
-    Dtt: addTime(durations),
+    dtt: dtt,
     client: {
       name: clientSelected.value.name,
       th: clientSelected.value.th,
       chrg: clientSelected.value.chrg,
+      ca: ca,
+      bnf: bnf,
     },
   };
   addLine(store, line, 1);

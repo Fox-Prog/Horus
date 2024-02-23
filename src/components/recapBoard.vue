@@ -18,15 +18,15 @@
       <v-divider color="#BAA7FF" thickness="2"></v-divider>
       <h3 class="title-flex">
         Chiffre d'affaire:
-        <h4 class="title-light ms-3">3500€</h4>
+        <h4 class="title-light ms-3">{{ props.ca }} €</h4>
       </h3>
       <h3 class="title-flex">
         Charges:
-        <h4 class="title-light ms-3">300€</h4>
+        <h4 class="title-light ms-3">{{ props.chrg }} %</h4>
       </h3>
       <h3 class="title-flex">
         Bénéfices:
-        <h4 class="title-light ms-3">3200€</h4>
+        <h4 class="title-light ms-3">{{ props.bnf }} €</h4>
       </h3>
     </div>
   </div>
@@ -35,7 +35,7 @@
 <script setup>
 // Import vue fonctions
 import { defineProps } from "vue";
-const props = defineProps(["tth", "avgDays"]);
+const props = defineProps(["tth", "avgDays", "chrg", "ca", "bnf"]);
 </script>
 
 <style>
@@ -48,11 +48,18 @@ const props = defineProps(["tth", "avgDays"]);
   border-radius: 5px;
   margin-bottom: 10px;
   padding: 10px 0 10px 0;
+  overflow: hidden;
 }
 
 .recap-2-container {
   text-align: left;
   margin: 0 20px 0 20px;
   width: 100%;
+}
+
+@media screen and (max-width: 600px) {
+  .recap-1-container {
+    display: block;
+  }
 }
 </style>

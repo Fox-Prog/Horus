@@ -3,7 +3,7 @@
     :append-icon="display ? 'mdi-chevron-up' : 'mdi-chevron-down'"
     color="#3C2E69"
     block
-    style="max-height: 40px"
+    style="height: 40px"
     @click="display = !display"
     ><h2 style="color: #ecd9fa">{{ monthName }}</h2>
     <v-divider class="mx-3" vertical></v-divider>{{ totalHours }}</v-btn
@@ -14,6 +14,9 @@
       <recapBoard
         :tth="totalHours"
         :avgDays="averageDays(durations, totalHours)"
+        :chrg="chrg"
+        :ca="sumCA(listCA)"
+        :bnf="sumBNF(listBNF)"
       ></recapBoard>
       <ligne v-for="line in content" :key="line.id" :line="line"></ligne>
     </div>
@@ -34,7 +37,8 @@ import ligne from "@/components/hourly/hourlyLine.vue";
 import recapBoard from "@/components/recapBoard.vue";
 // Import js fonctions
 import { addTime } from "@/functions/time_functions.js";
-import { averageDays } from "@/functions/recap_functions";
+import { averageDays } from "@/functions/recap_functions.js";
+import { sumCA, sumBNF } from "@/functions/money_functions.js";
 
 const display = ref(false);
 
@@ -62,7 +66,7 @@ const content = computed(() =>
   })
 );
 
-const durations = computed(() => content.value.map((l) => l.Dtt));
+const durations = computed(() => content.value.map((l) => l.dtt));
 
 const totalHours = computed(() => {
   if (durations.value.length > 0) {
@@ -70,16 +74,11 @@ const totalHours = computed(() => {
   }
   return 0;
 });
+const chrg = content.value[0].client.chrg.replace(".", ",");
+const listCA = computed(() => content.value.map((l) => l.client.ca));
+const listBNF = computed(() => content.value.map((l) => l.client.bnf));
 </script>
 
 <style>
-.card-calendar {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background-color: rgb(24, 17, 27);
-  border-radius: 5px;
-  box-shadow: 0px 0px 20px 0px rgba(105, 88, 173, 0.095);
-  padding: 10px;
-}
+@import url("@/styles.css");
 </style>

@@ -5,7 +5,7 @@
 
   <v-divider class="my-5"></v-divider>
 
-  <div class="monthCard-container" v-if="displayMode === 'year'">
+  <div class="card-container" v-if="displayMode === 'year'">
     <div v-for="year in yearFocus(savedLine)" :key="year.id">
       <h1>{{ year[0].name }}</h1>
       <monthCard
@@ -17,17 +17,9 @@
     </div>
   </div>
 
-  <div class="monthCard-container" v-if="displayMode === 'client'">
-    <div v-for="client in clientFocus(savedLine)" :key="client">
-      <h1>{{ client[0].name }}</h1>
-      <div v-for="year in yearFocus(client.slice(1))" :key="year.id">
-        <h1>{{ year[0].name }}</h1>
-        <monthCard
-          v-for="month in monthFocus(year.slice(1))"
-          :key="month"
-          :month="month"
-        ></monthCard>
-      </div>
+  <div class="card-container" v-if="displayMode === 'client'">
+    <div v-for="clients in clientFocus(savedLine)" :key="clients">
+      <clientCard :clients="clients"></clientCard>
     </div>
   </div>
 </template>
@@ -37,18 +29,19 @@
 <script setup>
 // Import vue fonctions
 import { computed, ref } from "vue";
+// Import store
+import { useStore } from "vuex";
+const store = useStore();
+// Import components
+import hourlyForm from "@/components/hourly/hourlyForm.vue";
+import monthCard from "@/components/month_card.vue";
+import clientCard from "@/components/client/client_card.vue";
 // Import js fonctions
 import {
   yearFocus,
   monthFocus,
   clientFocus,
 } from "@/functions/sort_functions.js";
-// Import store
-import { useStore } from "vuex";
-const store = useStore();
-
-import hourlyForm from "@/components/hourly/hourlyForm.vue";
-import monthCard from "@/components/month_card.vue";
 
 // Display lines
 const savedLine = computed(() => store.state.lines);
@@ -58,6 +51,7 @@ const displayMode = ref("client");
 <!-- ___________________________________ Style ___________________________________ -->
 
 <style>
+@import url("@/styles.css");
 #title {
   margin-bottom: 20px;
 }
@@ -70,8 +64,5 @@ const displayMode = ref("client");
   display: flex;
   align-items: center;
   margin-top: 10px;
-}
-.monthCard-container {
-  width: 100%;
 }
 </style>

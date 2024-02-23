@@ -52,6 +52,5 @@ export function clientFocus(lines) {
     }
     groups[client].push(obj);
   });
-  console.log(groups);
   return groups;
 }

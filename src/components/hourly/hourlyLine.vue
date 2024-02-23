@@ -34,7 +34,6 @@
         <h3>{{ line.date.getDate() }}</h3>
       </div>
       <h3 class="title-light">{{ sum }}</h3>
-      <h4>{{ profit }}€</h4>
     </div>
     <div id="h3-container">
       <h3 v-for="h in hourly" :key="h.id">
@@ -59,16 +58,14 @@ import { useStore } from "vuex";
 const store = useStore();
 // Import js fonctions
 import { removeLine } from "@/functions/bdd_functions.js";
-import { calcProfit } from "@/functions/money_functions.js";
 // Import components
 import setHourly from "@/components/hourly/hourlyForm.vue";
 
 const setBtn = ref(false);
 const hourly = ref(props.line.hourly);
 
-const Dtt = ref(props.line.Dtt);
-const sum = ref(Dtt.value.replace(":", "h"));
-const profit = calcProfit(Dtt.value, props.line.client);
+const dtt = ref(props.line.dtt);
+const sum = ref(dtt.value.replace(":", "h"));
 
 function showTouchBtn() {
   setBtn.value = true;
