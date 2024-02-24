@@ -124,7 +124,7 @@ const touch = computed(() => {
   border-radius: 3px;
   background-color: rgb(71, 56, 118);
   align-items: center;
-  min-width: 120px;
+  min-width: 130px;
 }
 #set-btn-container {
   position: absolute;

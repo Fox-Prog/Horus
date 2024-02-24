@@ -6,7 +6,7 @@
     style="height: 60px; border: solid 1px #473876"
     @click="display = !display"
     ><h1 style="color: #ecd9fa">{{ props.clients[0].name }}</h1>
-    <v-divider class="mx-3" vertical></v-divider>---</v-btn
+    <v-divider class="mx-2" vertical></v-divider></v-btn
   >
   <v-expand-transition>
     <div
@@ -30,7 +30,7 @@
         <monthCard
           v-for="month in monthFocus(year.slice(1))"
           :key="month"
-          :month="month"
+          :content="month"
         ></monthCard>
       </div>
     </div>
@@ -55,7 +55,6 @@ import { useStore } from "vuex";
 
 const store = useStore();
 const display = ref(false);
-
 const clientsList = computed(() =>
   store.state.lines.filter((l) => l.client.name === props.clients[0].name)
 );
@@ -66,7 +65,10 @@ const totalHours = computed(() => {
   }
   return 0;
 });
-const dtt_client = addTime(clientsList.value.map((l) => l.dtt));
+const dtt_client = addTime(clientsList.value.map((l) => l.dtt)).replace(
+  ":",
+  "h"
+);
 const chrg = props.clients[1].client.chrg.replace(".", ",");
 const listCA = computed(() => clientsList.value.map((l) => l.client.ca));
 const listBNF = computed(() => clientsList.value.map((l) => l.client.bnf));

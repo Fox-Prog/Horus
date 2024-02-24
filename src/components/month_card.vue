@@ -18,7 +18,7 @@
         :ca="sumCA(listCA)"
         :bnf="sumBNF(listBNF)"
       ></recapBoard>
-      <ligne v-for="line in content" :key="line.id" :line="line"></ligne>
+      <ligne v-for="line in props.content.slice(1)" :key="line.id" :line="line"></ligne>
     </div>
   </v-expand-transition>
 
@@ -28,7 +28,7 @@
 <script setup>
 // Import vue fonctions
 import { ref, defineProps, computed } from "vue";
-const props = defineProps(["month"]);
+const props = defineProps(["content"]);
 // Import store
 import { useStore } from "vuex";
 const store = useStore();
@@ -57,16 +57,10 @@ const listMonth = [
   "Décembre",
 ];
 const monthName = computed(() => {
-  return listMonth[props.month];
+  return listMonth[props.content];
 });
 
-const content = computed(() =>
-  store.state.lines.filter((l) => {
-    return new Date(l.date).getMonth() === props.month;
-  })
-);
-
-const durations = computed(() => content.value.map((l) => l.dtt));
+const durations = computed(() => props.content.slice(1).map((l) => l.dtt));
 
 const totalHours = computed(() => {
   if (durations.value.length > 0) {
@@ -74,9 +68,9 @@ const totalHours = computed(() => {
   }
   return 0;
 });
-const chrg = content.value[0].client.chrg.replace(".", ",");
-const listCA = computed(() => content.value.map((l) => l.client.ca));
-const listBNF = computed(() => content.value.map((l) => l.client.bnf));
+const chrg = props.content[1].client.chrg.replace(".", ",");
+const listCA = computed(() => props.content.slice(1).map((l) => l.client.ca));
+const listBNF = computed(() => props.content.slice(1).map((l) => l.client.bnf));
 </script>
 
 <style>

@@ -18,23 +18,22 @@ export function yearFocus(lines) {
 }
 
 // Regroupement par mois + tri croissant
-export function monthFocus(year) {
-  const monthList = year.map((l) => {
-    try {
-      return l.date.getMonth();
-    } catch (error) {
-      console.log(error);
+export function monthFocus(lines) {
+  const groups = {};
+
+  lines.forEach((obj) => {
+    const month = obj.date.getMonth();
+    if (!groups[month]) {
+      groups[month] = [
+        {
+          name: month,
+        },
+      ];
     }
+    groups[month].push(obj);
   });
 
-  const uniqueMonth = monthList.reduce((acc, curr) => {
-    if (!acc.includes(curr)) {
-      acc.push(curr);
-    }
-    return acc;
-  }, []);
-
-  return uniqueMonth.sort((a, b) => a - b);
+  return groups;
 }
 
 // Regroupement par client

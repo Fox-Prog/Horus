@@ -34,7 +34,6 @@
         append-inner-icon="mdi-percent"
         label="Charges"
         type="number"
-        min="0"
         v-model="chrg"
         :rules="[positiveNbr]"
       ></v-text-field>
@@ -73,8 +72,10 @@ import { addClient, removeClient } from "@/functions/bdd_functions.js";
 import { useStore } from "vuex";
 const store = useStore();
 
+const regex = /^(?!null$|^$).+/;
+
 const formDone = computed(() => {
-  if (clientName.value && th.value > 0 && chrg.value > 0) {
+  if (clientName.value && th.value > 0 && regex.test(chrg.value)) {
     return true;
   } else {
     return false;

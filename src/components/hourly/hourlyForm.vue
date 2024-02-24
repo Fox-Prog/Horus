@@ -169,7 +169,7 @@ function removeForm(id) {
 const resetFields = ref(false);
 function resetForm() {
   forms.value = [{ id: 1, status: false }];
-  resetFields.value = true;
+  resetFields.value = !resetFields.value;
 }
 
 // Création de l'objet ligne horaire

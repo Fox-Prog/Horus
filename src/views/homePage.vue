@@ -11,7 +11,7 @@
       <monthCard
         v-for="month in monthFocus(year.slice(1))"
         :key="month"
-        :month="month"
+        :content="month"
       ></monthCard>
       <v-divider class="my-5" thickness="4"></v-divider>
     </div>

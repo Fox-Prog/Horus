@@ -57,7 +57,7 @@ const props = defineProps(["tth", "avgDays", "chrg", "ca", "bnf"]);
   width: 100%;
 }
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 660px) {
   .recap-1-container {
     display: block;
   }
