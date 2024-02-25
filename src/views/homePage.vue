@@ -18,8 +18,8 @@
   </div>
 
   <div class="card-container" v-if="displayMode === 'client'">
-    <div v-for="clients in clientFocus(savedLine)" :key="clients">
-      <clientCard :clients="clients"></clientCard>
+    <div v-for="clientLines in clientFocus(savedLine)" :key="clientLines">
+      <clientCard :clientLines="clientLines"></clientCard>
     </div>
   </div>
 </template>

@@ -18,7 +18,11 @@
         :ca="sumCA(listCA)"
         :bnf="sumBNF(listBNF)"
       ></recapBoard>
-      <ligne v-for="line in props.content.slice(1)" :key="line.id" :line="line"></ligne>
+      <ligne
+        v-for="line in props.content.slice(1)"
+        :key="line.id"
+        :line="line"
+      ></ligne>
     </div>
   </v-expand-transition>
 
@@ -29,9 +33,6 @@
 // Import vue fonctions
 import { ref, defineProps, computed } from "vue";
 const props = defineProps(["content"]);
-// Import store
-import { useStore } from "vuex";
-const store = useStore();
 // Import components
 import ligne from "@/components/hourly/hourlyLine.vue";
 import recapBoard from "@/components/recapBoard.vue";

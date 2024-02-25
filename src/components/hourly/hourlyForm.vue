@@ -199,6 +199,7 @@ function createLine() {
     hourly: hourly,
     dtt: dtt,
     client: {
+      id: clientSelected.value.id,
       name: clientSelected.value.name,
       th: clientSelected.value.th,
       chrg: clientSelected.value.chrg,

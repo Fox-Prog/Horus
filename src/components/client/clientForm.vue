@@ -64,10 +64,17 @@
 <script setup>
 // Import vue fonctions
 import { ref, computed, defineProps, defineEmits } from "vue";
-const props = defineProps(["mode", "content", "client"]);
+const props = defineProps(["mode", "client"]);
 const emit = defineEmits(["done"]);
 // Import js fonctions
-import { addClient, removeClient } from "@/functions/bdd_functions.js";
+import {
+  addClient,
+  removeClient,
+  removeLine,
+  addLine,
+} from "@/functions/bdd_functions.js";
+import { calcCA, calcBNF } from "@/functions/money_functions";
+
 // Import store
 import { useStore } from "vuex";
 const store = useStore();
@@ -83,9 +90,10 @@ const formDone = computed(() => {
 });
 
 // V-MODEL
-const clientName = ref(props.content[0]);
-const th = ref(props.content[1]);
-const chrg = ref(props.content[2]);
+// const clientName = ref(props.content[0]);
+const clientName = ref(props.mode === 2 ? props.client.name : null);
+const th = ref(props.mode === 2 ? props.client.th : null);
+const chrg = ref(props.mode === 2 ? props.client.chrg : null);
 
 // RULES
 function positiveNbr(v) {
@@ -103,17 +111,53 @@ function unicName(v) {
   return true;
 }
 
+function setClientToHourly(clientID) {
+  const lines = store.state.lines.filter(
+    (l) => l.client.id === props.client.id
+  );
+  if (lines.length > 0) {
+    lines.forEach((l) => {
+      const ca = calcCA(l.dtt, th.value);
+      const hourly = l.hourly.map((h) => {
+        return { ...h, id: Date.now() };
+      });
+
+      const line = {
+        id: Date.now(),
+        date: l.date,
+        hourly: hourly,
+        dtt: l.dtt,
+        client: {
+          id: clientID,
+          name: clientName.value,
+          th: th.value,
+          chrg: chrg.value,
+          ca: ca,
+          bnf: calcBNF(ca, chrg.value),
+        },
+      };
+      removeLine(store, l);
+      addLine(store, line, 1);
+    });
+  }
+}
+
 function createClient() {
+  const clientID = Date.now();
   const client = {
-    id: Date.now(),
+    id: clientID,
     name: clientName.value,
     th: th.value,
     chrg: chrg.value,
   };
   addClient(store, client, 1);
+
+  // MODE MODIF
   if (props.mode === 2) {
+    setClientToHourly(clientID);
     removeClient(store, props.client);
   }
+
   emit("done", client);
 }
 

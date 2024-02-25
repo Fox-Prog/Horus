@@ -33,11 +33,6 @@
   <v-dialog style="width: 100%; height: 100%" v-model="dialog">
     <clientForm
       :mode="mode"
-      :content="
-        mode === 2
-          ? [clientData.name, clientData.th, clientData.chrg, null]
-          : [null, null, null]
-      "
       :client="mode === 2 ? clientData : null"
       @done="doneField"
     ></clientForm>
