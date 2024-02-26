@@ -14,7 +14,7 @@
           icon="mdi mdi-close"
           variant="flat"
           color="red"
-          @click="removeLine(store, props.line);"
+          @click="removeLine(store, props.line)"
         ></v-btn>
         <v-btn
           block
@@ -51,9 +51,8 @@
 
 <script setup>
 // Import vue fonctions
-import { computed, defineProps, defineEmits, ref } from "vue";
+import { computed, defineProps, ref } from "vue";
 const props = defineProps(["line"]);
-const emit = defineEmits(["removeLine"]);
 // Import store
 import { useStore } from "vuex";
 const store = useStore();

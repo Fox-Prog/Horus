@@ -1,16 +1,14 @@
 <template>
-  <v-btn
-    :append-icon="display ? 'mdi-chevron-up' : 'mdi-chevron-down'"
-    color="#3C2E69"
-    block
-    style="height: 40px"
-    @click="display = !display"
-    ><h2 style="color: #ecd9fa">{{ monthName }}</h2>
-    <v-divider class="mx-3" vertical></v-divider>{{ totalHours }}</v-btn
-  >
+  <v-btn variant="outlined" color="#ecd9fa" @click="display = !display"
+    ><h1 style="color: #ecd9fa">{{ props.content[0].name }}</h1>
+  </v-btn>
 
   <v-expand-transition>
-    <div v-if="display" class="card-calendar">
+    <div
+      v-if="display"
+      style="box-shadow: none; background-color: #14121f"
+      class="card-calendar"
+    >
       <recapBoard
         :tth="totalHours"
         :avgDays="averageDays(durations, totalHours)"
@@ -18,15 +16,17 @@
         :ca="sumCA(listCA)"
         :bnf="sumBNF(listBNF)"
       ></recapBoard>
-      <ligne
-        v-for="line in props.content.slice(1)"
-        :key="line.id"
-        :line="line"
-      ></ligne>
     </div>
   </v-expand-transition>
 
-  <div style="height: 20px"></div>
+  <div v-if="!display" style="height: 20px"></div>
+
+  <monthCard
+    v-for="month in monthFocus(props.content.slice(1))"
+    :key="month"
+    :content="month"
+    :chrg="props.chrg"
+  ></monthCard>
 </template>
 
 <script setup>
@@ -34,32 +34,15 @@
 import { ref, defineProps, computed } from "vue";
 const props = defineProps(["content", "chrg"]);
 // Import components
-import ligne from "@/components/hourly/hourlyLine.vue";
 import recapBoard from "@/components/recapBoard.vue";
+import monthCard from "@/components/month_card.vue";
 // Import js fonctions
 import { addTime } from "@/functions/time_functions.js";
 import { averageDays } from "@/functions/recap_functions.js";
 import { sumCA, sumBNF } from "@/functions/money_functions.js";
+import { monthFocus } from "@/functions/sort_functions.js";
 
 const display = ref(false);
-
-const listMonth = [
-  "Janvier",
-  "Février",
-  "Mars",
-  "Avril",
-  "Mai",
-  "Juin",
-  "Juillet",
-  "Août",
-  "Septembre",
-  "Octobre",
-  "Novembre",
-  "Décembre",
-];
-const monthName = computed(() => {
-  return listMonth[props.content[0].name];
-});
 
 const durations = computed(() => props.content.slice(1).map((l) => l.dtt));
 
@@ -69,6 +52,7 @@ const totalHours = computed(() => {
   }
   return 0;
 });
+
 const chrg =
   props.chrg === true ? props.content[1].client.chrg.replace(".", ",") : null;
 const listCA = computed(() => props.content.slice(1).map((l) => l.client.ca));

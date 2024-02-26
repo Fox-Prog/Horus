@@ -1,20 +1,18 @@
 <template>
-  <h1 id="title">Calculateur d'horaires</h1>
+  <h1 id="title">Horus</h1>
 
   <hourlyForm :mode="1"></hourlyForm>
 
   <v-divider class="my-5"></v-divider>
 
   <div class="card-container" v-if="displayMode === 'year'">
-    <div v-for="year in yearFocus(savedLine)" :key="year.id">
-      <h1>{{ year[0].name }}</h1>
-      <monthCard
-        v-for="month in monthFocus(year.slice(1))"
-        :key="month"
-        :content="month"
-      ></monthCard>
-      <v-divider class="my-5" thickness="4"></v-divider>
-    </div>
+    <yearCard
+      v-for="year in yearFocus(savedLine)"
+      :key="year.id"
+      :content="year"
+      :chrg="false"
+    ></yearCard>
+    <v-divider class="my-5" thickness="4"></v-divider>
   </div>
 
   <div class="card-container" v-if="displayMode === 'client'">
@@ -34,14 +32,10 @@ import { useStore } from "vuex";
 const store = useStore();
 // Import components
 import hourlyForm from "@/components/hourly/hourlyForm.vue";
-import monthCard from "@/components/month_card.vue";
+import yearCard from "@/components/year_card.vue";
 import clientCard from "@/components/client/client_card.vue";
 // Import js fonctions
-import {
-  yearFocus,
-  monthFocus,
-  clientFocus,
-} from "@/functions/sort_functions.js";
+import { yearFocus, clientFocus } from "@/functions/sort_functions.js";
 
 // Display lines
 const savedLine = computed(() => store.state.lines);

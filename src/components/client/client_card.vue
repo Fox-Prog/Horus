@@ -21,17 +21,13 @@
         :ca="sumCA(listCA)"
         :bnf="sumBNF(listBNF)"
       ></recapBoard>
-      <div
-        class="card-container"
-        v-for="year in yearFocus(props.clientLines.slice(1))"
-        :key="year.id"
-      >
-        <h1>{{ year[0].name }}</h1>
-        <monthCard
-          v-for="month in monthFocus(year.slice(1))"
-          :key="month"
-          :content="month"
-        ></monthCard>
+      <div class="card-container">
+        <yearCard
+          v-for="year in yearFocus(props.clientLines.slice(1))"
+          :key="year.id"
+          :content="year"
+          :chrg="false"
+        ></yearCard>
       </div>
     </div>
   </v-expand-transition>
@@ -43,10 +39,10 @@
 import { ref, defineProps, computed } from "vue";
 const props = defineProps(["clientLines"]);
 // Import components
-import monthCard from "@/components/month_card.vue";
 import recapBoard from "@/components/recapBoard.vue";
+import yearCard from "@/components/year_card.vue";
 // Import js fonctions
-import { yearFocus, monthFocus } from "@/functions/sort_functions.js";
+import { yearFocus } from "@/functions/sort_functions.js";
 import { addTime } from "@/functions/time_functions";
 import { averageDays } from "@/functions/recap_functions.js";
 import { sumCA, sumBNF } from "@/functions/money_functions.js";

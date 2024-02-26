@@ -20,7 +20,7 @@
         Chiffre d'affaire:
         <h4 class="title-light ms-3">{{ props.ca }} €</h4>
       </h3>
-      <h3 class="title-flex">
+      <h3 v-if="props.chrg" class="title-flex">
         Charges:
         <h4 class="title-light ms-3">{{ props.chrg }} %</h4>
       </h3>
