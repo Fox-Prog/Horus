@@ -1,7 +1,7 @@
 <template>
-  <div id="client-field-container">
+  <div class="client-field-container">
     <h2 class="dark-title">Client</h2>
-    <div id="client-select-btn">
+    <div class="client-select-btn">
       <v-select
         class="mx-4"
         density="compact"
@@ -73,21 +73,19 @@ watch(selectedClient, () => {
 </script>
 
 <style>
-@import url("@/styles.css");
-
-#client-field-container {
+.client-field-container {
   display: flex;
   width: 100%;
   background-color: var(--background-purple-1);
 }
-#client-select-btn {
+.client-select-btn {
   display: flex;
   width: 100%;
   background-color: var(--background-purple-1);
 }
 
 @media screen and (max-width: 600px) {
-  #client-field-container {
+  .client-field-container {
     display: block;
   }
 }

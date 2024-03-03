@@ -1,7 +1,7 @@
 <template>
   <v-btn
     :append-icon="display ? 'mdi-chevron-up' : 'mdi-chevron-down'"
-    color="var(--interactive-components-1)"
+    color="#291f43"
     block
     style="height: 60px; border: solid 1px var(--border-violet)"
     @click="display = !display"
@@ -64,7 +64,3 @@ const chrg = lines.value[0].client.chrg.replace(".", ",");
 const listCA = computed(() => lines.value.map((l) => l.client.ca));
 const listBNF = computed(() => lines.value.map((l) => l.client.bnf));
 </script>
-
-<style>
-@import url("@/styles.css");
-</style>

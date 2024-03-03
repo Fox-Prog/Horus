@@ -9,6 +9,17 @@
 }
 
 .title-flex {
-    display: flex;
-    align-items: center;
-  }
+  display: flex;
+  align-items: center;
+}
+
+.overlay-background {
+  position: absolute;
+  backdrop-filter: blur(30px);
+  background-color: var(--background-overlay);
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}

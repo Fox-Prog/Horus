@@ -233,3 +233,13 @@ onBeforeUnmount(() => {
   window.removeEventListener("keydown", shortcut);
 });
 </script>
+
+<style>
+#date-picker {
+  border: solid 5px var(--border-violet);
+}
+#date-picker .v-btn {
+  background-color: var(--background-violet-2);
+  color: var(--text-color-light);
+}
+</style>

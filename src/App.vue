@@ -52,15 +52,7 @@ onMounted(() => {
 
 <style>
 @import url("@/assets/main.css");
-@import url("@/assets/form.css");
-#main {
-  text-align: center;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 20px;
-}
+@import url("@/assets/containers.css");
 
 .dark {
   background-color: var(--background-violet-2);

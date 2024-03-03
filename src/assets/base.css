@@ -5,6 +5,8 @@
   --background-purple-1: #18111b;
   /* --background-color-light: #ba9aee; */
 
+  --background-overlay: rgba(27, 21, 37, 0.558);
+
   --text-color-dark: #baa7ff;
   --text-color-light: #e2ddfe;
 
@@ -13,4 +15,6 @@
   --interactive-components-3: #3c2e69;
 
   --border-violet: #56468b;
+
+  --box-shadow-color: rgba(105, 88, 173, 0.095);
 }

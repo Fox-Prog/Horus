@@ -1,13 +1,13 @@
 <template>
   <v-form v-model="form">
     <div id="lines">
-      <div class="formLine">
+      <div id="formLine">
         <field class="selector" v-model="Hstr" :contents="HH"></field>
         <h2 class="dark-title">h</h2>
         <field class="selector" v-model="Mstr" :contents="MM"></field>
       </div>
       <div style="width: 40px"></div>
-      <div class="formLine">
+      <div id="formLine">
         <field class="selector" v-model="Hstp" :contents="HH2"></field>
         <h2 class="dark-title">h</h2>
         <field class="selector" v-model="Mstp" :contents="MM2"></field>
@@ -156,5 +156,35 @@ onMounted(() => {
 </script>
 
 <style>
-@import url("@/styles.css");
+#lines {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+}
+
+#formLine {
+  display: flex;
+}
+
+.selector {
+  min-width: 85px;
+}
+
+#deleteForm {
+  position: absolute;
+  top: 8%;
+  left: 102%;
+}
+
+@media screen and (max-width: 600px) {
+  #lines {
+    flex-direction: column;
+  }
+  #deleteForm {
+    position: absolute;
+    top: 30%;
+    left: 111%;
+  }
+}
 </style>

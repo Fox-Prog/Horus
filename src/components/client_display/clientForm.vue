@@ -166,7 +166,3 @@ function deleteClient() {
   emit("done", true);
 }
 </script>
-
-<style>
-@import url("@/styles.css");
-</style>

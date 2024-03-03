@@ -3,10 +3,11 @@
     :append-icon="display ? 'mdi-chevron-up' : 'mdi-chevron-down'"
     color="#3C2E69"
     block
-    style="height: 40px"
+    height="40px"
     @click="display = !display"
     ><h2 class="light-title">{{ monthName }}</h2>
-    <v-divider class="mx-3" vertical></v-divider>{{ totalHours }}</v-btn
+    <v-divider class="mx-3" vertical></v-divider>
+    {{ totalHours }}</v-btn
   >
 
   <v-expand-transition>
@@ -74,7 +75,3 @@ const chrg =
 const listCA = computed(() => props.content.slice(1).map((l) => l.client.ca));
 const listBNF = computed(() => props.content.slice(1).map((l) => l.client.bnf));
 </script>
-
-<style>
-/* @import url("@/styles.css"); */
-</style>

@@ -45,7 +45,14 @@ const displayMode = ref("client");
 <!-- ___________________________________ Style ___________________________________ -->
 
 <style>
-/* @import url("@/styles.css"); */
+#main {
+  text-align: center;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
 #title {
   margin-bottom: 20px;
 }

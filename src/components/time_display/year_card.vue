@@ -6,7 +6,7 @@
   <v-expand-transition>
     <div
       v-if="display"
-      style="box-shadow: none; background-color: #14121f"
+      style="box-shadow: none; background-color: var(--background-violet-1)"
       class="card-calendar"
     >
       <recapBoard
