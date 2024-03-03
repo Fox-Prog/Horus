@@ -1,18 +1,21 @@
 <template>
   <v-btn
     :append-icon="display ? 'mdi-chevron-up' : 'mdi-chevron-down'"
-    color="#291F43"
+    color="var(--interactive-components-1)"
     block
-    style="height: 60px; border: solid 1px #473876"
+    style="height: 60px; border: solid 1px var(--border-violet)"
     @click="display = !display"
-    ><h1 style="color: #ecd9fa">{{ props.clientLines[0].name }}</h1>
+    ><h1 class="dark-title">{{ props.clientLines[0].name }}</h1>
     <v-divider class="mx-2" vertical></v-divider
   ></v-btn>
   <v-expand-transition>
     <div
       v-if="display"
       class="card-calendar"
-      style="border: solid 1px #473876; background-color: #14121f"
+      style="
+        border: solid 1px var(--border-violet);
+        background-color: var(--background-violet-1);
+      "
     >
       <recapBoard
         :tth="dtt_client"
@@ -40,7 +43,7 @@ import { ref, defineProps, computed } from "vue";
 const props = defineProps(["clientLines"]);
 // Import components
 import recapBoard from "@/components/recapBoard.vue";
-import yearCard from "@/components/year_card.vue";
+import yearCard from "@/components/time_display/year_card.vue";
 // Import js fonctions
 import { yearFocus } from "@/functions/sort_functions.js";
 import { addTime } from "@/functions/time_functions";

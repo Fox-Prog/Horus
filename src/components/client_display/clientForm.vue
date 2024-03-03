@@ -1,23 +1,23 @@
 <template>
   <div class="card-home">
     <v-form class="form" v-model="formDone" @submit.prevent="createClient()">
-      <h3>Client</h3>
+      <h3 class="dark-title">Client</h3>
       <v-text-field
         class="mx-2"
         density="compact"
         style="width: 90%"
         variant="solo-filled"
-        bg-color="#291F43"
+        bg-color="#291f43"
         label="Nom du client"
         :rules="[unicName]"
         v-model="clientName"
       ></v-text-field>
-      <h3>Revenu</h3>
+      <h3 class="dark-title">Revenu</h3>
       <v-text-field
         class="mx-2"
         density="compact"
         variant="solo-filled"
-        bg-color="#291F43"
+        bg-color="#291f43"
         hide-spin-buttons
         append-inner-icon="mdi-currency-eur"
         label="Taux horaire"
@@ -29,7 +29,7 @@
         class="mx-2"
         density="compact"
         variant="solo-filled"
-        bg-color="#291F43"
+        bg-color="#291f43"
         hide-spin-buttons
         append-inner-icon="mdi-percent"
         label="Charges"

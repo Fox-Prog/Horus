@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-main id="main">
+    <v-main id="main" :class="colorMode">
       <router-view></router-view>
     </v-main>
   </v-app>
@@ -8,7 +8,7 @@
 
 <script setup>
 import "@mdi/font/css/materialdesignicons.css";
-import { onMounted } from "vue";
+import { ref, onMounted } from "vue";
 import { getLinesLocal, getClientsLocal } from "@/functions/bdd_functions.js";
 import { useStore } from "vuex";
 const store = useStore();
@@ -41,6 +41,8 @@ function initIndexedDB() {
   }
 }
 
+const colorMode = ref("dark");
+
 onMounted(() => {
   initIndexedDB();
   getLinesLocal(store);
@@ -49,6 +51,8 @@ onMounted(() => {
 </script>
 
 <style>
+@import url("@/assets/main.css");
+@import url("@/assets/form.css");
 #main {
   text-align: center;
   margin: 0;
@@ -56,6 +60,12 @@ onMounted(() => {
   flex-direction: column;
   align-items: center;
   padding: 20px;
-  background-color: rgb(27, 21, 37);
+}
+
+.dark {
+  background-color: var(--background-violet-2);
+}
+.light {
+  background-color: var(--background-color-light);
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <h1 id="title">Horus</h1>
+  <h1 id="title" class="dark-title">Horus</h1>
 
   <hourlyForm :mode="1"></hourlyForm>
 
@@ -32,8 +32,8 @@ import { useStore } from "vuex";
 const store = useStore();
 // Import components
 import hourlyForm from "@/components/hourly/hourlyForm.vue";
-import yearCard from "@/components/year_card.vue";
-import clientCard from "@/components/client/client_card.vue";
+import yearCard from "@/components/time_display/year_card.vue";
+import clientCard from "@/components/client_display/client_card.vue";
 // Import js fonctions
 import { yearFocus, clientFocus } from "@/functions/sort_functions.js";
 
@@ -45,7 +45,7 @@ const displayMode = ref("client");
 <!-- ___________________________________ Style ___________________________________ -->
 
 <style>
-@import url("@/styles.css");
+/* @import url("@/styles.css"); */
 #title {
   margin-bottom: 20px;
 }

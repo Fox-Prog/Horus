@@ -3,13 +3,13 @@
     <div id="lines">
       <div class="formLine">
         <field class="selector" v-model="Hstr" :contents="HH"></field>
-        <h2>h</h2>
+        <h2 class="dark-title">h</h2>
         <field class="selector" v-model="Mstr" :contents="MM"></field>
       </div>
       <div style="width: 40px"></div>
       <div class="formLine">
         <field class="selector" v-model="Hstp" :contents="HH2"></field>
-        <h2>h</h2>
+        <h2 class="dark-title">h</h2>
         <field class="selector" v-model="Mstp" :contents="MM2"></field>
       </div>
       <v-btn

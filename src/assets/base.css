@@ -1,0 +1,16 @@
+:root {
+  --background-violet-1: #14121F;
+  --background-violet-2: #1B1525;
+  --background-violet-6: #473876;
+  --background-purple-1: #18111b;
+  /* --background-color-light: #ba9aee; */
+
+  --text-color-dark: #baa7ff;
+  --text-color-light: #e2ddfe;
+
+  --interactive-components-1: #291f43;
+  --interactive-components-2: #33255b;
+  --interactive-components-3: #3c2e69;
+
+  --border-violet: #56468b;
+}

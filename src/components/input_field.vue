@@ -3,7 +3,7 @@
     class="mx-2"
     density="compact"
     variant="solo-filled"
-    bg-color="#291F43"
+    bg-color="#291f43"
     :items="contents"
     menu-icon="none"
     :menu-props="menuProps"

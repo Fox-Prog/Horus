@@ -1,57 +1,3 @@
-/* _____________________ MAIN _____________________ */
-h1,
-h2,
-h3,
-h4 {
-  color: rgb(186, 167, 255);
-}
-
-.title-light {
-  color: rgb(254, 223, 221);
-}
-
-.title-flex {
-  display: flex;
-  align-items: center;
-}
-/* _____________________ FORM _____________________ */
-.card-home {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  align-self: center;
-  background-color: rgb(24, 17, 27);
-  border-radius: 5px;
-  box-shadow: 0px 0px 20px 0px rgba(105, 88, 173, 0.095);
-  padding: 10px;
-  width: fit-content;
-  max-width: 100%;
-}
-.form {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  max-width: 100%;
-}
-#date-picker {
-  border: solid 5px rgb(86, 70, 139);
-}
-#date-picker .v-btn {
-  background-color: rgb(27, 21, 37);
-  color: rgb(226, 221, 254);
-}
-.card-calendar {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background-color: #291f43;
-  border-radius: 5px;
-  box-shadow: 0px 0px 20px 0px rgba(105, 88, 173, 0.095);
-  padding: 10px;
-}
-.card-container {
-  width: 100%;
-}
 /* _____________________ FIELDS _____________________ */
 #lines {
   position: relative;
@@ -93,10 +39,10 @@ h4 {
     21,
     37,
     0.558
-  ); /* Ajustez l'opacité (dernier paramètre) */
+  );
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: 1; /* Assurez-vous que le fond est au-dessus de tout le reste */
+  z-index: 1;
 }

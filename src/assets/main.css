@@ -1,0 +1,14 @@
+@import "./base.css";
+
+.dark-title {
+  color: var(--text-color-dark);
+}
+
+.light-title {
+  color: var(--text-color-light);
+}
+
+.title-flex {
+    display: flex;
+    align-items: center;
+  }

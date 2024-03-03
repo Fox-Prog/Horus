@@ -30,13 +30,13 @@
     </v-fade-transition>
     <div id="total-hour-line">
       <div id="day">
-        <h3 class="mr-2">{{ dayName }}</h3>
-        <h3>{{ line.date.getDate() }}</h3>
+        <h3 class="dark-title mr-2">{{ dayName }}</h3>
+        <h3 class="dark-title">{{ line.date.getDate() }}</h3>
       </div>
-      <h3 class="title-light">{{ sum }}</h3>
+      <h3 class="light-title">{{ sum }}</h3>
     </div>
     <div id="h3-container">
-      <h3 v-for="h in hourly" :key="h.id">
+      <h3 class="dark-title" v-for="h in hourly" :key="h.id">
         {{ h.Hstr }}h{{ h.Mstr }} - {{ h.Hstp }}h{{ h.Mstp }}
       </h3>
     </div>
@@ -122,7 +122,7 @@ const touch = computed(() => {
   margin-right: 10px;
   padding: 0px 5px 0px 5px;
   border-radius: 3px;
-  background-color: rgb(71, 56, 118);
+  background-color: var(--background-violet-6);
   align-items: center;
   min-width: 130px;
 }

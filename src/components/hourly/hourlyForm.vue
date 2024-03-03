@@ -11,7 +11,7 @@
             v-bind="props"
             class="mb-5"
             variant="flat"
-            color="#291F43"
+            color="#291f43"
             size="60"
             block
             ><h2>
@@ -87,7 +87,7 @@ const content = defineProps(["line", "mode"]);
 const emit = defineEmits(["setDone"]);
 // Import components
 import entryHourlyField from "@/components/hourly/hourlyField.vue";
-import clientField from "@/components/client/clientField.vue";
+import clientField from "@/components/client_display/clientField.vue";
 // Import js fonctions
 import { addLine, removeLine } from "@/functions/bdd_functions.js";
 import { addTime } from "@/functions/time_functions.js";
@@ -233,7 +233,3 @@ onBeforeUnmount(() => {
   window.removeEventListener("keydown", shortcut);
 });
 </script>
-
-<style>
-@import url("@/styles.css");
-</style>

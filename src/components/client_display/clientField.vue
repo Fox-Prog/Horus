@@ -1,12 +1,12 @@
 <template>
   <div id="client-field-container">
-    <h2>Client</h2>
+    <h2 class="dark-title">Client</h2>
     <div id="client-select-btn">
       <v-select
         class="mx-4"
         density="compact"
         variant="solo-filled"
-        bg-color="#291F43"
+        bg-color="#291f43"
         :items="clientList"
         v-model="selectedClient"
       ></v-select>
@@ -14,7 +14,7 @@
         class="ms-2"
         size="40px"
         v-if="selectedClient"
-        color="#291F43"
+        color="#291f43"
         rounded="sm"
         icon="mdi-cog"
         @click="(dialog = true), (mode = 2)"
@@ -45,7 +45,7 @@ import { ref, defineEmits, watch, computed, defineProps } from "vue";
 const props = defineProps(["clientName"]);
 const emit = defineEmits(["selected"]);
 // Import components
-import clientForm from "@/components/client/clientForm.vue";
+import clientForm from "@/components/client_display/clientForm.vue";
 // Import store
 import { useStore } from "vuex";
 const store = useStore();
@@ -78,12 +78,12 @@ watch(selectedClient, () => {
 #client-field-container {
   display: flex;
   width: 100%;
-  background-color: rgb(24, 17, 27);
+  background-color: var(--background-purple-1);
 }
 #client-select-btn {
   display: flex;
   width: 100%;
-  background-color: rgb(24, 17, 27);
+  background-color: var(--background-purple-1);
 }
 
 @media screen and (max-width: 600px) {
