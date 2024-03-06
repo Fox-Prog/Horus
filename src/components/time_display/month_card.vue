@@ -20,7 +20,9 @@
         :bnf="sumBNF(listBNF)"
       ></recapBoard>
       <ligne
-        v-for="line in props.content.slice(1)"
+        v-for="line in props.content
+          .slice(1)
+          .sort((a, b) => (a.date > b.date ? 1 : b.date > a.date ? -1 : 0))"
         :key="line.id"
         :line="line"
       ></ligne>

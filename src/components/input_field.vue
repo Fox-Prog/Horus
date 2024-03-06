@@ -11,6 +11,7 @@
 </template>
 
 <script setup>
+// Import vue fonctions
 import { ref, defineProps, watch } from "vue";
 const props = defineProps(["contents"]);
 
