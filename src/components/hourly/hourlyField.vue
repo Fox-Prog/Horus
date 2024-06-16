@@ -86,10 +86,20 @@ const MM = [
 const HH2 = ref(HH);
 const MM2 = ref(MM);
 
+function autoZero() {
+  if (Hstr.value && !Mstr.value) {
+    Mstr.value = MM[0];
+  }
+  if (Hstp.value && !Mstp.value) {
+    Mstp.value = MM[0];
+  }
+}
+
 function calc_HH_contents() {
   if (Hstr.value) {
     HH2.value = HH.slice(HH.indexOf(Hstr.value));
-    Hstp.value = Hstr.value > Hstp.value ? Hstr.value : Hstp.value;
+    Hstp.value =
+      Hstp.value && Hstr.value > Hstp.value ? Hstr.value : Hstp.value;
   } else {
     HH2.value = HH;
   }
@@ -99,7 +109,8 @@ function calc_MM_contents() {
   if (Hstr.value === Hstp.value) {
     if (Mstr.value) {
       MM2.value = MM.slice(MM.indexOf(Mstr.value));
-      Mstp.value = Mstr.value > Mstp.value ? Mstr.value : Mstp.value;
+      Mstp.value =
+        Mstp.value && Mstr.value > Mstp.value ? Mstr.value : Mstp.value;
     }
   } else {
     MM2.value = MM;
@@ -146,6 +157,7 @@ watch(
 );
 
 watch([Hstr, Mstr, Hstp, Mstp], () => {
+  autoZero();
   calc_HH_contents();
   calc_MM_contents();
   checkForm();

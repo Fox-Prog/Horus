@@ -1,6 +1,6 @@
 <template>
   <div class="card-home">
-    <v-form class="form" v-model="formDone" @submit.prevent="createClient()">
+    <v-form class="form" @submit.prevent="createClient()">
       <h3 class="dark-title">Client</h3>
       <v-text-field
         class="mx-2"
@@ -63,7 +63,7 @@
 
 <script setup>
 // Import vue fonctions
-import { ref, computed, defineProps, defineEmits } from "vue";
+import { ref, defineProps, defineEmits, watch, onMounted } from "vue";
 const props = defineProps(["mode", "client"]);
 const emit = defineEmits(["done"]);
 // Import js fonctions
@@ -79,21 +79,38 @@ import { calcCA, calcBNF } from "@/functions/money_functions";
 import { useStore } from "vuex";
 const store = useStore();
 
-const regex = /^(?!null$|^$).+/;
-
-const formDone = computed(() => {
-  if (clientName.value && th.value > 0 && regex.test(chrg.value)) {
-    return true;
-  } else {
-    return false;
-  }
-});
-
 // V-MODEL
 // const clientName = ref(props.content[0]);
 const clientName = ref(props.mode === 2 ? props.client.name : null);
 const th = ref(props.mode === 2 ? props.client.th : null);
 const chrg = ref(props.mode === 2 ? props.client.chrg : null);
+
+// FORM
+const regex = /^(?!null$|^$)(?=.*\d)^(\d+(\.\d+)?|\.\d+)$/;
+
+const formDone = ref(false);
+
+function checkForm() {
+  console.log("unicName(clientName.value):", unicName(clientName.value));
+  if (
+    clientName.value &&
+    unicName(clientName.value) === true &&
+    th.value > 0 &&
+    regex.test(chrg.value)
+  ) {
+    formDone.value = true;
+  } else {
+    formDone.value = false;
+  }
+}
+
+watch([clientName, th, chrg], () => {
+  checkForm();
+});
+
+onMounted(() => {
+  checkForm();
+});
 
 // RULES
 function positiveNbr(v) {
@@ -105,7 +122,7 @@ function positiveNbr(v) {
 
 function unicName(v) {
   const clientExist = store.state.clients.some((c) => c.name === v);
-  if (clientExist) {
+  if (props.mode === 1 && clientExist) {
     return "Client déjà enregistré";
   }
   return true;
@@ -142,6 +159,17 @@ function setClientToHourly(clientID) {
   }
 }
 
+function removeLinesOfClient() {
+  const lines = store.state.lines.filter(
+    (l) => l.client.id === props.client.id
+  );
+  if (lines.length > 0) {
+    lines.forEach((l) => {
+      removeLine(store, l);
+    });
+  }
+}
+
 function createClient() {
   const clientID = Date.now();
   const client = {
@@ -162,6 +190,7 @@ function createClient() {
 }
 
 function deleteClient() {
+  removeLinesOfClient();
   removeClient(store, props.client);
   emit("done", true);
 }
