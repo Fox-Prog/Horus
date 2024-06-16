@@ -4,6 +4,7 @@ export default createStore({
   state: {
     lines: [],
     clients: [],
+    expandStates: [],
   },
   getters: {},
   mutations: {
@@ -20,6 +21,15 @@ export default createStore({
     removeClient(state, client) {
       state.clients.splice(client, 1);
     },
+
+    setExpandState(state, data) {
+      const existed = state.expandStates.find((st) => st.id === data.id);
+      if (existed) {
+        existed.state = data.state;
+      } else {
+        state.expandStates.push(data);
+      }
+    },
   },
   actions: {
     addLine({ commit }, line) {
@@ -34,6 +44,10 @@ export default createStore({
     },
     removeClient({ commit }, client) {
       commit("removeClient", client);
+    },
+
+    setExpandState({ commit }, data) {
+      commit("setExpandState", data);
     },
   },
   modules: {},

@@ -2,7 +2,7 @@
   <h1 id="title" class="dark-title">Horus</h1>
 
   <hourlyForm :mode="1"></hourlyForm>
-  <displaySelector></displaySelector>
+  <displaySelector @changeMode="handleDisplayMode"></displaySelector>
 
   <v-divider class="my-5"></v-divider>
 
@@ -27,7 +27,7 @@
 
 <script setup>
 // Import vue fonctions
-import { computed } from "vue";
+import { computed, ref } from "vue";
 // Import store
 import { useStore } from "vuex";
 const store = useStore();
@@ -41,13 +41,17 @@ import { yearFocus, clientFocus } from "@/functions/sort_functions.js";
 
 // Display lines
 const savedLine = computed(() => store.state.lines);
-const displayMode = computed(() => {
-  if (localStorage.getItem("displayMode")) {
-    return localStorage.getItem("displayMode");
-  }
 
-  return "Time";
-});
+const displayMode = ref(
+  localStorage.getItem("displayMode")
+    ? localStorage.getItem("displayMode")
+    : "Client"
+);
+
+function handleDisplayMode(data) {
+  displayMode.value = data;
+  store.state.expandStates = [];
+}
 </script>
 
 <!-- ___________________________________ Style ___________________________________ -->

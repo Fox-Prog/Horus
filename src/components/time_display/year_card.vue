@@ -26,13 +26,15 @@
     :key="month"
     :content="month"
     :chrg="props.chrg"
+    :clientID="props.clientID ? props.clientID : 'none'"
+    :year="props.content[0].name"
   ></monthCard>
 </template>
 
 <script setup>
 // Import vue fonctions
 import { ref, defineProps, computed } from "vue";
-const props = defineProps(["content", "chrg"]);
+const props = defineProps(["content", "chrg", "clientID"]);
 // Import components
 import recapBoard from "@/components/recapBoard.vue";
 import monthCard from "@/components/time_display/month_card.vue";

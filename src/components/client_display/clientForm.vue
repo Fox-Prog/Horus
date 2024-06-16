@@ -91,7 +91,6 @@ const regex = /^(?!null$|^$)(?=.*\d)^(\d+(\.\d+)?|\.\d+)$/;
 const formDone = ref(false);
 
 function checkForm() {
-  console.log("unicName(clientName.value):", unicName(clientName.value));
   if (
     clientName.value &&
     unicName(clientName.value) === true &&

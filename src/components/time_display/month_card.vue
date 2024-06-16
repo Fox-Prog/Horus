@@ -4,7 +4,7 @@
     color="#3C2E69"
     block
     height="40px"
-    @click="display = !display"
+    @click="handleDisplay"
     ><h2 class="light-title">{{ monthName }}</h2>
     <v-divider class="mx-3" vertical></v-divider>
     {{ totalHours }}</v-btn
@@ -35,7 +35,9 @@
 <script setup>
 // Import vue fonctions
 import { ref, defineProps, computed } from "vue";
-const props = defineProps(["content", "chrg"]);
+const props = defineProps(["content", "chrg", "clientID", "year"]);
+import { useStore } from "vuex";
+const store = useStore();
 // Import components
 import ligne from "@/components/hourly/hourlyLine.vue";
 import recapBoard from "@/components/recapBoard.vue";
@@ -44,7 +46,23 @@ import { addTime } from "@/functions/time_functions.js";
 import { averageDays } from "@/functions/recap_functions.js";
 import { sumCA, sumBNF } from "@/functions/money_functions.js";
 
-const display = ref(false);
+const state = computed(() => {
+  return store.state.expandStates.find(
+    (st) =>
+      st.id === props.clientID + "/" + props.content[0].name + "/" + props.year
+  );
+});
+
+const display = ref(state.value ? state.value.state : false);
+
+function handleDisplay() {
+  display.value = !display.value;
+
+  store.dispatch("setExpandState", {
+    id: props.clientID + "/" + props.content[0].name + "/" + props.year,
+    state: display.value,
+  });
+}
 
 const listMonth = [
   "Janvier",

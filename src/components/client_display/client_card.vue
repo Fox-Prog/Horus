@@ -4,7 +4,7 @@
     color="#291f43"
     block
     style="height: 60px; border: solid 1px var(--border-violet)"
-    @click="display = !display"
+    @click="handleDisplay"
     ><h1 class="dark-title">{{ props.clientLines[0].name }}</h1>
     <v-divider class="mx-2" vertical></v-divider
   ></v-btn>
@@ -30,6 +30,7 @@
           :key="year.id"
           :content="year"
           :chrg="false"
+          :clientID="props.clientLines[0].name"
         ></yearCard>
       </div>
     </div>
@@ -41,6 +42,8 @@
 // Import vue fonctions
 import { ref, defineProps, computed } from "vue";
 const props = defineProps(["clientLines"]);
+import { useStore } from "vuex";
+const store = useStore();
 // Import components
 import recapBoard from "@/components/recapBoard.vue";
 import yearCard from "@/components/time_display/year_card.vue";
@@ -50,7 +53,32 @@ import { addTime } from "@/functions/time_functions";
 import { averageDays } from "@/functions/recap_functions.js";
 import { sumCA, sumBNF } from "@/functions/money_functions.js";
 
-const display = ref(false);
+const clientName = ref(props.clientLines[0].name);
+const state = computed(() => {
+  return store.state.expandStates.find((st) => st.id === clientName.value);
+});
+
+const display = ref(state.value ? state.value.state : false);
+function handleDisplay() {
+  display.value = !display.value;
+
+  store.dispatch("setExpandState", {
+    id: clientName.value,
+    state: display.value,
+  });
+
+  if (!display.value) {
+    store.state.expandStates.map((st) => {
+      if (st.id.split("/")[0] === clientName.value) {
+        store.dispatch("setExpandState", {
+          id: st.id,
+          state: false,
+        });
+      }
+    });
+  }
+}
+
 const lines = computed(() => props.clientLines.slice(1));
 const durations = lines.value.map((l) => l.dtt);
 const totalHours = computed(() => {
