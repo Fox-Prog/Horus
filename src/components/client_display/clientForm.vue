@@ -46,18 +46,27 @@
         block
         >Valider</v-btn
       >
-      <v-btn
-        v-if="props.mode === 2"
-        class="mt-3"
-        type="submit"
-        variant="elevated"
-        color="#E5484D"
-        size="30"
-        block
-        @click="deleteClient"
-        >Supprimer</v-btn
-      >
     </v-form>
+    <v-btn
+      v-if="props.mode === 2"
+      class="mt-3"
+      type="submit"
+      variant="elevated"
+      color="#E5484D"
+      size="30"
+      block
+      @click="infoMessage = !infoMessage"
+      >Supprimer</v-btn
+    >
+
+    <v-dialog v-model="infoMessage" persistent>
+      <info_message_box
+        :title="'Attention !!'"
+        :text="'Tous les horaires de ce client seront supprimé en faisant ça, SUUUR le couz ?'"
+        @accept="deleteClient"
+        @cancel="infoMessage = false"
+      ></info_message_box>
+    </v-dialog>
   </div>
 </template>
 
@@ -66,6 +75,9 @@
 import { ref, defineProps, defineEmits, watch, onMounted } from "vue";
 const props = defineProps(["mode", "client"]);
 const emit = defineEmits(["done"]);
+// Import store
+import { useStore } from "vuex";
+const store = useStore();
 // Import js fonctions
 import {
   addClient,
@@ -73,11 +85,12 @@ import {
   removeLine,
   addLine,
 } from "@/functions/bdd_functions.js";
+import { removeLinesOfClient } from "@/functions/remove_functions";
 import { calcCA, calcBNF } from "@/functions/money_functions";
 
-// Import store
-import { useStore } from "vuex";
-const store = useStore();
+// Import components
+import info_message_box from "@/components/dialog/info_message_box.vue";
+const infoMessage = ref(false);
 
 // V-MODEL
 // const clientName = ref(props.content[0]);
@@ -158,17 +171,6 @@ function setClientToHourly(clientID) {
   }
 }
 
-function removeLinesOfClient() {
-  const lines = store.state.lines.filter(
-    (l) => l.client.id === props.client.id
-  );
-  if (lines.length > 0) {
-    lines.forEach((l) => {
-      removeLine(store, l);
-    });
-  }
-}
-
 function createClient() {
   const clientID = Date.now();
   const client = {
@@ -189,7 +191,7 @@ function createClient() {
 }
 
 function deleteClient() {
-  removeLinesOfClient();
+  removeLinesOfClient(store, props.client.id);
   removeClient(store, props.client);
   emit("done", true);
 }

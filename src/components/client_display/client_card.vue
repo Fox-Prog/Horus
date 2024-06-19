@@ -6,8 +6,25 @@
     style="height: 60px; border: solid 1px var(--border-violet)"
     @click="handleDisplay"
     ><h1 class="dark-title">{{ props.clientLines[0].name }}</h1>
-    <v-divider class="mx-2" vertical></v-divider
-  ></v-btn>
+    <v-divider class="mx-2" vertical></v-divider>
+    <delete_btn
+      style="position: absolute; right: 0"
+      :size="60"
+      @mouseenter="lock = true"
+      @mouseleave="lock = false"
+      @click="infoMessage = !infoMessage"
+    ></delete_btn>
+  </v-btn>
+
+  <v-dialog v-model="infoMessage" persistent>
+    <info_message_box
+      :title="'DANGER !!'"
+      :text="'Tous les horaires de ce client ainsi que le client seront supprimé, êtes vous sûr ?'"
+      @accept="deleteClient"
+      @cancel="infoMessage = false"
+    ></info_message_box>
+  </v-dialog>
+
   <v-expand-transition>
     <div
       v-if="display"
@@ -47,11 +64,17 @@ const store = useStore();
 // Import components
 import recapBoard from "@/components/recapBoard.vue";
 import yearCard from "@/components/time_display/year_card.vue";
+import delete_btn from "@/components/options/delete_btn.vue";
+import info_message_box from "@/components/dialog/info_message_box.vue";
 // Import js fonctions
 import { yearFocus } from "@/functions/sort_functions.js";
 import { addTime } from "@/functions/time_functions";
 import { averageDays } from "@/functions/recap_functions.js";
 import { sumCA, sumBNF } from "@/functions/money_functions.js";
+import { removeLinesOfClient } from "@/functions/remove_functions";
+import { removeClient } from "@/functions/bdd_functions";
+
+const infoMessage = ref(false);
 
 const clientName = ref(props.clientLines[0].name);
 const state = computed(() => {
@@ -59,23 +82,26 @@ const state = computed(() => {
 });
 
 const display = ref(state.value ? state.value.state : false);
+const lock = ref(false);
+
 function handleDisplay() {
-  display.value = !display.value;
+  if (!lock.value) {
+    display.value = !display.value;
 
-  store.dispatch("setExpandState", {
-    id: clientName.value,
-    state: display.value,
-  });
-
-  if (!display.value) {
-    store.state.expandStates.map((st) => {
-      if (st.id.split("/")[0] === clientName.value) {
-        store.dispatch("setExpandState", {
-          id: st.id,
-          state: false,
-        });
-      }
+    store.dispatch("setExpandState", {
+      id: clientName.value,
+      state: display.value,
     });
+    if (!display.value) {
+      store.state.expandStates.map((st) => {
+        if (st.id.split("/")[0] === clientName.value) {
+          store.dispatch("setExpandState", {
+            id: st.id,
+            state: false,
+          });
+        }
+      });
+    }
   }
 }
 
@@ -91,4 +117,9 @@ const dtt_client = addTime(lines.value.map((l) => l.dtt)).replace(":", "h");
 const chrg = lines.value[0].client.chrg.replace(".", ",");
 const listCA = computed(() => lines.value.map((l) => l.client.ca));
 const listBNF = computed(() => lines.value.map((l) => l.client.bnf));
+
+function deleteClient() {
+  removeLinesOfClient(store, props.clientLines[1].client.id);
+  removeClient(store, props.clientLines[1].client);
+}
 </script>

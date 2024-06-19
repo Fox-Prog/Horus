@@ -2,13 +2,30 @@
   <v-btn
     :append-icon="display ? 'mdi-chevron-up' : 'mdi-chevron-down'"
     color="#3C2E69"
-    block
     height="40px"
+    block
     @click="handleDisplay"
     ><h2 class="light-title">{{ monthName }}</h2>
     <v-divider class="mx-3" vertical></v-divider>
-    {{ totalHours }}</v-btn
-  >
+    {{ totalHours }}
+
+    <delete_btn
+      style="position: absolute; right: 0"
+      :size="40"
+      @mouseenter="lock = true"
+      @mouseleave="lock = false"
+      @click="infoMessage = !infoMessage"
+    ></delete_btn>
+  </v-btn>
+
+  <v-dialog v-model="infoMessage" persistent>
+    <info_message_box
+      :title="'Attention !!'"
+      :text="'Tous les horaires de ce mois seront supprimé, êtes vous sûr ?'"
+      @accept="deleteMonth"
+      @cancel="infoMessage = false"
+    ></info_message_box>
+  </v-dialog>
 
   <v-expand-transition>
     <div v-if="display" class="card-calendar">
@@ -41,10 +58,15 @@ const store = useStore();
 // Import components
 import ligne from "@/components/hourly/hourlyLine.vue";
 import recapBoard from "@/components/recapBoard.vue";
+import delete_btn from "@/components/options/delete_btn.vue";
+import info_message_box from "@/components/dialog/info_message_box.vue";
 // Import js fonctions
 import { addTime } from "@/functions/time_functions.js";
 import { averageDays } from "@/functions/recap_functions.js";
+import { removeLine } from "@/functions/bdd_functions";
 import { sumCA, sumBNF } from "@/functions/money_functions.js";
+
+const infoMessage = ref(false);
 
 const state = computed(() => {
   return store.state.expandStates.find(
@@ -54,14 +76,17 @@ const state = computed(() => {
 });
 
 const display = ref(state.value ? state.value.state : false);
+const lock = ref(false);
 
 function handleDisplay() {
-  display.value = !display.value;
+  if (!lock.value) {
+    display.value = !display.value;
 
-  store.dispatch("setExpandState", {
-    id: props.clientID + "/" + props.content[0].name + "/" + props.year,
-    state: display.value,
-  });
+    store.dispatch("setExpandState", {
+      id: props.clientID + "/" + props.content[0].name + "/" + props.year,
+      state: display.value,
+    });
+  }
 }
 
 const listMonth = [
@@ -94,4 +119,14 @@ const chrg =
   props.chrg === true ? props.content[1].client.chrg.replace(".", ",") : null;
 const listCA = computed(() => props.content.slice(1).map((l) => l.client.ca));
 const listBNF = computed(() => props.content.slice(1).map((l) => l.client.bnf));
+
+function deleteMonth() {
+  const lines = store.state.lines.filter(
+    (l) => l.date.getMonth() === props.content[0].name
+  );
+
+  lines.forEach((l) => {
+    removeLine(store, l);
+  });
+}
 </script>
