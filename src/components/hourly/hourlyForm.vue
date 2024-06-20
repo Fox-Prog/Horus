@@ -112,6 +112,9 @@ function handleSelectedClient(data) {
   checkGlobalTrue();
 }
 
+const billed = ref(content.mode === 2 ? content.line.client.billed : false);
+const paid = ref(content.mode === 2 ? content.line.client.paid : false);
+
 // Check global form
 function checkGlobalTrue() {
   const globalTrue = forms.value.every((f) => f.status === true);
@@ -205,6 +208,8 @@ function createLine() {
       chrg: clientSelected.value.chrg,
       ca: ca,
       bnf: bnf,
+      billed: billed.value,
+      paid: paid.value,
     },
   };
   addLine(store, line, 1);

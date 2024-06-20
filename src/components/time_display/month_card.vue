@@ -29,6 +29,14 @@
 
   <v-expand-transition>
     <div v-if="display" class="card-calendar">
+      <invoice_panel
+        v-if="props.clientID"
+        :billed="true"
+        @billed="goBilled"
+        :paid="true"
+        @paid="goPaid"
+      ></invoice_panel>
+
       <recapBoard
         :tth="totalHours"
         :avgDays="averageDays(durations, totalHours)"
@@ -60,10 +68,11 @@ import ligne from "@/components/hourly/hourlyLine.vue";
 import recapBoard from "@/components/recapBoard.vue";
 import delete_btn from "@/components/options/delete_btn.vue";
 import info_message_box from "@/components/dialog/info_message_box.vue";
+import invoice_panel from "@/components/options/invoice_panel.vue";
 // Import js fonctions
 import { addTime } from "@/functions/time_functions.js";
 import { averageDays } from "@/functions/recap_functions.js";
-import { removeLine } from "@/functions/bdd_functions";
+import { addLine, removeLine } from "@/functions/bdd_functions";
 import { sumCA, sumBNF } from "@/functions/money_functions.js";
 
 const infoMessage = ref(false);
@@ -120,13 +129,79 @@ const chrg =
 const listCA = computed(() => props.content.slice(1).map((l) => l.client.ca));
 const listBNF = computed(() => props.content.slice(1).map((l) => l.client.bnf));
 
-function deleteMonth() {
-  const lines = store.state.lines.filter(
+const linesList = computed(() => {
+  if (props.clientID) {
+    return store.state.lines
+      .filter((l) => l.client.name === props.clientID)
+      .filter((l) => l.date.getMonth() === props.content[0].name);
+  }
+
+  return store.state.lines.filter(
     (l) => l.date.getMonth() === props.content[0].name
   );
+});
 
-  lines.forEach((l) => {
+function deleteMonth() {
+  linesList.value.forEach((l) => {
+    removeLine(store, l);
+  });
+
+  infoMessage.value = false;
+}
+
+// INVOICE
+const checkBilled = computed(() => {
+  return linesList.value.every((l) => l.client.billed === true);
+});
+console.log("checkBilled:", checkBilled.value);
+
+function goBilled() {
+  linesList.value.forEach((l) => {
+    const line = {
+      id: Date.now(),
+      date: l.date,
+      hourly: JSON.parse(JSON.stringify(l.hourly)),
+      dtt: l.dtt,
+      client: {
+        id: l.client.id,
+        name: l.client.name,
+        th: l.client.th,
+        chrg: l.client.chrg,
+        ca: l.client.ca,
+        bnf: l.client.bnf,
+        billed: true,
+        paid: l.client.paid,
+      },
+    };
+
+    addLine(store, line, 1);
     removeLine(store, l);
   });
 }
+
+function goPaid() {
+  linesList.value.forEach((l) => {
+    const line = {
+      id: Date.now(),
+      date: l.date,
+      hourly: JSON.parse(JSON.stringify(l.hourly)),
+      dtt: l.dtt,
+      client: {
+        id: l.client.id,
+        name: l.client.name,
+        th: l.client.th,
+        chrg: l.client.chrg,
+        ca: l.client.ca,
+        bnf: l.client.bnf,
+        billed: l.client.billed,
+        paid: true,
+      },
+    };
+
+    addLine(store, line, 1);
+    removeLine(store, l);
+  });
+}
+
+console.log(store.state.lines);
 </script>

@@ -26,7 +26,7 @@
     :key="month"
     :content="month"
     :chrg="props.chrg"
-    :clientID="props.clientID ? props.clientID : 'none'"
+    :clientID="props.clientID ? props.clientID : null"
     :year="props.content[0].name"
   ></monthCard>
 </template>

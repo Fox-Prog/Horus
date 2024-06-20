@@ -51,5 +51,25 @@ export function clientFocus(lines) {
     }
     groups[client].push(obj);
   });
-  return groups;
+
+  // Sort
+  const sortedGroupsArray = Object.entries(groups).sort((a, b) => {
+    const nameA = a[1][0].name.toLowerCase();
+    const nameB = b[1][0].name.toLowerCase();
+    if (nameA < nameB) {
+      return -1;
+    }
+    if (nameA > nameB) {
+      return 1;
+    }
+    return 0;
+  });
+
+  // Array to Object
+  const sortedGroups = {};
+  sortedGroupsArray.forEach(([client, group]) => {
+    sortedGroups[client] = group;
+  });
+
+  return sortedGroups;
 }

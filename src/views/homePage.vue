@@ -13,7 +13,6 @@
       :content="year"
       :chrg="false"
     ></yearCard>
-    <v-divider class="my-5" thickness="4"></v-divider>
   </div>
 
   <div class="card-container" v-if="displayMode === 'Client'">
