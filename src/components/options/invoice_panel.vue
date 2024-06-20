@@ -5,7 +5,7 @@
       variant="tonal"
       rounded="sm"
       prepend-icon="mdi-file-document-outline"
-      :append-icon="props.billed ? 'mdi-check-all' : null"
+      :append-icon="props.billed === 'allTrue' ? 'mdi-check-all' : null"
       :color="colorInvoice"
       @click="emitInvoice"
       >Facturé</v-btn
@@ -15,22 +15,43 @@
       variant="tonal"
       rounded="sm"
       prepend-icon="mdi-currency-eur"
-      :append-icon="props.paid ? 'mdi-check-all' : null"
+      :append-icon="props.paid === 'allTrue' ? 'mdi-check-all' : null"
       :color="colorPaid"
       @click="emitPaid"
-      >Payé</v-btn
     >
+      <div style="display: flex; flex-direction: column">
+        Payé
+        <h5 v-if="props.paid === 'allTrue'" style="font-weight: 400">
+          {{ dop.toLocaleDateString() }}
+        </h5>
+      </div>
+    </v-btn>
   </div>
 </template>
 
 <script setup>
 // Import vue fonctions
-import { ref, defineProps, defineEmits } from "vue";
-const props = defineProps(["billed", "paid"]);
+import { computed, defineProps, defineEmits } from "vue";
+const props = defineProps(["billed", "paid", "dop"]);
 const emit = defineEmits(["billed", "paid"]);
 
-const colorInvoice = ref(props.billed ? "green" : "white");
-const colorPaid = ref(props.paid ? "green" : "white");
+const colorInvoice = computed(() => {
+  if (props.billed === "allTrue") {
+    return "green";
+  } else if (props.billed === "mixed") {
+    return "orange";
+  }
+  return "white";
+});
+
+const colorPaid = computed(() => {
+  if (props.paid === "allTrue") {
+    return "green";
+  } else if (props.paid === "mixed") {
+    return "orange";
+  }
+  return "white";
+});
 
 function emitInvoice() {
   emit("billed", true);

@@ -31,9 +31,10 @@
     <div v-if="display" class="card-calendar">
       <invoice_panel
         v-if="props.clientID"
-        :billed="true"
+        :billed="checkBilled"
         @billed="goBilled"
-        :paid="true"
+        :paid="checkPaid"
+        :dop="dateOfPaid"
         @paid="goPaid"
       ></invoice_panel>
 
@@ -151,11 +152,39 @@ function deleteMonth() {
 
 // INVOICE
 const checkBilled = computed(() => {
-  return linesList.value.every((l) => l.client.billed === true);
+  if (linesList.value.every((l) => l.client.billed === true)) {
+    return "allTrue";
+  } else if (linesList.value.every((l) => l.client.billed === false)) {
+    return "allFalse";
+  }
+  return "mixed";
 });
-console.log("checkBilled:", checkBilled.value);
+
+const checkPaid = computed(() => {
+  if (linesList.value.every((l) => l.client.paid === true)) {
+    return "allTrue";
+  } else if (linesList.value.every((l) => l.client.paid === false)) {
+    return "allFalse";
+  }
+  return "mixed";
+});
+
+const dateOfPaid = computed(() => {
+  if (linesList.value.every((l) => l.client.paid === true)) {
+    return linesList.value[0].client.dop;
+  }
+  return null;
+});
 
 function goBilled() {
+  let billedValue;
+
+  if (checkBilled.value === "allTrue") {
+    billedValue = false;
+  } else {
+    billedValue = true;
+  }
+
   linesList.value.forEach((l) => {
     const line = {
       id: Date.now(),
@@ -169,8 +198,9 @@ function goBilled() {
         chrg: l.client.chrg,
         ca: l.client.ca,
         bnf: l.client.bnf,
-        billed: true,
+        billed: billedValue,
         paid: l.client.paid,
+        dop: l.client.dop,
       },
     };
 
@@ -180,6 +210,17 @@ function goBilled() {
 }
 
 function goPaid() {
+  let paidValue;
+  let dop;
+
+  if (checkPaid.value === "allTrue") {
+    paidValue = false;
+    dop = null;
+  } else {
+    paidValue = true;
+    dop = new Date();
+  }
+
   linesList.value.forEach((l) => {
     const line = {
       id: Date.now(),
@@ -194,7 +235,8 @@ function goPaid() {
         ca: l.client.ca,
         bnf: l.client.bnf,
         billed: l.client.billed,
-        paid: true,
+        paid: paidValue,
+        dop: dop,
       },
     };
 
@@ -203,5 +245,5 @@ function goPaid() {
   });
 }
 
-console.log(store.state.lines);
+// console.log(store.state.lines);
 </script>

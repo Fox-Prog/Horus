@@ -210,6 +210,7 @@ function createLine() {
       bnf: bnf,
       billed: billed.value,
       paid: paid.value,
+      dop: null,
     },
   };
   addLine(store, line, 1);

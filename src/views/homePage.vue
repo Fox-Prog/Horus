@@ -20,6 +20,8 @@
       <clientCard :clientLines="clientLines"></clientCard>
     </div>
   </div>
+
+  <v-btn @click="pdf">PDF</v-btn>
 </template>
 
 <!-- ___________________________________ SETUP ___________________________________ -->
@@ -50,6 +52,28 @@ const displayMode = ref(
 function handleDisplayMode(data) {
   displayMode.value = data;
   store.state.expandStates = [];
+}
+
+import jsPDF from "jspdf";
+function pdf() {
+  const doc = new jsPDF();
+  let l = 10;
+  let h = 10;
+  store.state.lines.forEach((line) => {
+    doc.text(`ID: ${JSON.stringify(line.id)}`, l, h); // Nbr1 = l // Nbr2 = h
+    h = h + 10;
+    doc.text(
+      `Durée total: ${JSON.stringify(line.dtt).replace(":", "H")}`,
+      l,
+      h
+    );
+    h = h + 10;
+    doc.text(`Client name: ${line.client.name}`, l, h);
+    h = h + 10;
+    doc.text(`Bénéfices: ${JSON.stringify(line.client.bnf)} €`, l, h);
+    h = h + 10;
+  });
+  doc.save("doc.pdf");
 }
 </script>
 

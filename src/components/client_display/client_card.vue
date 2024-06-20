@@ -19,7 +19,7 @@
   <v-dialog v-model="infoMessage" persistent>
     <info_message_box
       :title="'DANGER !!'"
-      :text="'Tous les horaires de ce client ainsi que le client seront supprimé, êtes vous sûr ?'"
+      :text="'Tous les horaires de ce client seront supprimé, êtes vous sûr ?'"
       @accept="deleteClient"
       @cancel="infoMessage = false"
     ></info_message_box>
@@ -72,7 +72,7 @@ import { addTime } from "@/functions/time_functions";
 import { averageDays } from "@/functions/recap_functions.js";
 import { sumCA, sumBNF } from "@/functions/money_functions.js";
 import { removeLinesOfClient } from "@/functions/remove_functions";
-import { removeClient } from "@/functions/bdd_functions";
+// import { removeClient } from "@/functions/bdd_functions";
 
 const infoMessage = ref(false);
 
@@ -120,6 +120,6 @@ const listBNF = computed(() => lines.value.map((l) => l.client.bnf));
 
 function deleteClient() {
   removeLinesOfClient(store, props.clientLines[1].client.id);
-  removeClient(store, props.clientLines[1].client);
+  // removeClient(store, props.clientLines[1].client);
 }
 </script>
