@@ -246,4 +246,11 @@ function goPaid() {
 }
 
 // console.log(store.state.lines);
+store.state.lines.forEach((l) => {
+  console.log(
+    `Le ${l.date.getDate()}, th = ${l.client.th} / ca = ${
+      l.client.ca
+    } / bnf = ${l.client.bnf}`
+  );
+});
 </script>

@@ -63,6 +63,7 @@ function doneField(client) {
   dialog.value = false;
   mode.value = null;
   selectedClient.value = client.name;
+  emit("selected", clientData.value);
 }
 
 watch(selectedClient, () => {

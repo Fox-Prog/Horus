@@ -150,7 +150,6 @@ function setClientToHourly(clientID) {
       const hourly = l.hourly.map((h) => {
         return { ...h, id: Date.now() };
       });
-
       const line = {
         id: Date.now(),
         date: l.date,
@@ -163,10 +162,13 @@ function setClientToHourly(clientID) {
           chrg: chrg.value,
           ca: ca,
           bnf: calcBNF(ca, chrg.value),
+          billed: l.client.billed,
+          paid: l.client.paid,
+          dop: l.client.dop,
         },
       };
-      removeLine(store, l);
       addLine(store, line, 1);
+      removeLine(store, l);
     });
   }
 }
