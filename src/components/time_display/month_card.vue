@@ -41,6 +41,7 @@
       <recapBoard
         :tth="totalHours"
         :avgDays="averageDays(durations, totalHours)"
+        :jMax="jMax"
         :chrg="chrg"
         :ca="sumCA(listCA)"
         :bnf="sumBNF(listBNF)"
@@ -71,7 +72,7 @@ import delete_btn from "@/components/options/delete_btn.vue";
 import info_message_box from "@/components/dialog/info_message_box.vue";
 import invoice_panel from "@/components/options/invoice_panel.vue";
 // Import js fonctions
-import { addTime } from "@/functions/time_functions.js";
+import { addTime, hoursToHdec } from "@/functions/time_functions.js";
 import { averageDays } from "@/functions/recap_functions.js";
 import { addLine, removeLine } from "@/functions/bdd_functions";
 import { sumCA, sumBNF } from "@/functions/money_functions.js";
@@ -129,6 +130,19 @@ const chrg =
   props.chrg === true ? props.content[1].client.chrg.replace(".", ",") : null;
 const listCA = computed(() => props.content.slice(1).map((l) => l.client.ca));
 const listBNF = computed(() => props.content.slice(1).map((l) => l.client.bnf));
+const jMax = computed(() => {
+  const max = props.content
+    .slice(1)
+    .find(
+      (l) =>
+        hoursToHdec(l.dtt) ===
+        Math.max(...props.content.slice(1).map((l) => hoursToHdec(l.dtt)))
+    );
+  return {
+    dttMax: max.dtt,
+    day: max.date,
+  };
+});
 
 const linesList = computed(() => {
   if (props.clientID) {
@@ -142,10 +156,14 @@ const linesList = computed(() => {
   );
 });
 
-function deleteMonth() {
-  linesList.value.forEach((l) => {
-    removeLine(store, l);
-  });
+async function deleteMonth() {
+  for (const l of linesList.value) {
+    try {
+      await removeLine(store, l);
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   infoMessage.value = false;
 }
@@ -176,7 +194,7 @@ const dateOfPaid = computed(() => {
   return null;
 });
 
-function goBilled() {
+async function goBilled() {
   let billedValue;
 
   if (checkBilled.value === "allTrue") {
@@ -185,7 +203,7 @@ function goBilled() {
     billedValue = true;
   }
 
-  linesList.value.forEach((l) => {
+  for (const l of linesList.value) {
     const line = {
       id: Date.now(),
       date: l.date,
@@ -203,13 +221,16 @@ function goBilled() {
         dop: l.client.dop,
       },
     };
-
-    addLine(store, line, 1);
-    removeLine(store, l);
-  });
+    try {
+      await addLine(store, line, 1);
+      await removeLine(store, l);
+    } catch (error) {
+      console.log(error);
+    }
+  }
 }
 
-function goPaid() {
+async function goPaid() {
   let paidValue;
   let dop;
 
@@ -221,7 +242,7 @@ function goPaid() {
     dop = new Date();
   }
 
-  linesList.value.forEach((l) => {
+  for (const l of linesList.value) {
     const line = {
       id: Date.now(),
       date: l.date,
@@ -239,18 +260,21 @@ function goPaid() {
         dop: dop,
       },
     };
-
-    addLine(store, line, 1);
-    removeLine(store, l);
-  });
+    try {
+      await addLine(store, line, 1);
+      await removeLine(store, l);
+    } catch (error) {
+      console.log(error);
+    }
+  }
 }
 
-// console.log(store.state.lines);
-store.state.lines.forEach((l) => {
-  console.log(
-    `Le ${l.date.getDate()}, th = ${l.client.th} / ca = ${
-      l.client.ca
-    } / bnf = ${l.client.bnf}`
-  );
-});
+// console.log(store.state.lines.length);
+// store.state.lines.forEach((l) => {
+//   console.log(
+//     `Le ${l.date.getDate()}, th = ${l.client.th} / ca = ${l.client.ca.toFixed(
+//       2
+//     )} / bnf = ${l.client.bnf.toFixed(2)}`
+//   );
+// });
 </script>

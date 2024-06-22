@@ -14,7 +14,7 @@
           icon="mdi mdi-close"
           variant="flat"
           color="red"
-          @click="removeLine(store, props.line)"
+          @click="deleteLine"
         ></v-btn>
         <v-btn
           block
@@ -100,6 +100,14 @@ const touch = computed(() => {
     return false;
   }
 });
+
+async function deleteLine() {
+  try {
+    await removeLine(store, props.line);
+  } catch (error) {
+    console.log(error);
+  }
+}
 </script>
 
 <style>

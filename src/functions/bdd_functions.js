@@ -9,23 +9,33 @@ const indexedDB =
 
 // Add into vuex
 // Lines
-export function addLine(store, line, mode) {
-  store.dispatch("addLine", line);
-  if (mode === 1) {
-    addLineLocal(line);
+export async function addLine(store, line, mode) {
+  try {
+    await store.dispatch("addLine", line);
+    if (mode === 1) {
+      await addLineLocal(line);
+    }
+  } catch (error) {
+    console.log(error);
+    throw error;
   }
 }
 // Clients
-export function addClient(store, client, mode) {
-  store.dispatch("addClient", client);
-  if (mode === 1) {
-    addClientLocal(client);
+export async function addClient(store, client, mode) {
+  try {
+    await store.dispatch("addClient", client);
+    if (mode === 1) {
+      await addClientLocal(client);
+    }
+  } catch (error) {
+    console.log(error);
+    throw error;
   }
 }
 
 // Add into indexedDB
 // Lines
-export function addLineLocal(line) {
+export async function addLineLocal(line) {
   try {
     const request = indexedDB.open("horusDB", 1);
 
@@ -46,10 +56,11 @@ export function addLineLocal(line) {
     };
   } catch (err) {
     console.log("Error with IndexedDB: ", err);
+    throw err;
   }
 }
 // Clients
-export function addClientLocal(client) {
+export async function addClientLocal(client) {
   try {
     const request = indexedDB.open("horusDB", 1);
 
@@ -70,28 +81,39 @@ export function addClientLocal(client) {
     };
   } catch (err) {
     console.log("Error with IndexedDB: ", err);
+    throw err;
   }
 }
 
 // Remove into vuex
 // Lines
-export function removeLine(store, line) {
-  const index = store.state.lines.findIndex((l) => l === line);
+export async function removeLine(store, line) {
+  try {
+    const index = store.state.lines.findIndex((l) => l === line);
 
-  store.dispatch("removeLine", index);
-  removeLineLocal(line);
+    await store.dispatch("removeLine", index);
+    await removeLineLocal(line);
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
 }
 // Clients
-export function removeClient(store, client) {
-  const index = store.state.clients.findIndex((l) => l === client);
+export async function removeClient(store, client) {
+  try {
+    const index = store.state.clients.findIndex((l) => l === client);
 
-  store.dispatch("removeClient", index);
-  removeClientLocal(client);
+    await store.dispatch("removeClient", index);
+    await removeClientLocal(client);
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
 }
 
 // Remove into IndexedDB
 // Lines
-export function removeLineLocal(lineToRemove) {
+export async function removeLineLocal(lineToRemove) {
   try {
     const request = indexedDB.open("horusDB", 1);
 
@@ -112,10 +134,11 @@ export function removeLineLocal(lineToRemove) {
     };
   } catch (err) {
     console.error("Error with IndexedDB: ", err);
+    throw err;
   }
 }
 // Clients
-export function removeClientLocal(clientToRemove) {
+export async function removeClientLocal(clientToRemove) {
   try {
     const request = indexedDB.open("horusDB", 1);
 
@@ -136,6 +159,7 @@ export function removeClientLocal(clientToRemove) {
     };
   } catch (err) {
     console.error("Error with IndexedDB: ", err);
+    throw err;
   }
 }
 

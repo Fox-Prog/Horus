@@ -21,7 +21,10 @@
     >
       <div style="display: flex; flex-direction: column">
         Payé
-        <h5 v-if="props.paid === 'allTrue'" style="font-weight: 400">
+        <h5
+          v-if="props.paid === 'allTrue' && props.dop"
+          style="font-weight: 400"
+        >
           {{ dop.toLocaleDateString() }}
         </h5>
       </div>

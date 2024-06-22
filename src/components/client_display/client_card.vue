@@ -37,6 +37,7 @@
       <recapBoard
         :tth="dtt_client"
         :avgDays="averageDays(durations, totalHours)"
+        :th="th"
         :chrg="chrg"
         :ca="sumCA(listCA)"
         :bnf="sumBNF(listBNF)"
@@ -114,12 +115,17 @@ const totalHours = computed(() => {
   return 0;
 });
 const dtt_client = addTime(lines.value.map((l) => l.dtt)).replace(":", "h");
+const th = lines.value[0].client.th.replace(".", ",");
 const chrg = lines.value[0].client.chrg.replace(".", ",");
 const listCA = computed(() => lines.value.map((l) => l.client.ca));
 const listBNF = computed(() => lines.value.map((l) => l.client.bnf));
 
-function deleteClient() {
-  removeLinesOfClient(store, props.clientLines[1].client.id);
-  // removeClient(store, props.clientLines[1].client);
+async function deleteClient() {
+  try {
+    await removeLinesOfClient(store, props.clientLines[1].client.id);
+    // await removeClient(store, props.clientLines[1].client);
+  } catch (error) {
+    console.log(error);
+  }
 }
 </script>

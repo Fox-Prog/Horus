@@ -176,7 +176,7 @@ function resetForm() {
 }
 
 // Création de l'objet ligne horaire
-function createLine() {
+async function createLine() {
   const hourly = forms.value.map((f) => {
     return {
       id: Date.now(),
@@ -213,9 +213,17 @@ function createLine() {
       dop: null,
     },
   };
-  addLine(store, line, 1);
+  try {
+    await addLine(store, line, 1);
+  } catch (error) {
+    console.log(error);
+  }
   if (content.mode === 2) {
-    removeLine(store, content.line);
+    try {
+      await removeLine(store, content.line);
+    } catch (error) {
+      console.log(error);
+    }
   }
   resetForm();
   emit("setDone");

@@ -140,12 +140,12 @@ function unicName(v) {
   return true;
 }
 
-function setClientToHourly(clientID) {
+async function setClientToHourly(clientID) {
   const lines = store.state.lines.filter(
     (l) => l.client.id === props.client.id
   );
   if (lines.length > 0) {
-    lines.forEach((l) => {
+    for (const l of lines) {
       const ca = calcCA(l.dtt, th.value);
       const hourly = l.hourly.map((h) => {
         return { ...h, id: Date.now() };
@@ -167,13 +167,17 @@ function setClientToHourly(clientID) {
           dop: l.client.dop,
         },
       };
-      addLine(store, line, 1);
-      removeLine(store, l);
-    });
+      try {
+        await addLine(store, line, 1);
+        await removeLine(store, l);
+      } catch (error) {
+        console.log(error);
+      }
+    }
   }
 }
 
-function createClient() {
+async function createClient() {
   const clientID = Date.now();
   const client = {
     id: clientID,
@@ -181,20 +185,31 @@ function createClient() {
     th: th.value,
     chrg: chrg.value,
   };
-  addClient(store, client, 1);
+  try {
+    await addClient(store, client, 1);
+  } catch (error) {
+    console.log(error);
+  }
 
   // MODE MODIF
   if (props.mode === 2) {
-    setClientToHourly(clientID);
-    removeClient(store, props.client);
+    try {
+      await setClientToHourly(clientID);
+      await removeClient(store, props.client);
+    } catch (error) {
+      console.log(error);
+    }
   }
-
   emit("done", client);
 }
 
-function deleteClient() {
-  removeLinesOfClient(store, props.client.id);
-  removeClient(store, props.client);
-  emit("done", true);
+async function deleteClient() {
+  try {
+    await removeLinesOfClient(store, props.client.id);
+    await removeClient(store, props.client);
+    emit("done", true);
+  } catch (error) {
+    console.log(error);
+  }
 }
 </script>
