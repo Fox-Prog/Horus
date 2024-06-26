@@ -6,6 +6,7 @@ export default createStore({
     clients: [],
     expandStates: [],
     loader: {},
+    loaderTime: 450,
   },
   getters: {},
   mutations: {

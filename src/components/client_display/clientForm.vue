@@ -186,6 +186,7 @@ function createMode() {
 }
 
 const success = ref(false);
+const loaderTime = store.state.loaderTime;
 
 async function createClient() {
   const clientID = Date.now();
@@ -211,7 +212,7 @@ async function createClient() {
     emit("error", true);
   } finally {
     if (success.value === true) {
-      setLoader(store, { dialog: false, mode: "success" }, 1000);
+      setLoader(store, { dialog: false, mode: "success" }, loaderTime);
       emit("done", client);
     }
   }

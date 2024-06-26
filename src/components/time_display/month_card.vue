@@ -207,6 +207,7 @@ function invoice_action(mode) {
 }
 
 const success = ref(false);
+const loaderTime = store.state.loaderTime;
 
 async function goBilled() {
   let billedValue;
@@ -256,7 +257,7 @@ async function goBilled() {
     );
   } finally {
     if (success.value) {
-      setLoader(store, { dialog: false, mode: "success" }, 1000);
+      setLoader(store, { dialog: false, mode: "success" }, loaderTime);
     }
   }
 }
@@ -311,7 +312,7 @@ async function goPaid() {
     );
   } finally {
     if (success.value) {
-      setLoader(store, { dialog: false, mode: "success" }, 1000);
+      setLoader(store, { dialog: false, mode: "success" }, loaderTime);
     }
   }
 }

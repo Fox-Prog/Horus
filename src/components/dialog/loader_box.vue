@@ -1,22 +1,29 @@
 <template>
-  <div id="circle">
+  <div class="loader-container">
+    <div class="wait-loader" v-if="props.mode === 'wait'"></div>
+    <div class="success-loader" v-if="props.mode === 'success'">
+      <img :src="checkImg" alt="fzf" />
+    </div>
     <h3 v-if="error">{{ props.error }}</h3>
     <v-btn v-if="error" @click="handleErrorBtn">OK</v-btn>
   </div>
 </template>
 
 <script setup>
-import { computed, defineProps, defineEmits } from "vue";
+import { defineProps, defineEmits } from "vue";
 const props = defineProps(["mode", "error"]);
 const emit = defineEmits(["errorChecked"]);
-const color = computed(() => {
-  if (props.mode === "wait") {
-    return "red";
-  } else if (props.mode === "success") {
-    return "green";
-  }
-  return "orange";
-});
+
+const checkImg = "/check.png";
+
+// const color = computed(() => {
+//   if (props.mode === "wait") {
+//     return "red";
+//   } else if (props.mode === "success") {
+//     return "green";
+//   }
+//   return "orange";
+// });
 
 function handleErrorBtn() {
   emit("errorChecked", true);
@@ -24,19 +31,62 @@ function handleErrorBtn() {
 </script>
 
 <style>
-#circle {
+.loader-container {
   position: absolute;
-  right: 50%;
-  transform: translateX(-50%);
+  left: 50%;
   top: 50%;
-  transform: translateY(-50%);
+  transform: translate(-50%, -50%);
+  padding: 0;
+  margin: 0;
+  width: 100px;
+  height: 100px;
+}
 
-  width: 300px;
-  height: 300px;
+.success-loader img {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 100px;
+  animation: s1 0.6s;
+}
+
+@keyframes s1 {
+  100% {
+    width: 140px;
+  }
+}
+
+.wait-loader {
+  width: 100px;
+  height: 100px;
+  display: grid;
+  border: 8px solid #0000;
   border-radius: 50%;
-  background-color: v-bind(color);
+  border-color: #baa7ff #0000;
+  animation: s2 1s infinite linear;
+}
+.wait-loader::before,
+.wait-loader::after {
+  content: "";
+  grid-area: 1/1;
+  margin: 4px;
+  border: inherit;
+  border-radius: 50%;
+}
+.wait-loader::before {
+  border-color: #e2ddfe #0000;
+  animation: inherit;
+  animation-duration: 0.5s;
+  animation-direction: reverse;
+}
+.wait-loader::after {
+  margin: 16px;
+}
 
-  text-align: center;
-  align-content: center;
+@keyframes s2 {
+  100% {
+    transform: rotate(1turn);
+  }
 }
 </style>

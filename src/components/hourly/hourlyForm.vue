@@ -196,6 +196,7 @@ function createMode() {
 }
 
 const success = ref(false);
+const loaderTime = store.state.loaderTime;
 
 async function createLine() {
   const hourly = forms.value.map((f) => {
@@ -263,7 +264,7 @@ async function createLine() {
     resetForm();
 
     if (success.value === true) {
-      setLoader(store, { dialog: false, mode: "success" }, 1000);
+      setLoader(store, { dialog: false, mode: "success" }, loaderTime);
       emit("setDone", true);
     }
   }
