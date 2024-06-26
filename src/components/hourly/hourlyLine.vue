@@ -24,7 +24,6 @@
           variant="flat"
           color="blue"
           @click="dialog = true"
-          @setDone="dialog = false"
         ></v-btn>
       </div>
     </v-fade-transition>
@@ -44,8 +43,12 @@
   <v-divider></v-divider>
 
   <div class="overlay-background" v-if="dialog"></div>
-  <v-dialog style="width: 100%; height: 100%" v-model="dialog">
-    <setHourly :mode="2" :line="props.line"></setHourly>
+  <v-dialog style="width: 100%; height: 100%" v-model="dialog" persistent>
+    <setHourly
+      :mode="2"
+      :line="props.line"
+      @setDone="dialog = false"
+    ></setHourly>
   </v-dialog>
 </template>
 

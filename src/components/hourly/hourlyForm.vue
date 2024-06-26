@@ -4,7 +4,7 @@
       :clientName="content.mode === 2 ? content.line.client.name : null"
       @selected="handleSelectedClient"
     ></clientField>
-    <v-form class="form" v-model="formDone" @submit.prevent="createLine()">
+    <v-form class="form" v-model="formDone" @submit.prevent="createMode()">
       <v-dialog v-model="dialog">
         <template v-slot:activator="{ props }">
           <v-btn
@@ -69,6 +69,17 @@
         block
         >Valider</v-btn
       >
+
+      <v-btn
+        v-if="content.mode === 2"
+        class="mt-3"
+        variant="elevated"
+        color="#E5484D"
+        size="30"
+        block
+        @click="emit('setDone', true)"
+        >Annuler</v-btn
+      >
     </v-form>
   </div>
 </template>
@@ -93,6 +104,7 @@ import { addLine, removeLine } from "@/functions/bdd_functions.js";
 import { addTime } from "@/functions/time_functions.js";
 import { newForm } from "@/functions/forms_functions";
 import { calcCA, calcBNF } from "@/functions/money_functions";
+import { setLoader } from "@/functions/dialog_functions";
 // Import store
 import { useStore } from "vuex";
 const store = useStore();
@@ -176,6 +188,15 @@ function resetForm() {
 }
 
 // Création de l'objet ligne horaire
+function createMode() {
+  setLoader(store, { dialog: true, mode: "wait" }, 0);
+  setTimeout(() => {
+    createLine();
+  }, 200);
+}
+
+const success = ref(false);
+
 async function createLine() {
   const hourly = forms.value.map((f) => {
     return {
@@ -213,20 +234,39 @@ async function createLine() {
       dop: null,
     },
   };
+
   try {
-    await addLine(store, line, 1);
-  } catch (error) {
-    console.log(error);
-  }
-  if (content.mode === 2) {
-    try {
+    if (content.mode === 1) {
+      await addLine(store, line, 1);
+    } else if (content.mode === 2) {
+      await addLine(store, line, 1);
       await removeLine(store, content.line);
-    } catch (error) {
-      console.log(error);
+    }
+    success.value = true;
+    setLoader(store, { dialog: true, mode: "success" }, 0);
+  } catch (error) {
+    setLoader(
+      store,
+      {
+        dialog: true,
+        mode: "err",
+        error:
+          content.mode === 1
+            ? "Impossible d'enregistrer ces horaires"
+            : "Impossible de modifier ces horaires",
+      },
+      0
+    );
+
+    success.value = false;
+  } finally {
+    resetForm();
+
+    if (success.value === true) {
+      setLoader(store, { dialog: false, mode: "success" }, 1000);
+      emit("setDone", true);
     }
   }
-  resetForm();
-  emit("setDone");
 }
 
 function shortcut(event) {
@@ -237,6 +277,7 @@ function shortcut(event) {
       }
   }
 }
+
 // HOOK
 onMounted(() => {
   initForms();

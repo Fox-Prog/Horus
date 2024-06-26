@@ -5,6 +5,7 @@ export default createStore({
     lines: [],
     clients: [],
     expandStates: [],
+    loader: {},
   },
   getters: {},
   mutations: {
@@ -30,6 +31,10 @@ export default createStore({
         state.expandStates.push(data);
       }
     },
+
+    setLoader(state, data) {
+      state.loader = data;
+    },
   },
   actions: {
     addLine({ commit }, line) {
@@ -48,6 +53,10 @@ export default createStore({
 
     setExpandState({ commit }, data) {
       commit("setExpandState", data);
+    },
+
+    setLoader({ commit }, data) {
+      commit("setLoader", data);
     },
   },
   modules: {},

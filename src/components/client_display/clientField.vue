@@ -35,6 +35,7 @@
       :mode="mode"
       :client="mode === 2 ? clientData : null"
       @done="doneField"
+      @error="dialog = false"
     ></clientForm>
   </v-dialog>
 </template>

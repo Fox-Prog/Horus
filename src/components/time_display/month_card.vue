@@ -32,10 +32,10 @@
       <invoice_panel
         v-if="props.clientID"
         :billed="checkBilled"
-        @billed="goBilled"
+        @billed="invoice_action('billed')"
         :paid="checkPaid"
         :dop="dateOfPaid"
-        @paid="goPaid"
+        @paid="invoice_action('paid')"
       ></invoice_panel>
 
       <recapBoard
@@ -76,6 +76,7 @@ import { addTime, hoursToHdec } from "@/functions/time_functions.js";
 import { averageDays } from "@/functions/recap_functions.js";
 import { addLine, removeLine } from "@/functions/bdd_functions";
 import { sumCA, sumBNF } from "@/functions/money_functions.js";
+import { setLoader } from "@/functions/dialog_functions";
 
 const infoMessage = ref(false);
 
@@ -194,6 +195,19 @@ const dateOfPaid = computed(() => {
   return null;
 });
 
+function invoice_action(mode) {
+  setLoader(store, { dialog: true, mode: "wait" }, 0);
+  setTimeout(() => {
+    if (mode === "billed") {
+      goBilled();
+    } else if (mode === "paid") {
+      goPaid();
+    }
+  }, 200);
+}
+
+const success = ref(false);
+
 async function goBilled() {
   let billedValue;
 
@@ -203,29 +217,46 @@ async function goBilled() {
     billedValue = true;
   }
 
-  for (const l of linesList.value) {
-    const line = {
-      id: Date.now(),
-      date: l.date,
-      hourly: JSON.parse(JSON.stringify(l.hourly)),
-      dtt: l.dtt,
-      client: {
-        id: l.client.id,
-        name: l.client.name,
-        th: l.client.th,
-        chrg: l.client.chrg,
-        ca: l.client.ca,
-        bnf: l.client.bnf,
-        billed: billedValue,
-        paid: l.client.paid,
-        dop: l.client.dop,
-      },
-    };
-    try {
+  try {
+    for (const l of linesList.value) {
+      const line = {
+        id: Date.now(),
+        date: l.date,
+        hourly: JSON.parse(JSON.stringify(l.hourly)),
+        dtt: l.dtt,
+        client: {
+          id: l.client.id,
+          name: l.client.name,
+          th: l.client.th,
+          chrg: l.client.chrg,
+          ca: l.client.ca,
+          bnf: l.client.bnf,
+          billed: billedValue,
+          paid: l.client.paid,
+          dop: l.client.dop,
+        },
+      };
+
       await addLine(store, line, 1);
       await removeLine(store, l);
-    } catch (error) {
-      console.log(error);
+    }
+
+    setLoader(store, { dialog: true, mode: "success" }, 0);
+    success.value = true;
+  } catch (error) {
+    console.log(error);
+    setLoader(
+      store,
+      {
+        dialog: true,
+        mode: "err",
+        error: "Erreur billed",
+      },
+      0
+    );
+  } finally {
+    if (success.value) {
+      setLoader(store, { dialog: false, mode: "success" }, 1000);
     }
   }
 }
@@ -242,29 +273,45 @@ async function goPaid() {
     dop = new Date();
   }
 
-  for (const l of linesList.value) {
-    const line = {
-      id: Date.now(),
-      date: l.date,
-      hourly: JSON.parse(JSON.stringify(l.hourly)),
-      dtt: l.dtt,
-      client: {
-        id: l.client.id,
-        name: l.client.name,
-        th: l.client.th,
-        chrg: l.client.chrg,
-        ca: l.client.ca,
-        bnf: l.client.bnf,
-        billed: l.client.billed,
-        paid: paidValue,
-        dop: dop,
-      },
-    };
-    try {
+  try {
+    for (const l of linesList.value) {
+      const line = {
+        id: Date.now(),
+        date: l.date,
+        hourly: JSON.parse(JSON.stringify(l.hourly)),
+        dtt: l.dtt,
+        client: {
+          id: l.client.id,
+          name: l.client.name,
+          th: l.client.th,
+          chrg: l.client.chrg,
+          ca: l.client.ca,
+          bnf: l.client.bnf,
+          billed: l.client.billed,
+          paid: paidValue,
+          dop: dop,
+        },
+      };
       await addLine(store, line, 1);
       await removeLine(store, l);
-    } catch (error) {
-      console.log(error);
+    }
+
+    setLoader(store, { dialog: true, mode: "success" }, 0);
+    success.value = true;
+  } catch (error) {
+    console.log(error);
+    setLoader(
+      store,
+      {
+        dialog: true,
+        mode: "err",
+        error: "Erreur paid",
+      },
+      0
+    );
+  } finally {
+    if (success.value) {
+      setLoader(store, { dialog: false, mode: "success" }, 1000);
     }
   }
 }

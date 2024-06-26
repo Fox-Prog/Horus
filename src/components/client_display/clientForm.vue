@@ -1,6 +1,6 @@
 <template>
   <div class="card-home">
-    <v-form class="form" @submit.prevent="createClient()">
+    <v-form class="form" @submit.prevent="createMode()">
       <h3 class="dark-title">Client</h3>
       <v-text-field
         class="mx-2"
@@ -74,7 +74,7 @@
 // Import vue fonctions
 import { ref, defineProps, defineEmits, watch, onMounted } from "vue";
 const props = defineProps(["mode", "client"]);
-const emit = defineEmits(["done"]);
+const emit = defineEmits(["done", "error"]);
 // Import store
 import { useStore } from "vuex";
 const store = useStore();
@@ -87,6 +87,7 @@ import {
 } from "@/functions/bdd_functions.js";
 import { removeLinesOfClient } from "@/functions/remove_functions";
 import { calcCA, calcBNF } from "@/functions/money_functions";
+import { setLoader } from "@/functions/dialog_functions";
 
 // Import components
 import info_message_box from "@/components/dialog/info_message_box.vue";
@@ -177,6 +178,15 @@ async function setClientToHourly(clientID) {
   }
 }
 
+function createMode() {
+  setLoader(store, { dialog: true, mode: "wait" }, 0);
+  setTimeout(() => {
+    createClient();
+  }, 200);
+}
+
+const success = ref(false);
+
 async function createClient() {
   const clientID = Date.now();
   const client = {
@@ -186,21 +196,25 @@ async function createClient() {
     chrg: chrg.value,
   };
   try {
-    await addClient(store, client, 1);
-  } catch (error) {
-    console.log(error);
-  }
-
-  // MODE MODIF
-  if (props.mode === 2) {
-    try {
+    if (props.mode === 1) {
+      await addClient(store, client, 1);
+    } else if (props.mode === 2) {
+      await addClient(store, client, 1);
       await setClientToHourly(clientID);
       await removeClient(store, props.client);
-    } catch (error) {
-      console.log(error);
+    }
+    success.value = true;
+    setLoader(store, { dialog: true, mode: "success" }, 0);
+  } catch (error) {
+    console.log(error);
+    setLoader(store, { dialog: true, mode: "err", error: "Erreur client" }, 0);
+    emit("error", true);
+  } finally {
+    if (success.value === true) {
+      setLoader(store, { dialog: false, mode: "success" }, 1000);
+      emit("done", client);
     }
   }
-  emit("done", client);
 }
 
 async function deleteClient() {
