@@ -14,7 +14,7 @@
             color="#291f43"
             size="60"
             block
-            ><h2>
+            ><h2 class="number-font">
               {{ dayDate.toLocaleDateString() }}
             </h2></v-btn
           >

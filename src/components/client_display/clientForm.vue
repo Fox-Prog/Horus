@@ -222,7 +222,7 @@ async function deleteClient() {
   try {
     await removeLinesOfClient(store, props.client.id);
     await removeClient(store, props.client);
-    emit("done", true);
+    emit("done", null);
   } catch (error) {
     console.log(error);
   }

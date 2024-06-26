@@ -121,7 +121,11 @@ watch(
   padding: 20px;
 }
 #title {
-  margin-bottom: 20px;
+  margin-bottom: 10px;
+  font-family: "Orbitron";
+  font-weight: 400;
+  letter-spacing: 15px;
+  font-size: 50px;
 }
 #morning {
   display: flex;

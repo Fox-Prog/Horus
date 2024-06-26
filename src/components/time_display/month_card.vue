@@ -5,9 +5,11 @@
     height="40px"
     block
     @click="handleDisplay"
-    ><h2 class="light-title">{{ monthName }}</h2>
+    ><h2 class="light-title">
+      {{ monthName }}
+    </h2>
     <v-divider class="mx-3" vertical></v-divider>
-    {{ totalHours }}
+    <h3 class="number-font">{{ totalHours }}</h3>
 
     <delete_btn
       style="position: absolute; right: 0"
@@ -251,7 +253,7 @@ async function goBilled() {
       {
         dialog: true,
         mode: "err",
-        error: "Erreur billed",
+        error: "Erreur très longue qui n'a pas de sens",
       },
       0
     );

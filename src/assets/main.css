@@ -23,3 +23,27 @@
   height: 100%;
   z-index: 1;
 }
+
+.number-font {
+  font-family: "ShareTech";
+  letter-spacing: 1px;
+  font-weight: 600;
+}
+
+.client-font {
+  font-family: "Alegreya";
+  font-weight: 500;
+}
+
+@font-face {
+  font-family: "Orbitron";
+  src: url('/public/Orbitron.ttf');
+}
+@font-face {
+  font-family: "ShareTech";
+  src: url('/public/ShareTech.ttf');
+}
+@font-face {
+  font-family: "Alegreya";
+  src: url('/public/Alegreya.ttf');
+}

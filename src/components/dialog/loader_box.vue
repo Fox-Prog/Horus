@@ -2,10 +2,17 @@
   <div class="loader-container">
     <div class="wait-loader" v-if="props.mode === 'wait'"></div>
     <div class="success-loader" v-if="props.mode === 'success'">
-      <img :src="checkImg" alt="fzf" />
+      <img src="/check.png" alt="check-done" />
     </div>
-    <h3 v-if="error">{{ props.error }}</h3>
-    <v-btn v-if="error" @click="handleErrorBtn">OK</v-btn>
+  </div>
+  <div class="error-loader card-calendar" v-if="props.mode === 'err'">
+    <img src="/erreur.png" alt="error" />
+    <h3 class="light-title my-3">
+      {{ props.error }}
+    </h3>
+    <v-btn color="#3C2E69" height="30px" block @click="handleErrorBtn"
+      >OK</v-btn
+    >
   </div>
 </template>
 
@@ -13,17 +20,6 @@
 import { defineProps, defineEmits } from "vue";
 const props = defineProps(["mode", "error"]);
 const emit = defineEmits(["errorChecked"]);
-
-const checkImg = "/check.png";
-
-// const color = computed(() => {
-//   if (props.mode === "wait") {
-//     return "red";
-//   } else if (props.mode === "success") {
-//     return "green";
-//   }
-//   return "orange";
-// });
 
 function handleErrorBtn() {
   emit("errorChecked", true);
@@ -88,5 +84,15 @@ function handleErrorBtn() {
   100% {
     transform: rotate(1turn);
   }
+}
+
+.error-loader {
+  width: 80%;
+  align-self: center;
+  box-shadow: 0 0 40px 20px #ff000086;
+}
+
+.error-loader img {
+  width: 100px;
 }
 </style>

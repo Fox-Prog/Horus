@@ -1,6 +1,6 @@
 <template>
   <div class="client-field-container">
-    <h2 class="dark-title">Client</h2>
+    <h2 class="dark-title" style="font-weight: 200">Client</h2>
     <div class="client-select-btn">
       <v-select
         class="mx-4"

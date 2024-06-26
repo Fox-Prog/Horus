@@ -5,7 +5,7 @@
     block
     style="height: 60px; border: solid 1px var(--border-violet)"
     @click="handleDisplay"
-    ><h1 class="dark-title">{{ props.clientLines[0].name }}</h1>
+    ><h1 class="client-font dark-title">{{ props.clientLines[0].name }}</h1>
     <v-divider class="mx-2" vertical></v-divider>
     <delete_btn
       style="position: absolute; right: 0"
