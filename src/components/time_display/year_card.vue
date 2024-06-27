@@ -1,6 +1,6 @@
 <template>
   <v-btn variant="outlined" color="#e2ddfe" @click="display = !display"
-    ><h1 class="light-title">{{ props.content[0].name }}</h1>
+    ><h1 class="number-font light-title">{{ props.content[0].name }}</h1>
   </v-btn>
 
   <v-expand-transition>

@@ -75,7 +75,7 @@
         class="mt-3"
         variant="elevated"
         color="#E5484D"
-        size="30"
+        size="40"
         block
         @click="emit('setDone', true)"
         >Annuler</v-btn

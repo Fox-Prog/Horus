@@ -47,22 +47,33 @@
         >Valider</v-btn
       >
     </v-form>
-    <v-btn
-      v-if="props.mode === 2"
-      class="mt-3"
-      type="submit"
-      variant="elevated"
-      color="#E5484D"
-      size="30"
-      block
-      @click="infoMessage = !infoMessage"
-      >Supprimer</v-btn
-    >
+    <div class="btn-bottom-card">
+      <v-btn
+        class="mt-3"
+        variant="elevated"
+        color="#E5484D"
+        :width="props.mode === 2 ? '49%' : '100%'"
+        @click="emit('error', true)"
+        >Annuler</v-btn
+      >
+      <v-btn
+        v-if="props.mode === 2"
+        class="mt-3"
+        type="submit"
+        variant="elevated"
+        color="#E5484D"
+        width="49%"
+        @click="infoMessage = !infoMessage"
+        >Supprimer</v-btn
+      >
+    </div>
 
     <v-dialog v-model="infoMessage" persistent>
       <info_message_box
         :title="'Attention !!'"
         :text="'Tous les horaires de ce client seront supprimé en faisant ça, SUUUR le couz ?'"
+        :accept="'Supprimer'"
+        :cancel="'Annuler'"
         @accept="deleteClient"
         @cancel="infoMessage = false"
       ></info_message_box>
@@ -225,6 +236,12 @@ async function deleteClient() {
     emit("done", null);
   } catch (error) {
     console.log(error);
+    setLoader(
+      store,
+      { dialog: true, mode: "err", error: "Erreur suppression client" },
+      0
+    );
+    emit("error", true);
   }
 }
 </script>

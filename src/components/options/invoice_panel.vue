@@ -1,5 +1,5 @@
 <template>
-  <div class="invoice-panel">
+  <div class="btn-bottom-card">
     <v-btn
       width="49%"
       variant="tonal"
@@ -21,12 +21,13 @@
     >
       <div style="display: flex; flex-direction: column">
         Payé
-        <h5
+        <h4
+          class="number-font"
           v-if="props.paid === 'allTrue' && props.dop"
           style="font-weight: 400"
         >
           {{ dop.toLocaleDateString() }}
-        </h5>
+        </h4>
       </div>
     </v-btn>
   </div>
@@ -63,13 +64,3 @@ function emitPaid() {
   emit("paid", true);
 }
 </script>
-
-<style>
-.invoice-panel {
-  display: flex;
-  justify-content: left;
-  justify-content: space-between;
-  margin-bottom: 10px;
-  width: 95%;
-}
-</style>

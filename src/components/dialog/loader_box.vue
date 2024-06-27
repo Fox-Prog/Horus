@@ -89,10 +89,22 @@ function handleErrorBtn() {
 .error-loader {
   width: 80%;
   align-self: center;
-  box-shadow: 0 0 40px 20px #ff000086;
+  animation: shadow 3s infinite forwards;
 }
 
 .error-loader img {
   width: 100px;
+}
+
+@keyframes shadow {
+  0% {
+    box-shadow: 0 0 0px -5px #ff000086;
+  }
+  50% {
+    box-shadow: 0 0 40px 5px #ff000086;
+  }
+  100% {
+    box-shadow: 0 0 0px -5px #ff000086;
+  }
 }
 </style>

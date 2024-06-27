@@ -20,6 +20,8 @@
     <info_message_box
       :title="'DANGER !!'"
       :text="'Tous les horaires de ce client seront supprimé, êtes vous sûr ?'"
+      :accept="'Supprimer'"
+      :cancel="'Annuler'"
       @accept="deleteClient"
       @cancel="infoMessage = false"
     ></info_message_box>

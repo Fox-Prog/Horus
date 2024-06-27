@@ -11,6 +11,7 @@
 .title-flex {
   display: flex;
   align-items: center;
+  font-weight: 250;
 }
 
 .overlay-background {
@@ -24,10 +25,21 @@
   z-index: 1;
 }
 
+.big-title-font {
+  font-family: "Orbitron";
+  font-weight: 400;
+  letter-spacing: 15px;
+  font-size: 50px;
+}
+
+.title-font {
+  font-weight: 250;
+}
+
 .number-font {
   font-family: "ShareTech";
   letter-spacing: 1px;
-  font-weight: 600;
+  font-weight: 500;
 }
 
 .client-font {
@@ -35,15 +47,20 @@
   font-weight: 500;
 }
 
+.month-font {
+  font-family: "Alegreya";
+  font-weight: 500;
+}
+
 @font-face {
   font-family: "Orbitron";
-  src: url('/public/Orbitron.ttf');
+  src: url("/public/Orbitron.ttf");
 }
 @font-face {
   font-family: "ShareTech";
-  src: url('/public/ShareTech.ttf');
+  src: url("/public/ShareTech.ttf");
 }
 @font-face {
   font-family: "Alegreya";
-  src: url('/public/Alegreya.ttf');
+  src: url("/public/Alegreya.ttf");
 }

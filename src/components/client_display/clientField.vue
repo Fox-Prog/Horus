@@ -1,6 +1,6 @@
 <template>
   <div class="client-field-container">
-    <h2 class="dark-title" style="font-weight: 200">Client</h2>
+    <h2 class="title-font dark-title">Client</h2>
     <div class="client-select-btn">
       <v-select
         class="mx-4"
@@ -61,10 +61,17 @@ const clientData = computed(() =>
 );
 
 function doneField(client) {
+  console.log("client:", client);
   dialog.value = false;
   mode.value = null;
-  selectedClient.value = client.name;
-  emit("selected", clientData.value);
+
+  if (client === null) {
+    selectedClient.value = null;
+    emit("selected", null);
+  } else {
+    selectedClient.value = client.name;
+    emit("selected", clientData.value);
+  }
 }
 
 watch(selectedClient, () => {

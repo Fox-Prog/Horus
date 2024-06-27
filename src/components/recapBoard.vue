@@ -1,7 +1,7 @@
 <template>
   <div class="recap-1-container">
     <div class="recap-2-container">
-      <h2 class="dark-title">Heures</h2>
+      <h2 class="title-font dark-title">Heures</h2>
       <v-divider color="#BAA7FF" thickness="2"></v-divider>
       <h3 class="title-flex dark-title">
         Total:
@@ -19,14 +19,14 @@
           {{ `${props.jMax.dttMax.replace(":", "h")}` }}
         </h4>
         <div style="width: 5px"></div>
-        <h5 class="number-font light-title">
-          {{ `( le ${props.jMax.day.getDate()} )` }}
-        </h5>
+        <h4 class="number-font dark-title">
+          {{ ` - le ${props.jMax.day.getDate()}` }}
+        </h4>
       </h3>
     </div>
     <v-divider color="#BAA7FF" thickness="2" vertical></v-divider>
     <div class="recap-2-container">
-      <h2 class="dark-title">Revenus</h2>
+      <h2 class="title-font dark-title">Revenus</h2>
       <v-divider color="#BAA7FF" thickness="2"></v-divider>
       <h3 class="title-flex dark-title">
         Chiffre d'affaire:

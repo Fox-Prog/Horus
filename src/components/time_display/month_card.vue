@@ -5,7 +5,7 @@
     height="40px"
     block
     @click="handleDisplay"
-    ><h2 class="light-title">
+    ><h2 class="month-font light-title">
       {{ monthName }}
     </h2>
     <v-divider class="mx-3" vertical></v-divider>
@@ -24,6 +24,8 @@
     <info_message_box
       :title="'Attention !!'"
       :text="'Tous les horaires de ce mois seront supprimé, êtes vous sûr ?'"
+      :accept="'Supprimer'"
+      :cancel="'Annuler'"
       @accept="deleteMonth"
       @cancel="infoMessage = false"
     ></info_message_box>
