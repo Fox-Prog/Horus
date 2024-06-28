@@ -13,14 +13,24 @@
         Moyenne / Jour:
         <h4 class="number-font light-title ms-3">{{ props.avgDays }}</h4>
       </h3>
-      <h3 v-if="props.jMax" class="text-font title-flex dark-title">
+      <h3 v-if="props.jFrame" class="text-font title-flex dark-title">
         Max:
         <h4 class="number-font light-title ms-3">
-          {{ `${props.jMax.dttMax.replace(":", "h")}` }}
+          {{ `${props.jFrame.dttMax.replace(":", "h")}` }}
         </h4>
         <div style="width: 5px"></div>
         <h4 class="number-font dark-title">
-          {{ ` - le ${props.jMax.day.getDate()}` }}
+          {{ ` - le ${props.jFrame.dayMax.getDate()}` }}
+        </h4>
+      </h3>
+      <h3 v-if="props.jFrame" class="text-font title-flex dark-title">
+        Min:
+        <h4 class="number-font light-title ms-3">
+          {{ `${props.jFrame.dttMin.replace(":", "h")}` }}
+        </h4>
+        <div style="width: 5px"></div>
+        <h4 class="number-font dark-title">
+          {{ ` - le ${props.jFrame.dayMin.getDate()}` }}
         </h4>
       </h3>
     </div>
@@ -58,7 +68,7 @@ import { defineProps } from "vue";
 const props = defineProps([
   "tth",
   "avgDays",
-  "jMax",
+  "jFrame",
   "th",
   "chrg",
   "ca",

@@ -1,19 +1,26 @@
 <template>
   <v-btn
-    :append-icon="display ? 'mdi-chevron-up' : 'mdi-chevron-down'"
     color="#291f43"
     block
-    style="height: 60px; border: solid 1px var(--border-violet)"
+    style="
+      position: relative;
+      height: 60px;
+      border: solid 1px var(--border-violet);
+    "
     @click="handleDisplay"
     ><h1 class="client-font dark-title">{{ props.clientLines[0].name }}</h1>
-    <v-divider class="mx-2" vertical></v-divider>
-    <delete_btn
+    <!-- <delete_btn
       style="position: absolute; right: 0"
       :size="60"
       @mouseenter="lock = true"
       @mouseleave="lock = false"
       @click="infoMessage = !infoMessage"
-    ></delete_btn>
+    ></delete_btn> -->
+    <ddm
+      @mouseenter="lock = true"
+      @mouseleave="lock = false"
+      @delete="infoMessage = !infoMessage"
+    ></ddm>
   </v-btn>
 
   <v-dialog v-model="infoMessage" persistent>
@@ -67,7 +74,7 @@ const store = useStore();
 // Import components
 import recapBoard from "@/components/recapBoard.vue";
 import yearCard from "@/components/time_display/year_card.vue";
-import delete_btn from "@/components/options/delete_btn.vue";
+import ddm from "@/components/options/drop_down_menu.vue";
 import info_message_box from "@/components/dialog/info_message_box.vue";
 // Import js fonctions
 import { yearFocus } from "@/functions/sort_functions.js";

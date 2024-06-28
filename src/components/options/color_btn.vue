@@ -1,10 +1,10 @@
 <template>
   <v-btn
-    icon="mdi-close"
+    icon="mdi-palette"
     :size="props.size"
     rounded="sm"
-    :variant="props.variant"
-    color="red"
+    variant="flat"
+    color="blue"
     density="compact"
   ></v-btn>
 </template>
@@ -12,5 +12,5 @@
 <script setup>
 // Import vue fonctions
 import { defineProps } from "vue";
-const props = defineProps(["size", "variant"]);
+const props = defineProps(["size"]);
 </script>

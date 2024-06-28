@@ -13,7 +13,8 @@
 
     <delete_btn
       style="position: absolute; right: 0"
-      :size="40"
+      size="40"
+      variant="text"
       @mouseenter="lock = true"
       @mouseleave="lock = false"
       @click="infoMessage = !infoMessage"
@@ -45,7 +46,7 @@
       <recapBoard
         :tth="totalHours"
         :avgDays="averageDays(durations, totalHours)"
-        :jMax="jMax"
+        :jFrame="props.content.length > 2 ? jFrame : null"
         :chrg="chrg"
         :ca="sumCA(listCA)"
         :bnf="sumBNF(listBNF)"
@@ -135,7 +136,7 @@ const chrg =
   props.chrg === true ? props.content[1].client.chrg.replace(".", ",") : null;
 const listCA = computed(() => props.content.slice(1).map((l) => l.client.ca));
 const listBNF = computed(() => props.content.slice(1).map((l) => l.client.bnf));
-const jMax = computed(() => {
+const jFrame = computed(() => {
   const max = props.content
     .slice(1)
     .find(
@@ -143,9 +144,18 @@ const jMax = computed(() => {
         hoursToHdec(l.dtt) ===
         Math.max(...props.content.slice(1).map((l) => hoursToHdec(l.dtt)))
     );
+  const min = props.content
+    .slice(1)
+    .find(
+      (l) =>
+        hoursToHdec(l.dtt) ===
+        Math.min(...props.content.slice(1).map((l) => hoursToHdec(l.dtt)))
+    );
   return {
+    dttMin: min.dtt,
+    dayMin: min.date,
     dttMax: max.dtt,
-    day: max.date,
+    dayMax: max.date,
   };
 });
 

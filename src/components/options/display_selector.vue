@@ -1,7 +1,7 @@
 <template>
   <div
     class="card-calendar"
-    style="flex-direction: row; height: 30px; margin-top: 10px; width: 310px"
+    style="flex-direction: row; height: 30px; margin-top: 10px"
   >
     <h3 class="text-font dark-title" style="margin-right: 20px">Affichage</h3>
     <v-switch
