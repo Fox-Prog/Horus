@@ -57,7 +57,7 @@
         prepend-icon="mdi mdi-plus-circle-outline"
         block
         @click="forms.push(newForm(forms))"
-        >Ajouter une session</v-btn
+        ><h4 class="text-font">Ajouter une session</h4></v-btn
       >
 
       <v-btn
@@ -67,7 +67,7 @@
         color="#3C2E69"
         size="60"
         block
-        >Valider</v-btn
+        ><h4 class="text-font">Valider</h4></v-btn
       >
 
       <v-btn

@@ -3,14 +3,14 @@
     class="card-calendar"
     style="flex-direction: row; height: 30px; margin-top: 10px; width: 310px"
   >
-    <h3 class="dark-title" style="margin-right: 20px">Mode d'affichage</h3>
+    <h3 class="text-font dark-title" style="margin-right: 20px">Affichage</h3>
     <v-switch
       hide-details
       color="#e2ddfe"
       v-model="selected"
       @change="saveDisplay"
     ></v-switch>
-    <h3 class="light-title" style="margin-left: 20px">
+    <h3 class="text-font light-title" style="margin-left: 20px">
       {{ boolToTxt }}
     </h3>
   </div>

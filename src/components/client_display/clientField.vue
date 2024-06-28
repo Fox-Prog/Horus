@@ -1,9 +1,9 @@
 <template>
   <div class="client-field-container">
-    <h2 class="title-font dark-title">Client</h2>
+    <h2 class="text-font dark-title">Client</h2>
     <div class="client-select-btn">
       <v-select
-        class="mx-4"
+        class="custom-font mx-4"
         density="compact"
         variant="solo-filled"
         bg-color="#291f43"
@@ -97,5 +97,12 @@ watch(selectedClient, () => {
   .client-field-container {
     display: block;
   }
+}
+
+.custom-font .v-input__control,
+.custom-font .v-select__selections,
+.custom-font .v-list-item__title,
+.custom-font .v-list-item__content {
+  font-family: "OpenSans";
 }
 </style>

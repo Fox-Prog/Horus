@@ -1,19 +1,19 @@
 <template>
   <div class="recap-1-container">
     <div class="recap-2-container">
-      <h2 class="title-font dark-title">Heures</h2>
+      <h2 class="text-font dark-title">Heures</h2>
       <v-divider color="#BAA7FF" thickness="2"></v-divider>
-      <h3 class="title-flex dark-title">
+      <h3 class="text-font title-flex dark-title">
         Total:
         <h4 class="number-font light-title ms-3">
           {{ props.tth }}
         </h4>
       </h3>
-      <h3 class="title-flex dark-title">
+      <h3 class="text-font title-flex dark-title">
         Moyenne / Jour:
         <h4 class="number-font light-title ms-3">{{ props.avgDays }}</h4>
       </h3>
-      <h3 v-if="props.jMax" class="title-flex dark-title">
+      <h3 v-if="props.jMax" class="text-font title-flex dark-title">
         Max:
         <h4 class="number-font light-title ms-3">
           {{ `${props.jMax.dttMax.replace(":", "h")}` }}
@@ -26,23 +26,23 @@
     </div>
     <v-divider color="#BAA7FF" thickness="2" vertical></v-divider>
     <div class="recap-2-container">
-      <h2 class="title-font dark-title">Revenus</h2>
+      <h2 class="text-font dark-title">Revenus</h2>
       <v-divider color="#BAA7FF" thickness="2"></v-divider>
-      <h3 class="title-flex dark-title">
+      <h3 class="text-font title-flex dark-title">
         Chiffre d'affaire:
         <h4 class="number-font light-title ms-1">
           {{ props.ca.toFixed(2).replace(".", ",") }} €
         </h4>
       </h3>
-      <h3 v-if="props.th" class="title-flex dark-title">
+      <h3 v-if="props.th" class="text-font title-flex dark-title">
         Taux horaire:
         <h4 class="number-font light-title ms-1">{{ props.th }} €</h4>
       </h3>
-      <h3 v-if="props.chrg" class="title-flex dark-title">
+      <h3 v-if="props.chrg" class="text-font title-flex dark-title">
         Charges:
         <h4 class="number-font light-title ms-1">{{ props.chrg }} %</h4>
       </h3>
-      <h3 class="title-flex dark-title">
+      <h3 class="text-font title-flex dark-title">
         Bénéfices:
         <h4 class="number-font light-title ms-1">
           {{ props.bnf.toFixed(2).replace(".", ",") }} €

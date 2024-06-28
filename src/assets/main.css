@@ -8,12 +8,6 @@
   color: var(--text-color-light);
 }
 
-.title-flex {
-  display: flex;
-  align-items: center;
-  font-weight: 250;
-}
-
 .overlay-background {
   position: absolute;
   backdrop-filter: blur(30px);
@@ -25,6 +19,12 @@
   z-index: 1;
 }
 
+.title-flex {
+  display: flex;
+  align-items: center;
+  font-weight: 250;
+}
+
 .big-title-font {
   font-family: "Orbitron";
   font-weight: 400;
@@ -34,6 +34,11 @@
 
 .title-font {
   font-weight: 250;
+}
+
+.text-font {
+  font-family: "OpenSans";
+  font-weight: 600;
 }
 
 .number-font {
@@ -54,13 +59,17 @@
 
 @font-face {
   font-family: "Orbitron";
-  src: url("/public/Orbitron.ttf");
+  src: url("/public/fonts/Orbitron.ttf");
 }
 @font-face {
   font-family: "ShareTech";
-  src: url("/public/ShareTech.ttf");
+  src: url("/public/fonts/ShareTech.ttf");
 }
 @font-face {
   font-family: "Alegreya";
-  src: url("/public/Alegreya.ttf");
+  src: url("/public/fonts/Alegreya.ttf");
+}
+@font-face {
+  font-family: "OpenSans";
+  src: url("/public/fonts/OpenSans.ttf");
 }

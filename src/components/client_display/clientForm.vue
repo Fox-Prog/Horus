@@ -1,7 +1,7 @@
 <template>
   <div class="card-home">
     <v-form class="form" @submit.prevent="createMode()">
-      <h3 class="dark-title">Client</h3>
+      <h3 class="text-font dark-title">Client</h3>
       <v-text-field
         class="mx-2"
         density="compact"
@@ -12,7 +12,7 @@
         :rules="[unicName]"
         v-model="clientName"
       ></v-text-field>
-      <h3 class="dark-title">Revenu</h3>
+      <h3 class="text-font dark-title">Revenu</h3>
       <v-text-field
         class="mx-2"
         density="compact"
