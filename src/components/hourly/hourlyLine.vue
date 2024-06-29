@@ -9,21 +9,30 @@
       <div v-if="setBtn" id="set-btn-container">
         <v-btn
           block
-          size="100%"
+          height="100%"
           rounded="0"
-          icon="mdi mdi-close"
+          icon="mdi-close"
           variant="flat"
           color="red"
           @click="deleteLine"
         ></v-btn>
         <v-btn
           block
-          size="100%"
+          height="100%"
           rounded="0"
-          icon="mdi mdi-pen"
+          icon="mdi-pen"
           variant="flat"
           color="blue"
           @click="dialog = true"
+        ></v-btn>
+        <v-btn
+          v-if="props.line.note"
+          block
+          height="100%"
+          rounded="0"
+          icon="mdi-text-box-outline"
+          variant="flat"
+          color="green"
         ></v-btn>
       </div>
     </v-fade-transition>
@@ -43,7 +52,8 @@
   <v-divider></v-divider>
 
   <div class="overlay-background" v-if="dialog"></div>
-  <v-dialog style="width: 100%; height: 100%" v-model="dialog" persistent>
+
+  <v-dialog v-model="dialog" width="auto" scrollable persistent>
     <setHourly
       :mode="2"
       :line="props.line"
@@ -140,7 +150,7 @@ async function deleteLine() {
 #set-btn-container {
   position: absolute;
   display: flex;
-  width: 50%;
+  width: 33%;
   height: 100%;
 }
 </style>

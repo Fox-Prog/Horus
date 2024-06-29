@@ -61,7 +61,6 @@ const clientData = computed(() =>
 );
 
 function doneField(client) {
-  console.log("client:", client);
   dialog.value = false;
   mode.value = null;
 
@@ -96,6 +95,7 @@ watch(selectedClient, () => {
 @media screen and (max-width: 600px) {
   .client-field-container {
     display: block;
+    text-align: center;
   }
 }
 

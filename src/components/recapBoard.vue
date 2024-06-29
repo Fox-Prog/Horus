@@ -2,7 +2,7 @@
   <div class="recap-1-container">
     <div class="recap-2-container">
       <h2 class="text-font dark-title">Heures</h2>
-      <v-divider color="#BAA7FF" thickness="2"></v-divider>
+      <v-divider color="var(--divider-color)" thickness="2"></v-divider>
       <h3 class="text-font title-flex dark-title">
         Total:
         <h4 class="number-font light-title ms-3">
@@ -34,10 +34,10 @@
         </h4>
       </h3>
     </div>
-    <v-divider color="#BAA7FF" thickness="2" vertical></v-divider>
+    <v-divider color="var(--divider-color)" thickness="2" vertical></v-divider>
     <div class="recap-2-container">
       <h2 class="text-font dark-title">Revenus</h2>
-      <v-divider color="#BAA7FF" thickness="2"></v-divider>
+      <v-divider color="var(--divider-color)" thickness="2"></v-divider>
       <h3 class="text-font title-flex dark-title">
         Chiffre d'affaire:
         <h4 class="number-font light-title ms-1">

@@ -70,10 +70,11 @@
 
     <v-dialog v-model="infoMessage" persistent>
       <info_message_box
-        :title="'Attention !!'"
-        :text="'Tous les horaires de ce client seront supprimé en faisant ça, SUUUR le couz ?'"
-        :accept="'Supprimer'"
-        :cancel="'Annuler'"
+        mode="warning"
+        title="Attention !!"
+        text="Tous les horaires de ce client seront supprimé en faisant ça, SUUUR le couz ?"
+        accept="Supprimer"
+        cancel="Annuler"
         @accept="deleteClient"
         @cancel="infoMessage = false"
       ></info_message_box>
@@ -90,14 +91,11 @@ const emit = defineEmits(["done", "error"]);
 import { useStore } from "vuex";
 const store = useStore();
 // Import js fonctions
+import { addClient, removeClient } from "@/functions/bdd_functions.js";
 import {
-  addClient,
-  removeClient,
-  removeLine,
-  addLine,
-} from "@/functions/bdd_functions.js";
-import { removeLinesOfClient } from "@/functions/remove_functions";
-import { calcCA, calcBNF } from "@/functions/money_functions";
+  removeLinesOfClient,
+  setClientToHourly,
+} from "@/functions/client_functions";
 import { setLoader } from "@/functions/dialog_functions";
 
 // Import components
@@ -145,48 +143,15 @@ function positiveNbr(v) {
 }
 
 function unicName(v) {
-  const clientExist = store.state.clients.some((c) => c.name === v);
-  if (props.mode === 1 && clientExist) {
-    return "Client déjà enregistré";
-  }
-  return true;
-}
-
-async function setClientToHourly(clientID) {
-  const lines = store.state.lines.filter(
-    (l) => l.client.id === props.client.id
-  );
-  if (lines.length > 0) {
-    for (const l of lines) {
-      const ca = calcCA(l.dtt, th.value);
-      const hourly = l.hourly.map((h) => {
-        return { ...h, id: Date.now() };
-      });
-      const line = {
-        id: Date.now(),
-        date: l.date,
-        hourly: hourly,
-        dtt: l.dtt,
-        client: {
-          id: clientID,
-          name: clientName.value,
-          th: th.value,
-          chrg: chrg.value,
-          ca: ca,
-          bnf: calcBNF(ca, chrg.value),
-          billed: l.client.billed,
-          paid: l.client.paid,
-          dop: l.client.dop,
-        },
-      };
-      try {
-        await addLine(store, line, 1);
-        await removeLine(store, l);
-      } catch (error) {
-        console.log(error);
-      }
+  if (v) {
+    const clientExist = store.state.clients.some(
+      (c) => c.name.toUpperCase() === v.toUpperCase()
+    );
+    if (props.mode === 1 && clientExist) {
+      return "Client déjà enregistré";
     }
   }
+  return true;
 }
 
 function createMode() {
@@ -200,19 +165,19 @@ const success = ref(false);
 const loaderTime = store.state.loaderTime;
 
 async function createClient() {
-  const clientID = Date.now();
-  const client = {
-    id: clientID,
+  const newClient = {
+    id: Date.now(),
     name: clientName.value,
+    color: props.mode === 1 ? "#291f43" : props.client.color,
     th: th.value,
     chrg: chrg.value,
   };
   try {
     if (props.mode === 1) {
-      await addClient(store, client, 1);
+      await addClient(store, newClient, 1);
     } else if (props.mode === 2) {
-      await addClient(store, client, 1);
-      await setClientToHourly(clientID);
+      await setClientToHourly(store, newClient, props.client);
+      await addClient(store, newClient, 1);
       await removeClient(store, props.client);
     }
     success.value = true;
@@ -224,7 +189,7 @@ async function createClient() {
   } finally {
     if (success.value === true) {
       setLoader(store, { dialog: false, mode: "success" }, loaderTime);
-      emit("done", client);
+      emit("done", newClient);
     }
   }
 }

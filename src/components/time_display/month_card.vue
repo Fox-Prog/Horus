@@ -23,10 +23,11 @@
 
   <v-dialog v-model="infoMessage" persistent>
     <info_message_box
-      :title="'Attention !!'"
-      :text="'Tous les horaires de ce mois seront supprimé, êtes vous sûr ?'"
-      :accept="'Supprimer'"
-      :cancel="'Annuler'"
+      mode="warning"
+      title="Attention !!"
+      text="Tous les horaires de ce mois seront supprimé, êtes vous sûr ?"
+      accept="Supprimer"
+      cancel="Annuler"
       @accept="deleteMonth"
       @cancel="infoMessage = false"
     ></info_message_box>
@@ -239,9 +240,11 @@ async function goBilled() {
         date: l.date,
         hourly: JSON.parse(JSON.stringify(l.hourly)),
         dtt: l.dtt,
+        note: l.note,
         client: {
           id: l.client.id,
           name: l.client.name,
+          color: l.client.color,
           th: l.client.th,
           chrg: l.client.chrg,
           ca: l.client.ca,
@@ -295,9 +298,11 @@ async function goPaid() {
         date: l.date,
         hourly: JSON.parse(JSON.stringify(l.hourly)),
         dtt: l.dtt,
+        note: l.note,
         client: {
           id: l.client.id,
           name: l.client.name,
+          color: l.client.color,
           th: l.client.th,
           chrg: l.client.chrg,
           ca: l.client.ca,

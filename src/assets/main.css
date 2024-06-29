@@ -50,6 +50,7 @@
 .client-font {
   font-family: "Alegreya";
   font-weight: 500;
+  text-transform: none;
 }
 
 .month-font {

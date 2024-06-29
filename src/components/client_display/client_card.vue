@@ -1,6 +1,6 @@
 <template>
   <v-btn
-    color="#291f43"
+    :color="props.clientLines[1].client.color"
     block
     style="
       position: relative;
@@ -8,27 +8,29 @@
       border: solid 1px var(--border-violet);
     "
     @click="handleDisplay"
-    ><h1 class="client-font dark-title">{{ props.clientLines[0].name }}</h1>
-    <!-- <delete_btn
-      style="position: absolute; right: 0"
-      :size="60"
-      @mouseenter="lock = true"
-      @mouseleave="lock = false"
-      @click="infoMessage = !infoMessage"
-    ></delete_btn> -->
+    ><h1 class="client-font">{{ props.clientLines[0].name }}</h1>
     <ddm
       @mouseenter="lock = true"
       @mouseleave="lock = false"
       @delete="infoMessage = !infoMessage"
+      @setColor="selectColor = !selectColor"
     ></ddm>
   </v-btn>
 
+  <v-dialog v-model="selectColor" persistent>
+    <color_box
+      :colorNow="props.clientLines[1].client.color"
+      @color="createMode"
+    ></color_box>
+  </v-dialog>
+
   <v-dialog v-model="infoMessage" persistent>
     <info_message_box
-      :title="'DANGER !!'"
-      :text="'Tous les horaires de ce client seront supprimé, êtes vous sûr ?'"
-      :accept="'Supprimer'"
-      :cancel="'Annuler'"
+      mode="warning"
+      title="DANGER !!"
+      text="Tous les horaires de ce client seront supprimé, êtes vous sûr ?"
+      accept="Supprimer"
+      cancel="Annuler"
       @accept="deleteClient"
       @cancel="infoMessage = false"
     ></info_message_box>
@@ -76,15 +78,21 @@ import recapBoard from "@/components/recapBoard.vue";
 import yearCard from "@/components/time_display/year_card.vue";
 import ddm from "@/components/options/drop_down_menu.vue";
 import info_message_box from "@/components/dialog/info_message_box.vue";
+import color_box from "@/components/dialog/color_box.vue";
 // Import js fonctions
 import { yearFocus } from "@/functions/sort_functions.js";
 import { addTime } from "@/functions/time_functions";
 import { averageDays } from "@/functions/recap_functions.js";
 import { sumCA, sumBNF } from "@/functions/money_functions.js";
-import { removeLinesOfClient } from "@/functions/remove_functions";
-// import { removeClient } from "@/functions/bdd_functions";
+import {
+  removeLinesOfClient,
+  setClientToHourly,
+} from "@/functions/client_functions";
+import { addClient, removeClient } from "@/functions/bdd_functions.js";
+import { setLoader } from "@/functions/dialog_functions";
 
 const infoMessage = ref(false);
+const selectColor = ref(false);
 
 const clientName = ref(props.clientLines[0].name);
 const state = computed(() => {
@@ -132,9 +140,51 @@ const listBNF = computed(() => lines.value.map((l) => l.client.bnf));
 async function deleteClient() {
   try {
     await removeLinesOfClient(store, props.clientLines[1].client.id);
-    // await removeClient(store, props.clientLines[1].client);
   } catch (error) {
     console.log(error);
   }
 }
+
+function createMode(color) {
+  setLoader(store, { dialog: true, mode: "wait" }, 0);
+  setTimeout(() => {
+    setColorClient(color);
+  }, 200);
+}
+
+const success = ref(false);
+const loaderTime = store.state.loaderTime;
+
+async function setColorClient(color) {
+  const oldClient = store.state.clients.find(
+    (c) => c.name === props.clientLines[1].client.name
+  );
+  const newClient = {
+    id: Date.now(),
+    name: oldClient.name,
+    color: color,
+    th: oldClient.th,
+    chrg: oldClient.chrg,
+  };
+  try {
+    await setClientToHourly(store, newClient, oldClient);
+    await addClient(store, newClient, 1);
+    await removeClient(store, oldClient);
+    success.value = true;
+    setLoader(store, { dialog: true, mode: "success" }, 0);
+  } catch (error) {
+    console.log(error);
+    setLoader(
+      store,
+      { dialog: true, mode: "err", error: "Erreur couleur client" },
+      0
+    );
+  } finally {
+    if (success.value === true) {
+      setLoader(store, { dialog: false, mode: "success" }, loaderTime);
+    }
+  }
+}
+
+console.log("props.clientLines: ", props.clientLines[0].name);
 </script>

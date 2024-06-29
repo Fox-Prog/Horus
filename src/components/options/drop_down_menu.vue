@@ -6,7 +6,6 @@
         v-bind="activatorProps"
         rounded="lg"
         size="60"
-        color="var(--text-color-light)"
         variant="text"
         icon="mdi-dots-vertical"
       ></v-btn>

@@ -49,16 +49,38 @@
         @remove="removeForm"
       ></entryHourlyField>
 
-      <v-btn
-        class="mb-5"
-        variant="outlined"
-        color="#6e56cf"
-        rounded="lg"
-        prepend-icon="mdi mdi-plus-circle-outline"
-        block
-        @click="forms.push(newForm(forms))"
-        ><h4 class="text-font">Ajouter une session</h4></v-btn
-      >
+      <div class="btn-bottom-card">
+        <v-btn
+          class="mb-5"
+          width="49%"
+          variant="outlined"
+          :color="noteField ? 'red' : '#6e56cf'"
+          rounded="lg"
+          :prepend-icon="noteField ? 'mdi-close' : 'mdi-text-box-plus-outline'"
+          @click="handleNote"
+          ><h3 class="text-font">Note</h3></v-btn
+        >
+        <v-btn
+          class="mb-5"
+          width="49%"
+          variant="outlined"
+          color="#6e56cf"
+          rounded="lg"
+          prepend-icon="mdi-plus-circle-outline"
+          @click="forms.push(newForm(forms))"
+          ><h3 class="text-font">Horaires</h3></v-btn
+        >
+      </div>
+
+      <v-textarea
+        v-if="noteField"
+        v-model="note"
+        variant="solo-filled"
+        clearable
+        bg-color="#291f43"
+        label="Note"
+        width="100%"
+      ></v-textarea>
 
       <v-btn
         :disabled="!formDone"
@@ -67,7 +89,7 @@
         color="#3C2E69"
         size="60"
         block
-        ><h4 class="text-font">Valider</h4></v-btn
+        ><h2 class="text-font">Valider</h2></v-btn
       >
 
       <v-btn
@@ -124,8 +146,19 @@ function handleSelectedClient(data) {
   checkGlobalTrue();
 }
 
+// Invoice
 const billed = ref(content.mode === 2 ? content.line.client.billed : false);
 const paid = ref(content.mode === 2 ? content.line.client.paid : false);
+
+// Note
+const noteField = ref(content.mode === 2 && content.line.note ? true : false);
+const note = ref(content.mode === 2 ? content.line.note : null);
+function handleNote() {
+  if (noteField.value) {
+    note.value = null;
+  }
+  noteField.value = !noteField.value;
+}
 
 // Check global form
 function checkGlobalTrue() {
@@ -185,6 +218,8 @@ const resetFields = ref(false);
 function resetForm() {
   forms.value = [{ id: 1, status: false }];
   resetFields.value = !resetFields.value;
+  note.value = null;
+  noteField.value = false;
 }
 
 // Création de l'objet ligne horaire
@@ -223,9 +258,11 @@ async function createLine() {
     date: dayDate.value,
     hourly: hourly,
     dtt: dtt,
+    note: note.value,
     client: {
       id: clientSelected.value.id,
       name: clientSelected.value.name,
+      color: clientSelected.value.color,
       th: clientSelected.value.th,
       chrg: clientSelected.value.chrg,
       ca: ca,
