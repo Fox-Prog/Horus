@@ -27,10 +27,10 @@
   <v-dialog v-model="infoMessage" persistent>
     <info_message_box
       mode="warning"
-      title="DANGER !!"
-      text="Tous les horaires de ce client seront supprimé, êtes vous sûr ?"
-      accept="Supprimer"
-      cancel="Annuler"
+      :title="t.tt_imb_warning"
+      :text="t.txt_imb_del_lines_from_clientCard"
+      :accept="t.btn_img_continu"
+      :cancel="t.btn_img_cancel"
       @accept="deleteClient"
       @cancel="infoMessage = false"
     ></info_message_box>
@@ -90,6 +90,8 @@ import {
 } from "@/functions/client_functions";
 import { addClient, removeClient } from "@/functions/bdd_functions.js";
 import { setLoader } from "@/functions/dialog_functions";
+import { getTranslate } from "@/multilanguage/lang";
+const t = getTranslate();
 
 const infoMessage = ref(false);
 const selectColor = ref(false);

@@ -1,20 +1,20 @@
 <template>
   <div class="recap-1-container">
     <div class="recap-2-container">
-      <h2 class="text-font dark-title">Heures</h2>
+      <h2 class="text-font dark-title">{{ t.lb_hour }}</h2>
       <v-divider color="var(--divider-color)" thickness="2"></v-divider>
       <h3 class="text-font title-flex dark-title">
-        Total:
+        {{ t.lb_total_hours }}
         <h4 class="number-font light-title ms-3">
           {{ props.tth }}
         </h4>
       </h3>
       <h3 class="text-font title-flex dark-title">
-        Moyenne / Jour:
+        {{ t.lb_day_avg }}
         <h4 class="number-font light-title ms-3">{{ props.avgDays }}</h4>
       </h3>
       <h3 v-if="props.jFrame" class="text-font title-flex dark-title">
-        Max:
+        {{ t.lb_day_max }}
         <h4 class="number-font light-title ms-3">
           {{ `${props.jFrame.dttMax.replace(":", "h")}` }}
         </h4>
@@ -24,7 +24,7 @@
         </h4>
       </h3>
       <h3 v-if="props.jFrame" class="text-font title-flex dark-title">
-        Min:
+        {{ t.lb_day_min }}
         <h4 class="number-font light-title ms-3">
           {{ `${props.jFrame.dttMin.replace(":", "h")}` }}
         </h4>
@@ -36,24 +36,24 @@
     </div>
     <v-divider color="var(--divider-color)" thickness="2" vertical></v-divider>
     <div class="recap-2-container">
-      <h2 class="text-font dark-title">Revenus</h2>
+      <h2 class="text-font dark-title">{{ t.lb_income }}</h2>
       <v-divider color="var(--divider-color)" thickness="2"></v-divider>
       <h3 class="text-font title-flex dark-title">
-        Chiffre d'affaire:
+        {{ t.lb_ca }}
         <h4 class="number-font light-title ms-1">
           {{ props.ca.toFixed(2).replace(".", ",") }} €
         </h4>
       </h3>
       <h3 v-if="props.th" class="text-font title-flex dark-title">
-        Taux horaire:
+        {{ t.lb_th_dot }}
         <h4 class="number-font light-title ms-1">{{ props.th }} €</h4>
       </h3>
       <h3 v-if="props.chrg" class="text-font title-flex dark-title">
-        Charges:
+        {{ t.lb_chrg_dot }}
         <h4 class="number-font light-title ms-1">{{ props.chrg }} %</h4>
       </h3>
       <h3 class="text-font title-flex dark-title">
-        Bénéfices:
+        {{ t.lb_bnf }}
         <h4 class="number-font light-title ms-1">
           {{ props.bnf.toFixed(2).replace(".", ",") }} €
         </h4>
@@ -74,6 +74,9 @@ const props = defineProps([
   "ca",
   "bnf",
 ]);
+// Import js fonctions
+import { getTranslate } from "@/multilanguage/lang";
+const t = getTranslate();
 </script>
 
 <style>

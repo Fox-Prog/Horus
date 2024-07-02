@@ -1,18 +1,18 @@
 <template>
   <div class="card-home">
     <v-form class="form" @submit.prevent="createMode()">
-      <h3 class="text-font dark-title">Client</h3>
+      <h3 class="text-font dark-title">{{ t.tt_client_form }}</h3>
       <v-text-field
         class="mx-2"
         density="compact"
         style="width: 90%"
         variant="solo-filled"
         bg-color="#291f43"
-        label="Nom du client"
+        :label="t.lb_client_name"
         :rules="[unicName]"
         v-model="clientName"
       ></v-text-field>
-      <h3 class="text-font dark-title">Revenu</h3>
+      <h3 class="text-font dark-title">{{ t.lb_income }}</h3>
       <v-text-field
         class="mx-2"
         density="compact"
@@ -20,7 +20,7 @@
         bg-color="#291f43"
         hide-spin-buttons
         append-inner-icon="mdi-currency-eur"
-        label="Taux horaire"
+        :label="t.lb_th_nodot"
         type="number"
         v-model="th"
         :rules="[positiveNbr]"
@@ -32,7 +32,7 @@
         bg-color="#291f43"
         hide-spin-buttons
         append-inner-icon="mdi-percent"
-        label="Charges"
+        :label="t.lb_chrg_nodot"
         type="number"
         v-model="chrg"
         :rules="[positiveNbr]"
@@ -44,7 +44,7 @@
         color="#3C2E69"
         size="60"
         block
-        >Valider</v-btn
+        >{{ t.btn_done }}</v-btn
       >
     </v-form>
     <div class="btn-bottom-card">
@@ -54,7 +54,7 @@
         color="#E5484D"
         :width="props.mode === 2 ? '49%' : '100%'"
         @click="emit('error', true)"
-        >Annuler</v-btn
+        >{{ t.btn_cancel }}</v-btn
       >
       <v-btn
         v-if="props.mode === 2"
@@ -64,17 +64,17 @@
         color="#E5484D"
         width="49%"
         @click="infoMessage = !infoMessage"
-        >Supprimer</v-btn
+        >{{ t.btn_delete }}</v-btn
       >
     </div>
 
     <v-dialog v-model="infoMessage" persistent>
       <info_message_box
         mode="warning"
-        title="Attention !!"
-        text="Tous les horaires de ce client seront supprimé en faisant ça, SUUUR le couz ?"
-        accept="Supprimer"
-        cancel="Annuler"
+        :title="t.tt_imb_warning"
+        :text="t.txt_imb_del_client_and_lines_from_clientForm"
+        :accept="t.btn_img_continu"
+        :cancel="t.btn_img_cancel"
         @accept="deleteClient"
         @cancel="infoMessage = false"
       ></info_message_box>
@@ -97,6 +97,8 @@ import {
   setClientToHourly,
 } from "@/functions/client_functions";
 import { setLoader } from "@/functions/dialog_functions";
+import { getTranslate } from "@/multilanguage/lang";
+const t = getTranslate();
 
 // Import components
 import info_message_box from "@/components/dialog/info_message_box.vue";

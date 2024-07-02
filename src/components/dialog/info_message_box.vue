@@ -47,6 +47,7 @@ function sendCancel() {
 .width-fit {
   width: fit-content;
   align-self: center;
+  text-align: center;
 }
 #warning {
   width: 80%;

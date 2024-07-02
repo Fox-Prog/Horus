@@ -8,7 +8,7 @@
       :append-icon="props.billed === 'allTrue' ? 'mdi-check-all' : null"
       :color="colorInvoice"
       @click="emitInvoice"
-      >Facturé</v-btn
+      >{{ t.btn_billed }}</v-btn
     >
     <v-btn
       width="49%"
@@ -20,7 +20,7 @@
       @click="emitPaid"
     >
       <div style="display: flex; flex-direction: column">
-        Payé
+        {{ t.btn_paid }}
         <h4
           class="number-font"
           v-if="props.paid === 'allTrue' && props.dop"
@@ -38,6 +38,9 @@
 import { computed, defineProps, defineEmits } from "vue";
 const props = defineProps(["billed", "paid", "dop"]);
 const emit = defineEmits(["billed", "paid"]);
+// Import js fonctions
+import { getTranslate } from "@/multilanguage/lang";
+const t = getTranslate();
 
 const colorInvoice = computed(() => {
   if (props.billed === "allTrue") {

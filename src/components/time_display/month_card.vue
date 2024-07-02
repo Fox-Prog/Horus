@@ -24,10 +24,10 @@
   <v-dialog v-model="infoMessage" persistent>
     <info_message_box
       mode="warning"
-      title="Attention !!"
-      text="Tous les horaires de ce mois seront supprimé, êtes vous sûr ?"
-      accept="Supprimer"
-      cancel="Annuler"
+      :title="t.tt_imb_warning"
+      :text="`${t.txt_imb_del_lines_from_month_p1} ${monthName} ${t.txt_imb_del_lines_from_month_p2}`"
+      :accept="t.btn_img_continu"
+      :cancel="t.btn_img_cancel"
       @accept="deleteMonth"
       @cancel="infoMessage = false"
     ></info_message_box>
@@ -83,6 +83,8 @@ import { averageDays } from "@/functions/recap_functions.js";
 import { addLine, removeLine } from "@/functions/bdd_functions";
 import { sumCA, sumBNF } from "@/functions/money_functions.js";
 import { setLoader } from "@/functions/dialog_functions";
+import { getTranslate } from "@/multilanguage/lang";
+const t = getTranslate();
 
 const infoMessage = ref(false);
 

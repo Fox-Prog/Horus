@@ -1,6 +1,6 @@
 <template>
   <div class="client-field-container">
-    <h2 class="text-font dark-title">Client</h2>
+    <h2 class="text-font dark-title">{{ t.tt_client_form }}</h2>
     <div class="client-select-btn">
       <v-select
         class="custom-font mx-4"
@@ -47,6 +47,9 @@ const props = defineProps(["clientName"]);
 const emit = defineEmits(["selected"]);
 // Import components
 import clientForm from "@/components/client_display/clientForm.vue";
+// Import js fonctions
+import { getTranslate } from "@/multilanguage/lang";
+const t = getTranslate();
 // Import store
 import { useStore } from "vuex";
 const store = useStore();

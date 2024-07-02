@@ -1,6 +1,16 @@
 <template>
   <h1 id="title" class="big-title-font dark-title">Horus</h1>
 
+  <!-- <v-btn
+    style="position: absolute; top: 0; right: 0"
+    icon="mdi-cog"
+    variant="text"
+    rounded="sm"
+    size="60"
+    color="var(--text-color-light)"
+    @click="router.push('/settings')"
+  ></v-btn> -->
+
   <hourlyForm :mode="1"></hourlyForm>
   <displaySelector @changeMode="handleDisplayMode"></displaySelector>
 
@@ -44,6 +54,9 @@ import { computed, ref, watch } from "vue";
 // Import store
 import { useStore } from "vuex";
 const store = useStore();
+// Import router
+// import { useRouter } from "vue-router";
+// const router = useRouter();
 // Import components
 import hourlyForm from "@/components/hourly/hourlyForm.vue";
 import displaySelector from "@/components/options/display_selector.vue";
@@ -69,11 +82,10 @@ function handleDisplayMode(data) {
 }
 
 // Loader
-const loader = ref({ dialog: false });
+const loader = ref(store.state.loader);
 watch(
   () => store.state.loader,
   (newLoader) => {
-    // console.log("newLoader:", newLoader);
     loader.value = newLoader;
   }
 );

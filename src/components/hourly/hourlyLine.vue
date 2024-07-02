@@ -8,7 +8,7 @@
     <v-fade-transition>
       <div v-if="setBtn" id="set-btn-container">
         <v-btn
-          block
+          :width="props.line.note ? '33%' : '50%'"
           height="100%"
           rounded="0"
           icon="mdi-close"
@@ -17,25 +17,28 @@
           @click="deleteLine"
         ></v-btn>
         <v-btn
-          block
+          :width="props.line.note ? '33%' : '50%'"
           height="100%"
           rounded="0"
           icon="mdi-pen"
           variant="flat"
           color="blue"
-          @click="dialog = true"
+          @click="setHourly"
         ></v-btn>
         <v-btn
           v-if="props.line.note"
-          block
+          width="33%"
           height="100%"
           rounded="0"
-          icon="mdi-text-box-outline"
+          :icon="showNote ? 'mdi-close-box-outline' : 'mdi-text-box-outline'"
           variant="flat"
           color="green"
+          @click="showNote = !showNote"
         ></v-btn>
+        <note_box v-if="showNote" :note="props.line.note"></note_box>
       </div>
     </v-fade-transition>
+
     <div id="total-hour-line">
       <div id="day">
         <h3 class="dark-title mr-2">{{ dayName }}</h3>
@@ -50,32 +53,27 @@
     </div>
   </div>
   <v-divider></v-divider>
-
-  <div class="overlay-background" v-if="dialog"></div>
-
-  <v-dialog v-model="dialog" width="auto" scrollable persistent>
-    <setHourly
-      :mode="2"
-      :line="props.line"
-      @setDone="dialog = false"
-    ></setHourly>
-  </v-dialog>
 </template>
 
 <script setup>
 // Import vue fonctions
 import { computed, defineProps, ref } from "vue";
 const props = defineProps(["line"]);
+// Import router
+import { useRouter } from "vue-router";
+const router = useRouter();
 // Import store
 import { useStore } from "vuex";
 const store = useStore();
 // Import js fonctions
 import { removeLine } from "@/functions/bdd_functions.js";
 // Import components
-import setHourly from "@/components/hourly/hourlyForm.vue";
+import note_box from "@/components/dialog/note_box.vue";
 
 const setBtn = ref(false);
 const hourly = ref(props.line.hourly);
+
+const showNote = ref(false);
 
 const dtt = ref(props.line.dtt);
 const sum = ref(dtt.value.replace(":", "h"));
@@ -83,7 +81,9 @@ const sum = ref(dtt.value.replace(":", "h"));
 function showTouchBtn() {
   setBtn.value = true;
   setTimeout(() => {
-    setBtn.value = false;
+    if (!showNote.value) {
+      setBtn.value = false;
+    }
   }, 2000);
 }
 
@@ -102,8 +102,14 @@ const dayName = computed(() => {
   return listDay[day];
 });
 
-// Set hourly
-const dialog = ref(false);
+// Set Hourly
+function setHourly() {
+  store.dispatch("setHourlyData", {
+    mode: 2,
+    line: props.line,
+  });
+  router.push("/set");
+}
 
 // Touch or not
 const touch = computed(() => {
@@ -150,7 +156,11 @@ async function deleteLine() {
 #set-btn-container {
   position: absolute;
   display: flex;
-  width: 33%;
+  width: 100%;
   height: 100%;
+}
+
+.note-container {
+  position: absolute;
 }
 </style>

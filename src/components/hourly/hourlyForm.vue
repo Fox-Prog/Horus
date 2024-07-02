@@ -57,8 +57,8 @@
           :color="noteField ? 'red' : '#6e56cf'"
           rounded="lg"
           :prepend-icon="noteField ? 'mdi-close' : 'mdi-text-box-plus-outline'"
-          @click="handleNote"
-          ><h3 class="text-font">Note</h3></v-btn
+          @click="handleNote()"
+          ><h3 class="text-font">{{ t.btn_note }}</h3></v-btn
         >
         <v-btn
           class="mb-5"
@@ -68,7 +68,7 @@
           rounded="lg"
           prepend-icon="mdi-plus-circle-outline"
           @click="forms.push(newForm(forms))"
-          ><h3 class="text-font">Horaires</h3></v-btn
+          ><h3 class="text-font">{{ t.btn_hourly }}</h3></v-btn
         >
       </div>
 
@@ -77,6 +77,7 @@
         v-model="note"
         variant="solo-filled"
         clearable
+        :rules="[notNull]"
         bg-color="#291f43"
         label="Note"
         width="100%"
@@ -89,7 +90,7 @@
         color="#3C2E69"
         size="60"
         block
-        ><h2 class="text-font">Valider</h2></v-btn
+        ><h2 class="text-font">{{ t.btn_done }}</h2></v-btn
       >
 
       <v-btn
@@ -99,8 +100,8 @@
         color="#E5484D"
         size="40"
         block
-        @click="emit('setDone', true)"
-        >Annuler</v-btn
+        @click="emit('setDone')"
+        >{{ t.btn_cancel }}</v-btn
       >
     </v-form>
   </div>
@@ -127,6 +128,8 @@ import { addTime } from "@/functions/time_functions.js";
 import { newForm } from "@/functions/forms_functions";
 import { calcCA, calcBNF } from "@/functions/money_functions";
 import { setLoader } from "@/functions/dialog_functions";
+import { getTranslate } from "@/multilanguage/lang";
+const t = getTranslate();
 // Import store
 import { useStore } from "vuex";
 const store = useStore();
@@ -153,17 +156,28 @@ const paid = ref(content.mode === 2 ? content.line.client.paid : false);
 // Note
 const noteField = ref(content.mode === 2 && content.line.note ? true : false);
 const note = ref(content.mode === 2 ? content.line.note : null);
+function notNull(v) {
+  if (v === null) {
+    return false;
+  }
+  return true;
+}
 function handleNote() {
   if (noteField.value) {
     note.value = null;
   }
   noteField.value = !noteField.value;
+  checkGlobalTrue();
 }
 
 // Check global form
 function checkGlobalTrue() {
   const globalTrue = forms.value.every((f) => f.status === true);
-  if (globalTrue && clientSelected.value !== null) {
+  if (
+    globalTrue &&
+    clientSelected.value !== null &&
+    (noteField.value ? note.value !== null : true)
+  ) {
     formDone.value = true;
   } else {
     formDone.value = false;
@@ -172,7 +186,15 @@ function checkGlobalTrue() {
 
 // FORMS
 const forms = ref([]);
-watch(forms.value, () => {
+watch(
+  forms,
+  () => {
+    checkGlobalTrue();
+  },
+  { deep: true }
+);
+
+watch(noteField, () => {
   checkGlobalTrue();
 });
 
@@ -295,14 +317,14 @@ async function createLine() {
       },
       0
     );
-
     success.value = false;
+    emit("setDone");
   } finally {
     resetForm();
 
     if (success.value === true) {
       setLoader(store, { dialog: false, mode: "success" }, loaderTime);
-      emit("setDone", true);
+      emit("setDone");
     }
   }
 }

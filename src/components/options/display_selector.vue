@@ -3,7 +3,9 @@
     class="card-calendar"
     style="flex-direction: row; height: 30px; margin-top: 10px"
   >
-    <h3 class="text-font dark-title" style="margin-right: 20px">Affichage</h3>
+    <h3 class="text-font dark-title" style="margin-right: 20px">
+      {{ t.tt_display_mode }}
+    </h3>
     <v-switch
       hide-details
       color="#e2ddfe"
@@ -20,6 +22,9 @@
 // Import vue fonctions
 import { ref, computed, onMounted, defineEmits } from "vue";
 const emit = defineEmits(["changeMode"]);
+// Import js fonctions
+import { getTranslate } from "@/multilanguage/lang";
+const t = getTranslate();
 
 const savedData = localStorage.getItem("displayMode");
 

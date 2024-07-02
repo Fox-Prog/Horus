@@ -7,6 +7,7 @@ export default createStore({
     expandStates: [],
     loader: {},
     loaderTime: 450,
+    hourlyData: {},
   },
   getters: {},
   mutations: {
@@ -36,6 +37,10 @@ export default createStore({
     setLoader(state, data) {
       state.loader = data;
     },
+
+    setHourlyData(state, data) {
+      state.hourlyData = data;
+    },
   },
   actions: {
     addLine({ commit }, line) {
@@ -58,6 +63,10 @@ export default createStore({
 
     setLoader({ commit }, data) {
       commit("setLoader", data);
+    },
+
+    setHourlyData({ commit }, data) {
+      commit("setHourlyData", data);
     },
   },
   modules: {},
