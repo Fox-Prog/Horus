@@ -205,7 +205,7 @@ async function deleteClient() {
     console.log(error);
     setLoader(
       store,
-      { dialog: true, mode: "err", error: "Erreur suppression client" },
+      { dialog: true, mode: "err", error: t.txt_error_client_del },
       0
     );
     emit("error", true);

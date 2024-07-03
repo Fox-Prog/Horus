@@ -10,6 +10,7 @@
 import "@mdi/font/css/materialdesignicons.css";
 import { ref, onMounted } from "vue";
 import { getLinesLocal, getClientsLocal } from "@/functions/bdd_functions.js";
+import { getLang } from "@/multilanguage/lang.js";
 import { useStore } from "vuex";
 const store = useStore();
 
@@ -43,10 +44,11 @@ function initIndexedDB() {
 
 const colorMode = ref("dark");
 
-onMounted(() => {
+onMounted(async () => {
+  getLang();
   initIndexedDB();
-  getLinesLocal(store);
-  getClientsLocal(store);
+  await getLinesLocal(store);
+  await getClientsLocal(store);
 });
 </script>
 

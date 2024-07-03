@@ -71,6 +71,7 @@
 // Import vue fonctions
 import { ref, defineProps, computed } from "vue";
 const props = defineProps(["clientLines"]);
+// Import store
 import { useStore } from "vuex";
 const store = useStore();
 // Import components
@@ -178,7 +179,7 @@ async function setColorClient(color) {
     console.log(error);
     setLoader(
       store,
-      { dialog: true, mode: "err", error: "Erreur couleur client" },
+      { dialog: true, mode: "err", error: t.txt_error_client_color },
       0
     );
   } finally {

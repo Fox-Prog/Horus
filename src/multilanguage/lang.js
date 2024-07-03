@@ -15,7 +15,9 @@ export function getLangsNames() {
 
 export function setLang(lg) {
   localStorage.setItem("lang", lg);
-  document.location.reload(true);
+  setTimeout(() => {
+    document.location.reload(true);
+  }, 500);
 }
 
 export function getTranslate() {
@@ -73,9 +75,16 @@ const languages = [
     btn_img_continu: "Continuer",
     btn_img_cancel: "Annuler",
 
-    SECTEUR_7: "SETTINGS",
-    tt_settings_page: "Réglages",
-    h3_titleContactForm: "Formulaire de contact",
+    SECTEUR_7: "LOADER_BOX",
+    txt_error_client_color: "Erreur lors du changement de couleur",
+    txt_error_client_del: "Erreur lors de la suppression du client",
+    txt_error_change_lang: "Erreur lors du changement de language",
+    txt_error_mail: "Erreur lors de l'envoi du mail",
+
+    SECTEUR_8: "SETTINGS",
+    tt_settings_page: "Paramètres",
+    tt_contact_form: "Formulaire de contact",
+    labelName: "Nom",
     labelEmail: "Votre adresse e-mail",
     objectEmail: "Objet du courriel",
     objects: {
@@ -85,9 +94,10 @@ const languages = [
     },
     labelMailArea: "Saisissez votre message ici",
     sendMail: "Envoyer",
-    mailDone: "E-mail envoyé avec succès",
-    mailError: "Erreur, l'e-mail n'a pas pu être envoyé",
-    offlineError: "Vous êtes hors ligne",
+
+    SECTEUR_9: "CHECK-FIELD",
+    requireMsg: "Ce champ est requis",
+    isNotEmail: "Veuillez saisir une adresse e-mail valide",
   },
 
   {
@@ -136,10 +146,17 @@ const languages = [
     btn_img_continu: "Continue",
     btn_img_cancel: "Cancel",
 
-    SECTEUR_7: "SETTINGS",
+    SECTEUR_7: "LOADER_BOX",
+    txt_error_client_color: "Error changing the client's color",
+    txt_error_client_del: "Error deleting the client",
+    txt_error_change_lang: "Error changing the language",
+    txt_error_mail: "Error sending email",
+
+    SECTEUR_8: "SETTINGS",
     tt_settings_page: "Settings",
-    h3_titleContactForm: "Contact form",
+    tt_contact_form: "Contact form",
     labelEmail: "Your e-mail adress",
+    labelName: "Name",
     objectEmail: "Mail object",
     objects: {
       bug: "Report an issue",
@@ -148,8 +165,9 @@ const languages = [
     },
     labelMailArea: "Enter your message here",
     sendMail: "Send",
-    mailDone: "Email sent successfully",
-    mailError: "Error, e-mail not sent",
-    offlineError: "You are offline",
+
+    SECTEUR_9: "CHECK-FIELD",
+    requireMsg: "Field is required",
+    isNotEmail: "Please enter a valid e-mail address",
   },
 ];

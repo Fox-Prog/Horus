@@ -3,7 +3,7 @@
     <h2 class="text-font dark-title">{{ t.tt_client_form }}</h2>
     <div class="client-select-btn">
       <v-select
-        class="custom-font mx-4"
+        class="selector-font mx-4"
         density="compact"
         variant="solo-filled"
         bg-color="#291f43"
@@ -95,17 +95,10 @@ watch(selectedClient, () => {
   background-color: var(--background-purple-1);
 }
 
-@media screen and (max-width: 600px) {
+@media (max-width: 600px) {
   .client-field-container {
     display: block;
     text-align: center;
   }
-}
-
-.custom-font .v-input__control,
-.custom-font .v-select__selections,
-.custom-font .v-list-item__title,
-.custom-font .v-list-item__content {
-  font-family: "OpenSans";
 }
 </style>

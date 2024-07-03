@@ -31,6 +31,19 @@
   letter-spacing: 15px;
   font-size: 50px;
 }
+.var-big-title-font {
+  font-family: "Orbitron";
+  font-weight: 400;
+  letter-spacing: 15px;
+  font-size: 50px;
+}
+
+@media (max-width: 600px) {
+  .var-big-title-font {
+    font-size: 30px;
+    letter-spacing: 10px;
+  }
+}
 
 .title-font {
   font-weight: 250;
@@ -56,6 +69,13 @@
 .month-font {
   font-family: "Alegreya";
   font-weight: 500;
+}
+
+.selector-font .v-input__control,
+.selector-font .v-select__selections,
+.selector-font .v-list-item__title,
+.selector-font .v-list-item__content {
+  font-family: "OpenSans";
 }
 
 @font-face {
