@@ -4,7 +4,7 @@
       :clientName="content.mode === 2 ? content.line.client.name : null"
       @selected="handleSelectedClient"
     ></clientField>
-    <v-form class="form" v-model="formDone" @submit.prevent="createMode()">
+    <div class="form">
       <v-dialog v-model="dialog">
         <template v-slot:activator="{ props }">
           <v-btn
@@ -71,7 +71,6 @@
           ><h3 class="text-font">{{ t.btn_hourly }}</h3></v-btn
         >
       </div>
-
       <v-textarea
         v-if="noteField"
         v-model="note"
@@ -81,15 +80,16 @@
         bg-color="#291f43"
         label="Note"
         width="100%"
+        @input="checkGlobalTrue()"
       ></v-textarea>
 
       <v-btn
         :disabled="!formDone"
-        type="submit"
         variant="elevated"
         color="#3C2E69"
         size="60"
         block
+        @click="createMode()"
         ><h2 class="text-font">{{ t.btn_done }}</h2></v-btn
       >
 
@@ -103,7 +103,7 @@
         @click="emit('setDone')"
         >{{ t.btn_cancel }}</v-btn
       >
-    </v-form>
+    </div>
   </div>
 </template>
 
@@ -193,10 +193,6 @@ watch(
   },
   { deep: true }
 );
-
-watch(noteField, () => {
-  checkGlobalTrue();
-});
 
 function initForms() {
   if (content.mode === 2) {
