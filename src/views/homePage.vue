@@ -12,7 +12,10 @@
   ></v-btn>
 
   <hourlyForm :mode="1"></hourlyForm>
-  <displaySelector @changeMode="handleDisplayMode"></displaySelector>
+  <displaySelector
+    @changeMode="handleDisplayMode"
+    @search="updateSearch"
+  ></displaySelector>
 
   <v-divider class="my-5"></v-divider>
 
@@ -68,7 +71,25 @@ import { yearFocus, clientFocus } from "@/functions/sort_functions.js";
 import { setLoader } from "@/functions/dialog_functions";
 
 // Display lines
-const savedLine = computed(() => store.state.lines);
+const savedLine = computed(() => {
+  if (search.value) {
+    return store.state.lines.filter((l) =>
+      l.client.name.toUpperCase().startsWith(search.value)
+    );
+  }
+  return store.state.lines;
+});
+
+//Search Mode
+const search = ref(null);
+
+function updateSearch(data) {
+  if (data) {
+    search.value = data.toUpperCase();
+  } else {
+    search.value = null;
+  }
+}
 
 const displayMode = ref(
   localStorage.getItem("displayMode")

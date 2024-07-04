@@ -188,6 +188,4 @@ async function setColorClient(color) {
     }
   }
 }
-
-console.log("props.clientLines: ", props.clientLines[0].name);
 </script>

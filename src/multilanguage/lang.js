@@ -45,6 +45,7 @@ const languages = [
 
     SECTION_3: "OPTIONS",
     tt_display_mode: "Affichage",
+    lb_search_bar: "Nom du client",
 
     SECTION_4: "RECAP_BOARD",
     lb_hour: "Heures",
@@ -116,6 +117,7 @@ const languages = [
 
     SECTION_3: "OPTIONS",
     tt_display_mode: "Display",
+    lb_search_bar: "Client name",
 
     SECTION_4: "RECAP_BOARD",
     lb_hour: "Hours",

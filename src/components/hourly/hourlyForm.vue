@@ -21,7 +21,7 @@
         </template>
 
         <v-container>
-          <v-row justify="space-around">
+          <v-row style="justify-content: center">
             <v-date-picker
               id="date-picker"
               color="#3C2E69"
@@ -347,7 +347,7 @@ onBeforeUnmount(() => {
 
 <style>
 #date-picker {
-  border: solid 5px var(--border-violet);
+  border: solid 2px var(--border-violet);
 }
 #date-picker .v-btn {
   background-color: var(--background-violet-2);
