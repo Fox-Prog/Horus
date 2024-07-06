@@ -1,23 +1,31 @@
 <template>
-  <div class="card-home">
+  <div :class="cm" class="card-home">
     <v-form class="form" @submit.prevent="createMode()">
-      <h3 class="text-font dark-title">{{ t.tt_client_form }}</h3>
+      <h3 :class="cm" class="text-font dark-title">{{ t.tt_client_form }}</h3>
       <v-text-field
-        class="mx-2"
+        class="input-field mx-2"
         density="compact"
         style="width: 90%"
         variant="solo-filled"
-        bg-color="#291f43"
+        :bg-color="
+          cm === 'dark_mode'
+            ? 'var(--bg-dark-3)'
+            : 'var(--interactive-components-light)'
+        "
         :label="t.lb_client_name"
         :rules="[unicName]"
         v-model="clientName"
       ></v-text-field>
-      <h3 class="text-font dark-title">{{ t.lb_income }}</h3>
+      <h3 :class="cm" class="text-font dark-title">{{ t.lb_income }}</h3>
       <v-text-field
-        class="mx-2"
+        class="input-field mx-2"
         density="compact"
         variant="solo-filled"
-        bg-color="#291f43"
+        :bg-color="
+          cm === 'dark_mode'
+            ? 'var(--bg-dark-3)'
+            : 'var(--interactive-components-light)'
+        "
         hide-spin-buttons
         append-inner-icon="mdi-currency-eur"
         :label="t.lb_th_nodot"
@@ -26,10 +34,14 @@
         :rules="[positiveNbr]"
       ></v-text-field>
       <v-text-field
-        class="mx-2"
+        class="input-field mx-2"
         density="compact"
         variant="solo-filled"
-        bg-color="#291f43"
+        :bg-color="
+          cm === 'dark_mode'
+            ? 'var(--bg-dark-3)'
+            : 'var(--interactive-components-light)'
+        "
         hide-spin-buttons
         append-inner-icon="mdi-percent"
         :label="t.lb_chrg_nodot"
@@ -41,10 +53,16 @@
         :disabled="!formDone"
         type="submit"
         variant="elevated"
-        color="#3C2E69"
+        :color="
+          cm === 'dark_mode'
+            ? 'var(--interactive-components-dark)'
+            : 'var(--interactive-components-light)'
+        "
         size="60"
         block
-        >{{ t.btn_done }}</v-btn
+        ><h2 :class="cm" class="light-title text-font">
+          {{ t.btn_done }}
+        </h2></v-btn
       >
     </v-form>
     <div class="btn-bottom-card">
@@ -84,7 +102,7 @@
 
 <script setup>
 // Import vue fonctions
-import { ref, defineProps, defineEmits, watch, onMounted } from "vue";
+import { ref, computed, defineProps, defineEmits, watch, onMounted } from "vue";
 const props = defineProps(["mode", "client"]);
 const emit = defineEmits(["done", "error"]);
 // Import store
@@ -99,6 +117,8 @@ import {
 import { setLoader } from "@/functions/dialog_functions";
 import { getTranslate } from "@/multilanguage/lang";
 const t = getTranslate();
+// Color Mode
+const cm = computed(() => store.state.colorMode);
 
 // Import components
 import info_message_box from "@/components/dialog/info_message_box.vue";
@@ -170,7 +190,7 @@ async function createClient() {
   const newClient = {
     id: Date.now(),
     name: clientName.value,
-    color: props.mode === 1 ? "#291f43" : props.client.color,
+    color: props.mode === 1 ? "var(--bg-dark-3)" : props.client.color,
     th: th.value,
     chrg: chrg.value,
   };

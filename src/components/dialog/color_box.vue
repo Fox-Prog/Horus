@@ -1,5 +1,5 @@
 <template>
-  <div id="color-grid-container" class="card-home">
+  <div id="color-grid-container" :class="cm" class="card-home">
     <v-btn
       v-for="(color, index) in colorList"
       :key="index"

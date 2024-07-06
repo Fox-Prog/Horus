@@ -1,29 +1,44 @@
 <template>
   <div class="client-field-container">
-    <h2 class="text-font dark-title">{{ t.tt_client_form }}</h2>
+    <h2 :class="cm" class="text-font dark-title">{{ t.tt_client_form }}</h2>
     <div class="client-select-btn">
       <v-select
-        class="selector-font mx-4"
+        :class="cm"
+        class="input-field selector-font mx-4"
         density="compact"
-        variant="solo-filled"
-        bg-color="#291f43"
+        :variant="cm === 'dark_mode' ? 'solo-filled' : 'outlined'"
+        :bg-color="
+          cm === 'dark_mode'
+            ? 'var(--bg-dark-3)'
+            : 'var(--interactive-components-light)'
+        "
         :items="clientList"
         v-model="selectedClient"
       ></v-select>
       <v-btn
-        class="ms-2"
+        class="btn ms-2"
         size="40px"
         v-if="selectedClient"
-        color="#291f43"
+        :color="
+          cm === 'dark_mode'
+            ? 'var(--bg-dark-3)'
+            : 'var(--interactive-components-light)'
+        "
         rounded="sm"
+        :variant="cm === 'dark_mode' ? 'elevated' : 'flat'"
         icon="mdi-cog"
         @click="(dialog = true), (mode = 2)"
       ></v-btn>
       <v-btn
-        class="ms-2"
+        class="btn ms-2"
         size="40px"
-        color="#3C2E69"
+        :color="
+          cm === 'dark_mode'
+            ? 'var(--interactive-components-dark)'
+            : 'var(--interactive-components-light)'
+        "
         rounded="sm"
+        :variant="cm === 'dark_mode' ? 'elevated' : 'flat'"
         icon="mdi-plus"
         @click="(dialog = true), (mode = 1)"
       ></v-btn>
@@ -53,6 +68,8 @@ const t = getTranslate();
 // Import store
 import { useStore } from "vuex";
 const store = useStore();
+// Color Mode
+const cm = computed(() => store.state.colorMode);
 
 const dialog = ref(false);
 const mode = ref(null);

@@ -1,13 +1,18 @@
 <template>
-  <div class="note-container card-calendar">
-    <h3 class="text-font light-title">{{ props.note }}</h3>
+  <div :class="cm" class="note-container card-calendar">
+    <h3 :class="cm" class="text-font light-title">{{ props.note }}</h3>
   </div>
 </template>
 
 <script setup>
 // Import vue fonctions
-import { defineProps } from "vue";
+import { computed, defineProps } from "vue";
 const props = defineProps(["note"]);
+// Import store
+import { useStore } from "vuex";
+const store = useStore();
+// Color Mode
+const cm = computed(() => store.state.colorMode);
 </script>
 
 <style>
@@ -15,6 +20,6 @@ const props = defineProps(["note"]);
   position: absolute;
   bottom: 110%;
   right: 0;
-  border: solid var(--border-violet) 2px;
+  border: solid var(--border-color) 2px;
 }
 </style>

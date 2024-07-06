@@ -1,5 +1,5 @@
 <template>
-  <div class="card-home">
+  <div :class="cm" class="card-home">
     <clientField
       :clientName="content.mode === 2 ? content.line.client.name : null"
       @selected="handleSelectedClient"
@@ -11,10 +11,19 @@
             v-bind="props"
             class="mb-5"
             variant="flat"
-            color="#291f43"
+            :style="
+              cm === 'dark_mode'
+                ? {}
+                : { border: '1px solid rgba(0, 0, 0, 0.35)' }
+            "
+            :color="
+              cm === 'dark_mode'
+                ? 'var(--bg-dark-3)'
+                : 'var(--interactive-components-light)'
+            "
             size="60"
             block
-            ><h2 class="number-font">
+            ><h2 :class="cm" class="light-title number-font">
               {{ dayDate.toLocaleDateString() }}
             </h2></v-btn
           >
@@ -24,8 +33,15 @@
           <v-row style="justify-content: center">
             <v-date-picker
               id="date-picker"
-              color="#3C2E69"
-              bg-color="#1B1525"
+              :class="cm"
+              :color="
+                cm === 'dark_mode'
+                  ? 'var(--interactive-components-dark)'
+                  : 'var(--interactive-components-light)'
+              "
+              :bg-color="
+                cm === 'dark_mode' ? 'var(--bg-dark-2)' : 'var(--bg-light-2)'
+              "
               elevation="24"
               hide-header
               v-model="dayDate"
@@ -73,11 +89,18 @@
       </div>
       <v-textarea
         v-if="noteField"
+        :class="cm"
+        class="input-field"
+        id="note-area"
         v-model="note"
         variant="solo-filled"
         clearable
         :rules="[notNull]"
-        bg-color="#291f43"
+        :bg-color="
+          cm === 'dark_mode'
+            ? 'var(--bg-dark-2)'
+            : 'var(--interactive-components-light)'
+        "
         label="Note"
         width="100%"
         @input="checkGlobalTrue()"
@@ -86,11 +109,17 @@
       <v-btn
         :disabled="!formDone"
         variant="elevated"
-        color="#3C2E69"
+        :color="
+          cm === 'dark_mode'
+            ? 'var(--interactive-components-dark)'
+            : 'var(--interactive-components-light)'
+        "
         size="60"
         block
         @click="createMode()"
-        ><h2 class="text-font">{{ t.btn_done }}</h2></v-btn
+        ><h2 :class="cm" class="light-title text-font">
+          {{ t.btn_done }}
+        </h2></v-btn
       >
 
       <v-btn
@@ -113,6 +142,7 @@ import {
   onMounted,
   onBeforeUnmount,
   ref,
+  computed,
   watch,
   defineProps,
   defineEmits,
@@ -133,6 +163,8 @@ const t = getTranslate();
 // Import store
 import { useStore } from "vuex";
 const store = useStore();
+// Color Mode
+const cm = computed(() => store.state.colorMode);
 
 const formDone = ref(false);
 
@@ -347,10 +379,18 @@ onBeforeUnmount(() => {
 
 <style>
 #date-picker {
-  border: solid 2px var(--border-violet);
+  border: solid 2px var(--border-color);
 }
 #date-picker .v-btn {
-  background-color: var(--background-violet-2);
-  color: var(--text-color-light);
+  background-color: var(--bg-color-2);
+  color: var(--txt-dark);
+}
+
+#date-picker {
+  color: var(--txt-light);
+}
+
+#note-area {
+  color: var(--txt-light);
 }
 </style>

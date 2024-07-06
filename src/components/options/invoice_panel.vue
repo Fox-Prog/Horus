@@ -38,6 +38,11 @@
 import { computed, defineProps, defineEmits } from "vue";
 const props = defineProps(["billed", "paid", "dop"]);
 const emit = defineEmits(["billed", "paid"]);
+// Import store
+import { useStore } from "vuex";
+const store = useStore();
+// Color Mode
+const cm = computed(() => store.state.colorMode);
 // Import js fonctions
 import { getTranslate } from "@/multilanguage/lang";
 const t = getTranslate();
@@ -48,7 +53,7 @@ const colorInvoice = computed(() => {
   } else if (props.billed === "mixed") {
     return "orange";
   }
-  return "white";
+  return cm.value === "dark_mode" ? "white" : "gray";
 });
 
 const colorPaid = computed(() => {
@@ -57,7 +62,7 @@ const colorPaid = computed(() => {
   } else if (props.paid === "mixed") {
     return "orange";
   }
-  return "white";
+  return cm.value === "dark_mode" ? "white" : "gray";
 });
 
 function emitInvoice() {

@@ -1,9 +1,14 @@
 <template>
   <v-select
-    class="mx-2"
+    :class="cm"
+    class="input-field mx-2"
     density="compact"
-    variant="solo-filled"
-    bg-color="#291f43"
+    :variant="cm === 'dark_mode' ? 'solo-filled' : 'outlined'"
+    :bg-color="
+      cm === 'dark_mode'
+        ? 'var(--bg-dark-3)'
+        : 'var(--interactive-components-light)'
+    "
     :items="contents"
     menu-icon="none"
     :menu-props="menuProps"
@@ -12,8 +17,13 @@
 
 <script setup>
 // Import vue fonctions
-import { ref, defineProps, watch } from "vue";
+import { ref, computed, defineProps, watch } from "vue";
 const props = defineProps(["contents"]);
+// Import store
+import { useStore } from "vuex";
+const store = useStore();
+// Color Mode
+const cm = computed(() => store.state.colorMode);
 
 const contents = ref(props.contents);
 
@@ -28,10 +38,3 @@ watch(
   }
 );
 </script>
-
-<style>
-/* .custom-menu-props .v-list-item {
-  color: rgb(226, 221, 254);
-  background-color: rgb(58, 49, 82);
-} */
-</style>

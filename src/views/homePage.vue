@@ -1,13 +1,14 @@
 <template>
-  <h1 id="title" class="big-title-font dark-title">Horus</h1>
+  <h1 id="title" :class="cm" class="big-title-font dark-title">Horus</h1>
 
   <v-btn
+    :class="cm"
     style="position: absolute; top: 0; right: 0"
     icon="mdi-cog"
     variant="text"
     rounded="sm"
-    size="60"
-    color="var(--text-color-light)"
+    size="50"
+    color="var(--txt-dark)"
     @click="router.push('/settings')"
   ></v-btn>
 
@@ -69,6 +70,8 @@ import loader_box from "@/components/dialog/loader_box.vue";
 // Import js fonctions
 import { yearFocus, clientFocus } from "@/functions/sort_functions.js";
 import { setLoader } from "@/functions/dialog_functions";
+// Color Mode
+const cm = computed(() => store.state.colorMode);
 
 // Display lines
 const savedLine = computed(() => {

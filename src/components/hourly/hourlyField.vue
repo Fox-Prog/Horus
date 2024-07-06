@@ -3,13 +3,13 @@
     <div id="lines">
       <div id="formLine">
         <field class="selector" v-model="Hstr" :contents="HH"></field>
-        <h2 class="dark-title">h</h2>
+        <h2 :class="cm" class="dark-title">h</h2>
         <field class="selector" v-model="Mstr" :contents="MM"></field>
       </div>
       <div style="width: 40px"></div>
       <div id="formLine">
         <field class="selector" v-model="Hstp" :contents="HH2"></field>
-        <h2 class="dark-title">h</h2>
+        <h2 :class="cm" class="dark-title">h</h2>
         <field class="selector" v-model="Mstp" :contents="MM2"></field>
       </div>
       <v-btn
@@ -28,13 +28,18 @@
 
 <script setup>
 // Import vue fonctions
-import { ref, defineEmits, defineProps, watch, onMounted } from "vue";
+import { ref, computed, defineEmits, defineProps, watch, onMounted } from "vue";
 const props = defineProps(["id", "reset", "data"]);
 const emit = defineEmits(["data", "remove"]);
 // Import components
 import field from "@/components/input_field.vue";
 // Import js fonctions
 import { durationTime } from "@/functions/time_functions.js";
+// Import store
+import { useStore } from "vuex";
+const store = useStore();
+// Color Mode
+const cm = computed(() => store.state.colorMode);
 
 const form = ref(false);
 const Hstr = ref(props.data[0]);

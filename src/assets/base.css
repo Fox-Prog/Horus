@@ -1,22 +1,66 @@
 :root {
-  --background-violet-1: #14121f;
-  --background-violet-2: #1b1525;
-  --background-violet-6: #473876;
-  --background-purple-1: #18111b;
-  /* --background-color-light: #ba9aee; */
+  /* Dark mode */
+  --bg-dark-1: #1b1525; /*BG volet client + year card*/
+  --bg-dark-2: #18111b; /*BG app + color btn calendar*/
+  --bg-dark-3: #291f43; /*BG card calendar*/
+  --bg-dark-4: #473876;
 
-  --background-overlay: rgba(27, 21, 37, 0.558);
+  --txt-dark-dark: #baa7ff;
+  --txt-dark-light: #e2ddfe;
 
-  --text-color-dark: #baa7ff;
-  --text-color-light: #e2ddfe;
+  --interactive-components-dark: #3c2e69; /*Valeur en dur -- btn done*/
 
-  --interactive-components-1: #291f43;
-  --interactive-components-2: #33255b;
-  --interactive-components-3: #3c2e69;
+  --border-dark: #56468b; /*All border*/
+  --divider-dark: var(--txt-dark-dark); /*All divider*/
 
-  --border-violet: #56468b;
+  --box-shadow-color-dark: rgba(105, 88, 173, 0.095);
 
-  --divider-color: #baa7ff;
+  /* Light mode */
+  --bg-light-1: #fdfcfe;
+  --bg-light-2: #faf8ff;
+  --bg-light-3: #f4f0fe; /*f4f0fe*/
+  --bg-light-4: #d4cafe;
 
-  --box-shadow-color: rgba(105, 88, 173, 0.095);
+  --txt-light-dark: #2f265f;
+  --text-light-light: #6550b9;
+
+  --interactive-components-light: #ebe4ff;
+
+  --border-light: #aa99ec;
+  --divider-light: var(--txt-light-dark);
+
+  --box-shadow-color-light: rgba(105, 88, 173, 0.522);
+}
+
+.dark_mode {
+  --bg-color-1: var(--bg-dark-1);
+  --bg-color-2: var(--bg-dark-2);
+  --bg-color-3: var(--bg-dark-3);
+  --bg-color-4: var(--bg-dark-4);
+
+  --txt-dark: var(--txt-dark-dark);
+  --txt-light: var(--txt-dark-light);
+
+  --interactive-components: var(--interactive-components-dark);
+
+  --border-color: var(--border-dark);
+  --divider-color: var(--divider-dark);
+
+  --box-shadow-color: var(--box-shadow-color-dark);
+}
+.light_mode {
+  --bg-color-1: var(--bg-light-1);
+  --bg-color-2: var(--bg-light-2);
+  --bg-color-3: var(--bg-light-3);
+  --bg-color-4: var(--bg-light-4);
+
+  --txt-dark: var(--txt-light-dark);
+  --txt-light: var(--txt-light-light);
+
+  --interactive-components: var(--interactive-components-light);
+
+  --border-color: var(--border-light);
+  --divider-color: var(--divider-light);
+
+  --box-shadow-color: var(--box-shadow-color-light);
 }

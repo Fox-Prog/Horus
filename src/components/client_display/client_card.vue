@@ -1,11 +1,12 @@
 <template>
   <v-btn
+    :class="cm"
     :color="props.clientLines[1].client.color"
     block
     style="
       position: relative;
       height: 60px;
-      border: solid 1px var(--border-violet);
+      border: solid 1px var(--border-color);
     "
     @click="handleDisplay"
     ><h1 class="client-font">{{ props.clientLines[0].name }}</h1>
@@ -40,9 +41,10 @@
     <div
       v-if="display"
       class="card-calendar"
+      :class="cm"
       style="
-        border: solid 1px var(--border-violet);
-        background-color: var(--background-violet-1);
+        border: solid 1px var(--border-color);
+        background-color: var(--bg-color-1);
       "
     >
       <recapBoard
@@ -93,6 +95,9 @@ import { addClient, removeClient } from "@/functions/bdd_functions.js";
 import { setLoader } from "@/functions/dialog_functions";
 import { getTranslate } from "@/multilanguage/lang";
 const t = getTranslate();
+
+// Color Mode
+const cm = computed(() => store.state.colorMode);
 
 const infoMessage = ref(false);
 const selectColor = ref(false);

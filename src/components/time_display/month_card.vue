@@ -1,15 +1,19 @@
 <template>
   <v-btn
     :append-icon="display ? 'mdi-chevron-up' : 'mdi-chevron-down'"
-    color="#3C2E69"
+    :color="
+      cm === 'dark_mode'
+        ? 'var(--interactive-components-dark)'
+        : 'var(--interactive-components-light)'
+    "
     height="40px"
     block
     @click="handleDisplay"
-    ><h2 class="month-font light-title">
+    ><h2 :class="cm" class="month-font light-title">
       {{ monthName }}
     </h2>
     <v-divider class="mx-3" vertical></v-divider>
-    <h3 class="number-font">{{ totalHours }}</h3>
+    <h3 :class="cm" class="dark-title number-font">{{ totalHours }}</h3>
 
     <delete_btn
       style="position: absolute; right: 0"
@@ -34,7 +38,7 @@
   </v-dialog>
 
   <v-expand-transition>
-    <div v-if="display" class="card-calendar">
+    <div v-if="display" :class="cm" class="card-calendar">
       <invoice_panel
         v-if="props.clientID"
         :billed="checkBilled"
@@ -85,6 +89,9 @@ import { sumCA, sumBNF } from "@/functions/money_functions.js";
 import { setLoader } from "@/functions/dialog_functions";
 import { getTranslate } from "@/multilanguage/lang";
 const t = getTranslate();
+
+// Color Mode
+const cm = computed(() => store.state.colorMode);
 
 const infoMessage = ref(false);
 

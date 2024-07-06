@@ -1,8 +1,12 @@
 <template>
-  <div :id="idMode" class="card-calendar width-fit">
+  <div :id="idMode" :class="cm" class="card-calendar width-fit">
     <img v-if="props.mode === 'warning'" src="/warning.png" alt="warning" />
-    <h3 class="light-title">{{ props.title }}</h3>
-    <p :class="props.mode === 'warning' ? 'light-title mb-5' : 'light-title'">
+    <h3 :class="cm" class="light-title">{{ props.title }}</h3>
+    <p
+      :class="
+        cm && props.mode === 'warning' ? 'light-title mb-5' : 'light-title'
+      "
+    >
       {{ props.text }}
     </p>
 
@@ -19,7 +23,7 @@
         width="49%"
         variant="elevated"
         rounded="sm"
-        color="#3C2E69"
+        :color="cm === 'dark_mode' ? 'var(--interactive-components-dark)' : 'var(--interactive-components-light)'"
         @click="sendCancel()"
         >{{ props.cancel }}</v-btn
       >
@@ -29,9 +33,14 @@
 
 <script setup>
 // Import vue fonctions
-import { ref, defineProps, defineEmits } from "vue";
+import { ref, computed, defineProps, defineEmits } from "vue";
 const props = defineProps(["mode", "title", "text", "accept", "cancel"]);
 const emit = defineEmits(["accept", "cancel"]);
+// Import store
+import { useStore } from "vuex";
+const store = useStore();
+// Color Mode
+const cm = computed(() => store.state.colorMode);
 
 const idMode = ref(props.mode);
 

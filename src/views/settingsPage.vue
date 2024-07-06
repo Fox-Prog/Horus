@@ -1,33 +1,55 @@
 <template>
-  <h1 id="title" class="var-big-title-font dark-title">
+  <h1 id="title" :class="cm" class="var-big-title-font dark-title">
     {{ t.tt_settings_page }}
   </h1>
 
   <v-btn
+    :class="cm"
     style="position: absolute; top: 0; left: 0"
     icon="mdi-chevron-left"
     variant="text"
     rounded="sm"
     size="60"
-    color="var(--text-color-light)"
+    color="var(--txt-dark)"
     @click="router.push('/')"
   ></v-btn>
 
   <!-- Language selector -->
-  <div class="card-home">
+  <div :class="cm" class="card-home">
     <div class="mt-2" style="display: flex">
       <v-select
-        class="custom-font"
+        class="input-field custom-font"
         v-model="language"
         density="compact"
         variant="solo-filled"
         prepend-inner-icon="mdi-translate"
-        bg-color="#291f43"
+        :bg-color="
+          cm === 'dark_mode'
+            ? 'var(--bg-dark-3)'
+            : 'var(--interactive-components-light)'
+        "
         :items="lgs"
         @update:model-value="handleLang"
       ></v-select>
-      <v-divider class="mx-5" vertical></v-divider>
-      <v-btn icon="mdi-theme-light-dark" rounded="sm" size="40"></v-btn>
+      <v-divider
+        class="mx-5"
+        :class="cm"
+        color="var(--divider-color)"
+        thickness="2"
+        vertical
+      ></v-divider>
+      <v-btn
+        class="btn"
+        icon="mdi-theme-light-dark"
+        rounded="sm"
+        size="40"
+        :color="
+          cm === 'dark_mode'
+            ? 'var(--interactive-components-dark)'
+            : 'var(--interactive-components-light)'
+        "
+        @click="setColorMode(store, cm)"
+      ></v-btn>
     </div>
 
     <v-divider class="my-5"></v-divider>
@@ -35,31 +57,39 @@
     <!-- Email form -->
     <div>
       <div>
-        <h2 class="dark-title mb-2">{{ t.tt_contact_form }}</h2>
+        <h2 :class="cm" class="dark-title mb-2">{{ t.tt_contact_form }}</h2>
       </div>
       <v-form v-model="form">
         <!-- Name -->
         <v-text-field
-          class="mb-2"
+          class="input-field mb-2"
           v-model="name"
           prepend-inner-icon="mdi-account"
           clearable
           density="compact"
           variant="solo-filled"
-          bg-color="#291f43"
+          :bg-color="
+            cm === 'dark_mode'
+              ? 'var(--bg-dark-3)'
+              : 'var(--interactive-components-light)'
+          "
           :label="t.labelName"
           :rules="[required]"
         ></v-text-field>
 
         <!-- Email -->
         <v-text-field
-          class="mb-2"
+          class="input-field mb-2"
           v-model="email"
           type="email"
           prepend-inner-icon="mdi-at"
           density="compact"
           clearable
-          bg-color="#291f43"
+          :bg-color="
+            cm === 'dark_mode'
+              ? 'var(--bg-dark-3)'
+              : 'var(--interactive-components-light)'
+          "
           variant="solo-filled"
           :label="t.labelEmail"
           :rules="[required, isEmail]"
@@ -67,21 +97,30 @@
 
         <!-- Objet -->
         <v-select
-          class="mb-2"
+          class="input-field mb-2"
           v-model="object"
           prepend-inner-icon="mdi-text-short"
           variant="solo-filled"
-          bg-color="#291f43"
+          :bg-color="
+            cm === 'dark_mode'
+              ? 'var(--bg-dark-3)'
+              : 'var(--interactive-components-light)'
+          "
           :label="t.objectEmail"
           :items="objects"
         ></v-select>
 
         <!-- Content -->
         <v-textarea
-          class="mb-2"
+          class="input-field mb-2"
           v-model="content"
           variant="solo-filled"
-          bg-color="#291f43"
+          :bg-color="
+            cm === 'dark_mode'
+              ? 'var(--bg-dark-3)'
+              : 'var(--interactive-components-light)'
+          "
+          clearable
           :label="t.labelMailArea"
           :rules="[required]"
         ></v-textarea>
@@ -90,11 +129,17 @@
         <v-btn
           :disabled="!form || loaderMail"
           variant="elevated"
-          color="#3C2E69"
           size="60"
+          :color="
+            cm === 'dark_mode'
+              ? 'var(--interactive-components-dark)'
+              : 'var(--interactive-components-light)'
+          "
           block
           @click="sendMode"
-          >{{ t.sendMail }}</v-btn
+          ><h2 :class="cm" class="light-title text-font">
+            {{ t.sendMail }}
+          </h2></v-btn
         >
       </v-form>
     </div>
@@ -110,7 +155,7 @@
 
 <script setup>
 // Import vue fonctions
-import { ref, watch } from "vue";
+import { computed, ref, watch } from "vue";
 // Import store
 import { useStore } from "vuex";
 const store = useStore();
@@ -121,8 +166,12 @@ const router = useRouter();
 import loader_box from "@/components/dialog/loader_box.vue";
 // Import js fonctions
 import { setLoader } from "@/functions/dialog_functions";
+import { setColorMode } from "@/assets/color_functions";
 import { getTranslate } from "@/multilanguage/lang.js";
 const t = getTranslate();
+
+// Color Mode
+const cm = computed(() => store.state.colorMode);
 
 // Loader box
 const loaderTime = store.state.loaderTime;

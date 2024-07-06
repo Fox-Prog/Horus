@@ -1,22 +1,11 @@
 @import "./base.css";
 
 .dark-title {
-  color: var(--text-color-dark);
+  color: var(--txt-dark);
 }
 
 .light-title {
-  color: var(--text-color-light);
-}
-
-.overlay-background {
-  position: absolute;
-  backdrop-filter: blur(30px);
-  background-color: var(--background-overlay);
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 1;
+  color: var(--txt-light);
 }
 
 .title-flex {
@@ -93,4 +82,14 @@
 @font-face {
   font-family: "OpenSans";
   src: url("/public/fonts/OpenSans.ttf");
+}
+
+.input-field .v-field__input,
+.input-field .v-field__clearable,
+.input-field .v-field__prepend-inner,
+.input-field .v-progress-linear,
+.input-field .v-select__selection,
+.input-field .v-label,
+.btn .v-btn__content  {
+  color: var(--txt-light);
 }

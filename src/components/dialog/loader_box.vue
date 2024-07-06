@@ -5,21 +5,38 @@
       <img src="/check.png" alt="check-done" />
     </div>
   </div>
-  <div class="error-loader card-calendar" v-if="props.mode === 'err'">
+  <div
+    :class="cm"
+    class="error-loader card-calendar"
+    v-if="props.mode === 'err'"
+  >
     <img src="/erreur.png" alt="error" />
-    <h3 class="light-title my-3">
+    <h3 :class="cm" class="light-title my-3">
       {{ props.error }}
     </h3>
-    <v-btn color="#3C2E69" height="30px" block @click="handleErrorBtn"
+    <v-btn
+      :color="
+        cm === 'dark_mode'
+          ? 'var(--interactive-components-dark)'
+          : 'var(--interactive-components-light)'
+      "
+      height="30px"
+      block
+      @click="handleErrorBtn"
       >OK</v-btn
     >
   </div>
 </template>
 
 <script setup>
-import { defineProps, defineEmits } from "vue";
+import { computed, defineProps, defineEmits } from "vue";
 const props = defineProps(["mode", "error"]);
 const emit = defineEmits(["errorChecked"]);
+// Import store
+import { useStore } from "vuex";
+const store = useStore();
+// Color Mode
+const cm = computed(() => store.state.colorMode);
 
 function handleErrorBtn() {
   emit("errorChecked", true);

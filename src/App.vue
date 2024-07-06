@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-main id="main" :class="colorMode">
+    <v-main id="main" :class="cm" style="background-color: var(--bg-color-1)">
       <router-view></router-view>
     </v-main>
   </v-app>
@@ -8,9 +8,10 @@
 
 <script setup>
 import "@mdi/font/css/materialdesignicons.css";
-import { ref, onMounted } from "vue";
+import { computed, onMounted } from "vue";
 import { getLinesLocal, getClientsLocal } from "@/functions/bdd_functions.js";
 import { getLang } from "@/multilanguage/lang.js";
+import { getColorMode } from "@/assets/color_functions";
 import { useStore } from "vuex";
 const store = useStore();
 
@@ -42,9 +43,11 @@ function initIndexedDB() {
   }
 }
 
-const colorMode = ref("dark");
+// Color Mode
+const cm = computed(() => store.state.colorMode);
 
 onMounted(async () => {
+  getColorMode(store);
   getLang();
   initIndexedDB();
   await getLinesLocal(store);
@@ -55,11 +58,4 @@ onMounted(async () => {
 <style>
 @import url("@/assets/main.css");
 @import url("@/assets/containers.css");
-
-.dark {
-  background-color: var(--background-violet-2);
-}
-.light {
-  background-color: var(--background-color-light);
-}
 </style>

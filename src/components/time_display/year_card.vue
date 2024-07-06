@@ -1,13 +1,20 @@
 <template>
-  <v-btn variant="outlined" color="#e2ddfe" @click="display = !display"
-    ><h1 class="number-font light-title">{{ props.content[0].name }}</h1>
+  <v-btn
+    :class="cm"
+    variant="outlined"
+    color="var(--txt-light)"
+    @click="display = !display"
+    ><h1 :class="cm" class="number-font light-title">
+      {{ props.content[0].name }}
+    </h1>
   </v-btn>
 
   <v-expand-transition>
     <div
       v-if="display"
-      style="box-shadow: none; background-color: var(--background-violet-1)"
       class="card-calendar"
+      :class="cm"
+      style="box-shadow: none; background-color: var(--bg-color-1)"
     >
       <recapBoard
         :tth="totalHours"
@@ -35,6 +42,9 @@
 // Import vue fonctions
 import { ref, defineProps, computed } from "vue";
 const props = defineProps(["content", "chrg", "clientID"]);
+// Import store
+import { useStore } from "vuex";
+const store = useStore();
 // Import components
 import recapBoard from "@/components/recapBoard.vue";
 import monthCard from "@/components/time_display/month_card.vue";
@@ -43,6 +53,9 @@ import { addTime } from "@/functions/time_functions.js";
 import { averageDays } from "@/functions/recap_functions.js";
 import { sumCA, sumBNF } from "@/functions/money_functions.js";
 import { monthFocus } from "@/functions/sort_functions.js";
+
+// Color Mode
+const cm = computed(() => store.state.colorMode);
 
 const display = ref(false);
 

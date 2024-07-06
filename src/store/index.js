@@ -8,6 +8,7 @@ export default createStore({
     loader: {},
     loaderTime: 450,
     hourlyData: {},
+    colorMode: "dark_mode",
   },
   getters: {},
   mutations: {
@@ -41,6 +42,10 @@ export default createStore({
     setHourlyData(state, data) {
       state.hourlyData = data;
     },
+
+    setColorMode(state, color) {
+      state.colorMode = color;
+    },
   },
   actions: {
     addLine({ commit }, line) {
@@ -67,6 +72,10 @@ export default createStore({
 
     setHourlyData({ commit }, data) {
       commit("setHourlyData", data);
+    },
+
+    setColorMode({ commit }, mode) {
+      commit("setColorMode", mode);
     },
   },
   modules: {},
