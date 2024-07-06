@@ -3,6 +3,8 @@
     :class="cm"
     variant="outlined"
     color="var(--txt-light)"
+    width="fit-content"
+    style="align-self: center"
     @click="display = !display"
     ><h1 :class="cm" class="number-font light-title">
       {{ props.content[0].name }}

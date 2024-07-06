@@ -12,7 +12,7 @@
 </template>
 
 <script setup>
-import { defineEmits, defineProps } from "vue";
+import { computed, defineEmits, defineProps } from "vue";
 const props = defineProps(["colorNow"]);
 const emit = defineEmits(["color"]);
 
@@ -40,8 +40,14 @@ const colorList = [
   "#cd74e8",
   "#a27ae1",
   "#9d9bff",
-  "#291f43",
+  "#D4CAFE",
 ];
+
+// Import store
+import { useStore } from "vuex";
+const store = useStore();
+// Color Mode
+const cm = computed(() => store.state.colorMode);
 </script>
 
 <style>

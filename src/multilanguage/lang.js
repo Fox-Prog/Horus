@@ -99,6 +99,10 @@ const languages = [
     SECTEUR_9: "CHECK-FIELD",
     requireMsg: "Ce champ est requis",
     isNotEmail: "Veuillez saisir une adresse e-mail valide",
+
+    SECTEUR_10: "BIG_PANEL",
+    txt_dark_mode: "Sombre",
+    txt_light_mode: "Clair",
   },
 
   {
@@ -171,5 +175,9 @@ const languages = [
     SECTEUR_9: "CHECK-FIELD",
     requireMsg: "Field is required",
     isNotEmail: "Please enter a valid e-mail address",
+
+    SECTEUR_10: "BIG_PANEL",
+    txt_dark_mode: "Dark",
+    txt_light_mode: "Light",
   },
 ];

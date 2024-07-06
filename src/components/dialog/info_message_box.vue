@@ -23,7 +23,11 @@
         width="49%"
         variant="elevated"
         rounded="sm"
-        :color="cm === 'dark_mode' ? 'var(--interactive-components-dark)' : 'var(--interactive-components-light)'"
+        :color="
+          cm === 'dark_mode'
+            ? 'var(--interactive-components-dark)'
+            : 'var(--interactive-components-light)'
+        "
         @click="sendCancel()"
         >{{ props.cancel }}</v-btn
       >

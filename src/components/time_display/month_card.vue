@@ -1,6 +1,5 @@
 <template>
   <v-btn
-    :append-icon="display ? 'mdi-chevron-up' : 'mdi-chevron-down'"
     :color="
       cm === 'dark_mode'
         ? 'var(--interactive-components-dark)'

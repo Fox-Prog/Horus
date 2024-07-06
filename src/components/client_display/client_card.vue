@@ -18,7 +18,7 @@
     ></ddm>
   </v-btn>
 
-  <v-dialog v-model="selectColor" persistent>
+  <v-dialog v-model="selectColor">
     <color_box
       :colorNow="props.clientLines[1].client.color"
       @color="createMode"

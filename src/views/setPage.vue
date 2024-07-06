@@ -1,12 +1,14 @@
 <template>
-  <setHourly
-    :mode="data.mode"
-    :line="data.line"
-    @setDone="router.push('/')"
-  ></setHourly>
-  <v-dialog v-model="loader.dialog" persistent>
-    <loader_box :mode="loader.mode" :error="loader.error"></loader_box>
-  </v-dialog>
+  <div class="set-vue">
+    <setHourly
+      :mode="data.mode"
+      :line="data.line"
+      @setDone="router.push('/')"
+    ></setHourly>
+    <v-dialog v-model="loader.dialog" persistent>
+      <loader_box :mode="loader.mode" :error="loader.error"></loader_box>
+    </v-dialog>
+  </div>
 </template>
 
 <script setup>
@@ -33,3 +35,12 @@ watch(
   }
 );
 </script>
+
+<style>
+.set-vue {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+</style>

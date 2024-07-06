@@ -1,147 +1,117 @@
 <template>
-  <h1 id="title" :class="cm" class="var-big-title-font dark-title">
-    {{ t.tt_settings_page }}
-  </h1>
+  <div class="header-container">
+    <h1 id="title" :class="cm" class="var-big-title-font dark-title">
+      {{ t.tt_settings_page }}
+    </h1>
 
-  <v-btn
-    :class="cm"
-    style="position: absolute; top: 0; left: 0"
-    icon="mdi-chevron-left"
-    variant="text"
-    rounded="sm"
-    size="60"
-    color="var(--txt-dark)"
-    @click="router.push('/')"
-  ></v-btn>
+    <v-btn
+      :class="cm"
+      style="position: absolute; top: 0; left: 0"
+      icon="mdi-chevron-left"
+      variant="text"
+      rounded="sm"
+      size="60"
+      color="var(--txt-dark)"
+      @click="router.push('/')"
+    ></v-btn>
+  </div>
 
-  <!-- Language selector -->
-  <div :class="cm" class="card-home">
-    <div class="mt-2" style="display: flex">
-      <v-select
-        class="input-field custom-font"
-        v-model="language"
-        density="compact"
-        variant="solo-filled"
-        prepend-inner-icon="mdi-translate"
-        :bg-color="
-          cm === 'dark_mode'
-            ? 'var(--bg-dark-3)'
-            : 'var(--interactive-components-light)'
-        "
-        :items="lgs"
-        @update:model-value="handleLang"
-      ></v-select>
-      <v-divider
-        class="mx-5"
-        :class="cm"
-        color="var(--divider-color)"
-        thickness="2"
-        vertical
-      ></v-divider>
-      <v-btn
-        class="btn"
-        icon="mdi-theme-light-dark"
-        rounded="sm"
-        size="40"
-        :color="
-          cm === 'dark_mode'
-            ? 'var(--interactive-components-dark)'
-            : 'var(--interactive-components-light)'
-        "
-        @click="setColorMode(store, cm)"
-      ></v-btn>
-    </div>
+  <div class="body-center">
+    <!-- Language selector -->
+    <div :class="cm" class="settings-card card-home">
+      <!-- Email form -->
+      <div style="width: 100%">
+        <div style="text-align: center; width: 100%">
+          <h2 :class="cm" class="dark-title mb-2">{{ t.tt_contact_form }}</h2>
+        </div>
+        <v-form v-model="form">
+          <div class="form-flex-block">
+            <!-- Name -->
+            <v-text-field
+              class="input-field mb-2"
+              :class="screenW > 750 ? 'mr-3' : null"
+              v-model="name"
+              prepend-inner-icon="mdi-account"
+              clearable
+              density="compact"
+              :variant="cm === 'dark_mode' ? 'solo-filled' : 'outlined'"
+              :bg-color="
+                cm === 'dark_mode'
+                  ? 'var(--bg-dark-3)'
+                  : 'var(--interactive-components-light)'
+              "
+              :label="t.labelName"
+              :rules="[required]"
+            ></v-text-field>
 
-    <v-divider class="my-5"></v-divider>
+            <!-- Email -->
+            <v-text-field
+              class="input-field mb-2"
+              :class="screenW > 750 ? 'ml-3' : null"
+              v-model="email"
+              type="email"
+              prepend-inner-icon="mdi-at"
+              density="compact"
+              clearable
+              :bg-color="
+                cm === 'dark_mode'
+                  ? 'var(--bg-dark-3)'
+                  : 'var(--interactive-components-light)'
+              "
+              :variant="cm === 'dark_mode' ? 'solo-filled' : 'outlined'"
+              :label="t.labelEmail"
+              :rules="[required, isEmail]"
+            ></v-text-field>
+          </div>
 
-    <!-- Email form -->
-    <div>
-      <div>
-        <h2 :class="cm" class="dark-title mb-2">{{ t.tt_contact_form }}</h2>
+          <!-- Objet -->
+          <v-select
+            class="input-field mb-2"
+            v-model="object"
+            prepend-inner-icon="mdi-text-short"
+            :variant="cm === 'dark_mode' ? 'solo-filled' : 'outlined'"
+            :bg-color="
+              cm === 'dark_mode'
+                ? 'var(--bg-dark-3)'
+                : 'var(--interactive-components-light)'
+            "
+            :label="t.objectEmail"
+            :items="objects"
+          ></v-select>
+
+          <!-- Content -->
+          <v-textarea
+            class="input-field mb-2"
+            v-model="content"
+            :variant="cm === 'dark_mode' ? 'solo-filled' : 'outlined'"
+            :bg-color="
+              cm === 'dark_mode'
+                ? 'var(--bg-dark-3)'
+                : 'var(--interactive-components-light)'
+            "
+            clearable
+            :label="t.labelMailArea"
+            :rules="[required]"
+          ></v-textarea>
+
+          <!-- Submit -->
+          <v-btn
+            :disabled="!form || loaderMail"
+            variant="elevated"
+            size="60"
+            :color="
+              cm === 'dark_mode'
+                ? 'var(--interactive-components-dark)'
+                : 'var(--interactive-components-light)'
+            "
+            block
+            @click="sendMode"
+            ><h2 :class="cm" class="light-title text-font">
+              {{ t.sendMail }}
+            </h2></v-btn
+          >
+        </v-form>
       </div>
-      <v-form v-model="form">
-        <!-- Name -->
-        <v-text-field
-          class="input-field mb-2"
-          v-model="name"
-          prepend-inner-icon="mdi-account"
-          clearable
-          density="compact"
-          variant="solo-filled"
-          :bg-color="
-            cm === 'dark_mode'
-              ? 'var(--bg-dark-3)'
-              : 'var(--interactive-components-light)'
-          "
-          :label="t.labelName"
-          :rules="[required]"
-        ></v-text-field>
-
-        <!-- Email -->
-        <v-text-field
-          class="input-field mb-2"
-          v-model="email"
-          type="email"
-          prepend-inner-icon="mdi-at"
-          density="compact"
-          clearable
-          :bg-color="
-            cm === 'dark_mode'
-              ? 'var(--bg-dark-3)'
-              : 'var(--interactive-components-light)'
-          "
-          variant="solo-filled"
-          :label="t.labelEmail"
-          :rules="[required, isEmail]"
-        ></v-text-field>
-
-        <!-- Objet -->
-        <v-select
-          class="input-field mb-2"
-          v-model="object"
-          prepend-inner-icon="mdi-text-short"
-          variant="solo-filled"
-          :bg-color="
-            cm === 'dark_mode'
-              ? 'var(--bg-dark-3)'
-              : 'var(--interactive-components-light)'
-          "
-          :label="t.objectEmail"
-          :items="objects"
-        ></v-select>
-
-        <!-- Content -->
-        <v-textarea
-          class="input-field mb-2"
-          v-model="content"
-          variant="solo-filled"
-          :bg-color="
-            cm === 'dark_mode'
-              ? 'var(--bg-dark-3)'
-              : 'var(--interactive-components-light)'
-          "
-          clearable
-          :label="t.labelMailArea"
-          :rules="[required]"
-        ></v-textarea>
-
-        <!-- Submit -->
-        <v-btn
-          :disabled="!form || loaderMail"
-          variant="elevated"
-          size="60"
-          :color="
-            cm === 'dark_mode'
-              ? 'var(--interactive-components-dark)'
-              : 'var(--interactive-components-light)'
-          "
-          block
-          @click="sendMode"
-          ><h2 :class="cm" class="light-title text-font">
-            {{ t.sendMail }}
-          </h2></v-btn
-        >
-      </v-form>
     </div>
   </div>
   <v-dialog v-model="loader.dialog" persistent>
@@ -166,7 +136,6 @@ const router = useRouter();
 import loader_box from "@/components/dialog/loader_box.vue";
 // Import js fonctions
 import { setLoader } from "@/functions/dialog_functions";
-import { setColorMode } from "@/assets/color_functions";
 import { getTranslate } from "@/multilanguage/lang.js";
 const t = getTranslate();
 
@@ -182,35 +151,6 @@ watch(
     loader.value = newLoader;
   }
 );
-
-// Language
-import { getLangsNames, setLang } from "@/multilanguage/lang.js";
-
-const language = ref(localStorage.getItem("lang"));
-const lgs = ref(getLangsNames());
-
-function handleLang() {
-  let success = false;
-  setLoader(store, { dialog: true, mode: "wait" }, 0);
-  setTimeout(() => {
-    try {
-      setLang(language.value);
-      setLoader(store, { dialog: true, mode: "success" }, 0);
-      success = true;
-    } catch (error) {
-      console.log(error);
-      setLoader(
-        store,
-        { dialog: true, mode: "err", error: t.txt_error_change_lang },
-        0
-      );
-    } finally {
-      if (success) {
-        setLoader(store, { dialog: false, mode: "success" }, loaderTime);
-      }
-    }
-  }, 200);
-}
 
 // Email form
 import emailjs from "emailjs-com";
@@ -288,4 +228,28 @@ async function sendMail() {
     }
   }
 }
+
+const screenW = ref(window.innerWidth);
+window.addEventListener("resize", () => {
+  screenW.value = window.innerWidth;
+});
 </script>
+
+<style>
+.settings-card {
+  width: 75%;
+}
+
+.form-flex-block {
+  display: flex;
+}
+
+@media (max-width: 750px) {
+  .settings-card {
+    width: 100%;
+  }
+  .form-flex-block {
+    display: block;
+  }
+}
+</style>

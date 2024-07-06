@@ -191,7 +191,7 @@ onMounted(() => {
 #deleteForm {
   position: absolute;
   top: 8%;
-  left: 102%;
+  right: 102%;
 }
 
 @media screen and (max-width: 600px) {

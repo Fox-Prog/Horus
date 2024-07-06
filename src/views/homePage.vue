@@ -1,40 +1,45 @@
 <template>
-  <h1 id="title" :class="cm" class="big-title-font dark-title">Horus</h1>
+  <div class="header-container">
+    <h1 :class="cm" class="big-title-font dark-title">Horus</h1>
+  </div>
 
-  <v-btn
-    :class="cm"
-    style="position: absolute; top: 0; right: 0"
-    icon="mdi-cog"
-    variant="text"
-    rounded="sm"
-    size="50"
-    color="var(--txt-dark)"
-    @click="router.push('/settings')"
-  ></v-btn>
+  <div class="body-first-left-container">
+    <big_panel></big_panel>
+  </div>
 
-  <hourlyForm :mode="1"></hourlyForm>
-  <displaySelector
-    @changeMode="handleDisplayMode"
-    @search="updateSearch"
-  ></displaySelector>
+  <div class="body-second-middle-container">
+    <!-- Hourly Forms -->
+    <hourlyForm :mode="1"></hourlyForm>
+
+    <!-- Display selector -->
+    <displaySelector
+      @changeMode="handleDisplayMode"
+      @search="updateSearch"
+    ></displaySelector>
+  </div>
 
   <v-divider class="my-5"></v-divider>
 
-  <div class="card-container" v-if="displayMode === 'Time'">
-    <yearCard
-      v-for="year in yearFocus(savedLine)"
-      :key="year.id"
-      :content="year"
-      :chrg="false"
-    ></yearCard>
-  </div>
+  <div class="body-third-right-container">
+    <!-- Time display -->
+    <div class="card-container" v-if="displayMode === 'Time'">
+      <yearCard
+        v-for="year in yearFocus(savedLine)"
+        :key="year.id"
+        :content="year"
+        :chrg="false"
+      ></yearCard>
+    </div>
 
-  <div class="card-container" v-if="displayMode === 'Client'">
-    <div v-for="clientLines in clientFocus(savedLine)" :key="clientLines">
-      <clientCard :clientLines="clientLines"></clientCard>
+    <!-- Client display -->
+    <div class="card-container" v-if="displayMode === 'Client'">
+      <div v-for="clientLines in clientFocus(savedLine)" :key="clientLines">
+        <clientCard :clientLines="clientLines"></clientCard>
+      </div>
     </div>
   </div>
 
+  <!-- Loader box -->
   <v-dialog v-model="loader.dialog" persistent>
     <loader_box
       :mode="loader.mode"
@@ -58,15 +63,13 @@ import { computed, ref, watch } from "vue";
 // Import store
 import { useStore } from "vuex";
 const store = useStore();
-// Import router
-import { useRouter } from "vue-router";
-const router = useRouter();
 // Import components
 import hourlyForm from "@/components/hourly/hourlyForm.vue";
 import displaySelector from "@/components/options/display_selector.vue";
 import yearCard from "@/components/time_display/year_card.vue";
 import clientCard from "@/components/client_display/client_card.vue";
 import loader_box from "@/components/dialog/loader_box.vue";
+import big_panel from "@/components/control_panel/big_panel.vue";
 // Import js fonctions
 import { yearFocus, clientFocus } from "@/functions/sort_functions.js";
 import { setLoader } from "@/functions/dialog_functions";
@@ -148,25 +151,10 @@ watch(
 <!-- ___________________________________ Style ___________________________________ -->
 
 <style>
-#main {
-  text-align: center;
-  margin: 0;
+.card-container {
+  width: 100%;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  padding: 20px;
-}
-#title {
-  margin-bottom: 10px;
-}
-#morning {
-  display: flex;
-  align-items: center;
-  margin-top: 10px;
-}
-#afternoon {
-  display: flex;
-  align-items: center;
-  margin-top: 10px;
+  justify-content: center;
 }
 </style>

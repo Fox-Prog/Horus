@@ -1,9 +1,10 @@
 <template>
-  <div>
+  <div style="width: fit-content; align-self: center">
     <div
       :class="cm"
       class="card-calendar"
       style="
+        align-self: center;
         flex-direction: row;
         height: 30px;
         margin-top: 10px;

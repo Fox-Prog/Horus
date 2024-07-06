@@ -6,7 +6,7 @@
         class="input-field mx-2"
         density="compact"
         style="width: 90%"
-        variant="solo-filled"
+        :variant="cm === 'dark_mode' ? 'solo-filled' : 'outlined'"
         :bg-color="
           cm === 'dark_mode'
             ? 'var(--bg-dark-3)'
@@ -20,7 +20,7 @@
       <v-text-field
         class="input-field mx-2"
         density="compact"
-        variant="solo-filled"
+        :variant="cm === 'dark_mode' ? 'solo-filled' : 'outlined'"
         :bg-color="
           cm === 'dark_mode'
             ? 'var(--bg-dark-3)'
@@ -36,7 +36,7 @@
       <v-text-field
         class="input-field mx-2"
         density="compact"
-        variant="solo-filled"
+        :variant="cm === 'dark_mode' ? 'solo-filled' : 'outlined'"
         :bg-color="
           cm === 'dark_mode'
             ? 'var(--bg-dark-3)'
@@ -190,7 +190,7 @@ async function createClient() {
   const newClient = {
     id: Date.now(),
     name: clientName.value,
-    color: props.mode === 1 ? "var(--bg-dark-3)" : props.client.color,
+    color: props.mode === 1 ? "#D4CAFE" : props.client.color,
     th: th.value,
     chrg: chrg.value,
   };
