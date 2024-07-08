@@ -3,6 +3,7 @@
     :class="cm"
     class="input-field mx-2"
     density="compact"
+    :theme="cm === 'dark_mode' ? 'dark' : 'light'"
     :variant="cm === 'dark_mode' ? 'solo-filled' : 'outlined'"
     :bg-color="
       cm === 'dark_mode'

@@ -18,8 +18,6 @@
     ></displaySelector>
   </div>
 
-  <v-divider class="my-5"></v-divider>
-
   <div class="body-third-right-container">
     <!-- Time display -->
     <div class="card-container" v-if="displayMode === 'Time'">
@@ -38,6 +36,9 @@
       </div>
     </div>
   </div>
+
+  <!-- Compact panel -->
+  <compact_panel></compact_panel>
 
   <!-- Loader box -->
   <v-dialog v-model="loader.dialog" persistent>
@@ -70,6 +71,7 @@ import yearCard from "@/components/time_display/year_card.vue";
 import clientCard from "@/components/client_display/client_card.vue";
 import loader_box from "@/components/dialog/loader_box.vue";
 import big_panel from "@/components/control_panel/big_panel.vue";
+import compact_panel from "@/components/control_panel/compact_panel.vue";
 // Import js fonctions
 import { yearFocus, clientFocus } from "@/functions/sort_functions.js";
 import { setLoader } from "@/functions/dialog_functions";

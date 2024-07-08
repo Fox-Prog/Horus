@@ -54,7 +54,7 @@ const languages = [
     lb_day_max: "Max",
     lb_day_min: "Min",
     lb_income: "Revenus",
-    lb_ca: "Chiffre d'affaires : ",
+    lb_ca: "Chf. d'affaires : ",
     lb_th_dot: "Taux horaire : ",
     lb_th_nodot: "Taux horaire",
     lb_chrg_dot: "Charges : ",

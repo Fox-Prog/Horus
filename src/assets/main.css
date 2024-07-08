@@ -91,6 +91,8 @@
 .input-field .v-progress-linear,
 .input-field .v-select__selection,
 .input-field .v-label,
-.btn .v-btn__content  {
+.btn .v-btn__content,
+.btn .v-btn__prepend,
+.btn .v-btn__append {
   color: var(--txt-light);
 }

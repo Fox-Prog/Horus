@@ -63,7 +63,7 @@ onMounted(async () => {
   position: relative;
   margin: 0;
   display: grid;
-  grid-template-rows: repeat(3);
+  grid-template-rows: repeat(4);
   grid-template-columns: repeat(5, 1fr);
   gap: 1rem;
   width: 100%;

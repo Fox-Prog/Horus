@@ -25,18 +25,18 @@
     <!-- THEMES -->
     <v-btn
       class="btn my-5"
-      prepend-inner-icon="mdi-theme-light-dark"
+      prepend-icon="mdi-theme-light-dark"
       :variant="cm === 'dark_mode' ? 'outlined' : 'flat'"
       rounded="sm"
-      block
+      width="100%"
       :color="
         cm === 'dark_mode'
           ? 'var(--interactive-components-dark)'
           : 'var(--interactive-components-light)'
       "
       @click="setColorMode(store, cm)"
-      >{{ txt_cm }}</v-btn
-    >
+      >{{ txt_cm }}
+    </v-btn>
 
     <v-divider
       :class="cm"
@@ -48,10 +48,10 @@
     <v-btn
       class="btn my-5"
       :class="cm"
-      prepend-inner-icon="mdi-cog"
+      prepend-icon="mdi-cog"
       :variant="cm === 'dark_mode' ? 'outlined' : 'flat'"
       rounded="sm"
-      block
+      width="100%"
       :color="
         cm === 'dark_mode'
           ? 'var(--interactive-components-dark)'
@@ -81,9 +81,9 @@ const t = getTranslate();
 const cm = computed(() => store.state.colorMode);
 const txt_cm = computed(() => {
   if (cm.value === "dark_mode") {
-    return t.txt_dark_mode;
+    return t.txt_light_mode;
   }
-  return t.txt_light_mode;
+  return t.txt_dark_mode;
 });
 
 // Languages
@@ -116,9 +116,6 @@ function handleLang() {
 
 <style>
 .big-panel-container {
-  /* position: absolute;
-  top: 0;
-  left: 0; */
   width: 175px;
   height: 100%;
   background-color: var(--bg-color-1);
