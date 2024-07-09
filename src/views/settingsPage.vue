@@ -3,17 +3,10 @@
     <h1 id="title" :class="cm" class="var-big-title-font dark-title">
       {{ t.tt_settings_page }}
     </h1>
+  </div>
 
-    <v-btn
-      :class="cm"
-      style="position: absolute; top: 0; left: 0"
-      icon="mdi-chevron-left"
-      variant="text"
-      rounded="sm"
-      size="60"
-      color="var(--txt-dark)"
-      @click="router.push('/')"
-    ></v-btn>
+  <div class="body-first-left-container">
+    <big_panel btn_nav="home"></big_panel>
   </div>
 
   <div class="body-center">
@@ -114,6 +107,11 @@
       </div>
     </div>
   </div>
+
+  <!-- Compact panel -->
+  <compact_panel btn_nav="home"></compact_panel>
+
+  <!-- Loader box -->
   <v-dialog v-model="loader.dialog" persistent>
     <loader_box
       :mode="loader.mode"
@@ -129,11 +127,10 @@ import { computed, ref, watch } from "vue";
 // Import store
 import { useStore } from "vuex";
 const store = useStore();
-// Import router
-import { useRouter } from "vue-router";
-const router = useRouter();
 // Import components
 import loader_box from "@/components/dialog/loader_box.vue";
+import big_panel from "@/components/control_panel/big_panel.vue";
+import compact_panel from "@/components/control_panel/compact_panel.vue";
 // Import js fonctions
 import { setLoader } from "@/functions/dialog_functions";
 import { getTranslate } from "@/multilanguage/lang.js";

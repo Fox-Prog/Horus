@@ -1,21 +1,39 @@
 <template>
   <div class="big-panel-container" :class="cm">
-    <!-- LANGUAGES -->
-    <v-select
-      class="input-field custom-font"
-      v-model="language"
-      density="compact"
-      :variant="cm === 'dark_mode' ? 'solo-filled' : 'outlined'"
-      prepend-inner-icon="mdi-translate"
-      :bg-color="
+    <!-- SETTINGS -->
+    <v-btn
+      v-if="props.btn_nav === 'settings'"
+      class="btn my-5"
+      :class="cm"
+      prepend-icon="mdi-cog"
+      :variant="cm === 'dark_mode' ? 'outlined' : 'flat'"
+      rounded="sm"
+      width="100%"
+      :color="
         cm === 'dark_mode'
-          ? 'var(--bg-dark-3)'
+          ? 'var(--interactive-components-dark)'
           : 'var(--interactive-components-light)'
       "
-      :items="lgs"
-      @update:model-value="handleLang"
-    ></v-select>
-
+      @click="router.push('/settings')"
+      >{{ t.tt_settings_page }}</v-btn
+    >
+    <!-- HOME -->
+    <v-btn
+      v-if="props.btn_nav === 'home'"
+      class="btn my-5"
+      :class="cm"
+      prepend-icon="mdi-home"
+      :variant="cm === 'dark_mode' ? 'outlined' : 'flat'"
+      rounded="sm"
+      width="100%"
+      :color="
+        cm === 'dark_mode'
+          ? 'var(--interactive-components-dark)'
+          : 'var(--interactive-components-light)'
+      "
+      @click="router.push('/')"
+      >{{ t.tt_home_page }}</v-btn
+    >
     <v-divider
       :class="cm"
       color="var(--divider-color)"
@@ -44,28 +62,28 @@
       thickness="2"
     ></v-divider>
 
-    <!-- SETTINGS -->
-    <v-btn
-      class="btn my-5"
-      :class="cm"
-      prepend-icon="mdi-cog"
-      :variant="cm === 'dark_mode' ? 'outlined' : 'flat'"
-      rounded="sm"
-      width="100%"
-      :color="
+    <!-- LANGUAGES -->
+    <v-select
+      class="input-field custom-font my-5"
+      v-model="language"
+      density="compact"
+      :variant="cm === 'dark_mode' ? 'solo-filled' : 'outlined'"
+      prepend-inner-icon="mdi-translate"
+      :bg-color="
         cm === 'dark_mode'
-          ? 'var(--interactive-components-dark)'
+          ? 'var(--bg-dark-3)'
           : 'var(--interactive-components-light)'
       "
-      @click="router.push('/settings')"
-      >{{ t.tt_settings_page }}</v-btn
-    >
+      :items="lgs"
+      @update:model-value="handleLang"
+    ></v-select>
   </div>
 </template>
 
 <script setup>
 // Import vue fonctions
-import { computed, ref } from "vue";
+import { computed, ref, defineProps } from "vue";
+const props = defineProps(["btn_nav"]);
 // Import store
 import { useStore } from "vuex";
 const store = useStore();

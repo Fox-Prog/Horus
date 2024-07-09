@@ -38,8 +38,22 @@
       ><h6>{{ txt_cm }}</h6>
     </v-btn>
 
+    <!-- HOME -->
+    <v-btn
+      v-if="props.btn_nav === 'home'"
+      class="btn"
+      :class="cm"
+      prepend-icon="mdi-home"
+      variant="text"
+      rounded="sm"
+      stacked
+      @click="router.push('/')"
+      ><h6>{{ t.tt_home_page }}</h6></v-btn
+    >
+
     <!-- SETTINGS -->
     <v-btn
+      v-if="props.btn_nav === 'settings'"
       class="btn"
       :class="cm"
       prepend-icon="mdi-cog"
@@ -54,7 +68,8 @@
 
 <script setup>
 // Import vue fonctions
-import { computed } from "vue";
+import { computed, defineProps } from "vue";
+const props = defineProps(["btn_nav"]);
 // Import store
 import { useStore } from "vuex";
 const store = useStore();

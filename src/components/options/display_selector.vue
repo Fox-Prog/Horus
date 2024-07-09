@@ -71,7 +71,7 @@ const savedData = localStorage.getItem("displayMode");
 function txtToBool() {
   if (savedData === "Client") {
     selected.value = false;
-  } else if (savedData === "Time") {
+  } else if (savedData === "Time" || savedData === "Temps") {
     selected.value = true;
   } else {
     selected.value = false;
@@ -81,7 +81,7 @@ function txtToBool() {
 const selected = ref(null);
 
 const boolToTxt = computed(() => {
-  return selected.value === true ? "Time" : "Client";
+  return selected.value === true ? t.txt_time_mode : "Client";
 });
 
 function saveDisplay() {

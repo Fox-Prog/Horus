@@ -4,7 +4,7 @@
   </div>
 
   <div class="body-first-left-container">
-    <big_panel></big_panel>
+    <big_panel btn_nav="settings"></big_panel>
   </div>
 
   <div class="body-second-middle-container">
@@ -20,7 +20,7 @@
 
   <div class="body-third-right-container">
     <!-- Time display -->
-    <div class="card-container" v-if="displayMode === 'Time'">
+    <div class="card-container" v-if="displayMode === t.txt_time_mode">
       <yearCard
         v-for="year in yearFocus(savedLine)"
         :key="year.id"
@@ -38,7 +38,7 @@
   </div>
 
   <!-- Compact panel -->
-  <compact_panel></compact_panel>
+  <compact_panel btn_nav="settings"></compact_panel>
 
   <!-- Loader box -->
   <v-dialog v-model="loader.dialog" persistent>
@@ -75,6 +75,8 @@ import compact_panel from "@/components/control_panel/compact_panel.vue";
 // Import js fonctions
 import { yearFocus, clientFocus } from "@/functions/sort_functions.js";
 import { setLoader } from "@/functions/dialog_functions";
+import { getTranslate } from "@/multilanguage/lang";
+const t = getTranslate();
 // Color Mode
 const cm = computed(() => store.state.colorMode);
 

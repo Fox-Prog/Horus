@@ -7,6 +7,8 @@ export function getLang() {
     localStorage.setItem("lang", "Français");
     lang = "Français";
   }
+
+  return lang;
 }
 
 export function getLangsNames() {
@@ -14,7 +16,13 @@ export function getLangsNames() {
 }
 
 export function setLang(lg) {
+  const displayMode = localStorage.getItem("displayMode");
   localStorage.setItem("lang", lg);
+  if (displayMode === "Time") {
+    localStorage.setItem("displayMode", "Temps");
+  } else if (displayMode === "Temps") {
+    localStorage.setItem("displayMode", "Time");
+  }
   setTimeout(() => {
     document.location.reload(true);
   }, 500);
@@ -46,6 +54,7 @@ const languages = [
     SECTION_3: "OPTIONS",
     tt_display_mode: "Affichage",
     lb_search_bar: "Nom du client",
+    txt_time_mode: "Temps",
 
     SECTION_4: "RECAP_BOARD",
     lb_hour: "Heures",
@@ -84,6 +93,7 @@ const languages = [
 
     SECTEUR_8: "SETTINGS",
     tt_settings_page: "Paramètres",
+    tt_home_page: "Retour",
     tt_contact_form: "Formulaire de contact",
     labelName: "Nom",
     labelEmail: "Votre adresse e-mail",
@@ -122,6 +132,7 @@ const languages = [
     SECTION_3: "OPTIONS",
     tt_display_mode: "Display",
     lb_search_bar: "Client name",
+    txt_time_mode: "Time",
 
     SECTION_4: "RECAP_BOARD",
     lb_hour: "Hours",
@@ -160,6 +171,7 @@ const languages = [
 
     SECTEUR_8: "SETTINGS",
     tt_settings_page: "Settings",
+    tt_home_page: "Back",
     tt_contact_form: "Contact form",
     labelEmail: "Your e-mail adress",
     labelName: "Name",
