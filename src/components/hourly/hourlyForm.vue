@@ -28,27 +28,11 @@
             </h2></v-btn
           >
         </template>
-
-        <v-container>
-          <v-row style="justify-content: center">
-            <v-date-picker
-              id="date-picker"
-              :class="cm"
-              :color="
-                cm === 'dark_mode'
-                  ? 'var(--interactive-components-dark)'
-                  : 'var(--interactive-components-light)'
-              "
-              :bg-color="
-                cm === 'dark_mode' ? 'var(--bg-dark-2)' : 'var(--bg-light-2)'
-              "
-              elevation="24"
-              hide-header
-              v-model="dayDate"
-              @update:model-value="dialog = false"
-            ></v-date-picker>
-          </v-row>
-        </v-container>
+        <calendar
+          v-model="dayDate"
+          @update:model-value="dialog = false"
+          :colors="colors"
+        ></calendar>
       </v-dialog>
 
       <entryHourlyField
@@ -152,6 +136,7 @@ const emit = defineEmits(["setDone"]);
 // Import components
 import entryHourlyField from "@/components/hourly/hourlyField.vue";
 import clientField from "@/components/client_display/clientField.vue";
+import calendar from "@/components/dialog/calendar_box.vue";
 // Import js fonctions
 import { addLine, removeLine } from "@/functions/bdd_functions.js";
 import { addTime } from "@/functions/time_functions.js";
@@ -167,7 +152,30 @@ const store = useStore();
 const cm = computed(() => store.state.colorMode);
 
 const formDone = ref(false);
+// Calendar
+function colorVarToHex(colorVar) {
+  return getComputedStyle(document.documentElement)
+    .getPropertyValue(colorVar)
+    .trim();
+}
 
+const colors = computed(() => {
+  if (cm.value === "dark_mode") {
+    return {
+      txt_light: colorVarToHex("--txt-dark-light"),
+      txt_dark: colorVarToHex("--txt-dark-dark"),
+      interactive_color: colorVarToHex("--interactive-components-dark"),
+      bg_color: colorVarToHex("--bg-dark-2"),
+    };
+  } else {
+    return {
+      txt_light: colorVarToHex("--txt-light-light"),
+      txt_dark: colorVarToHex("--txt-light-dark"),
+      interactive_color: colorVarToHex("--interactive-components-light"),
+      bg_color: colorVarToHex("--bg-light-2"),
+    };
+  }
+});
 // Date
 const dialog = ref(false);
 const dayDate = ref(

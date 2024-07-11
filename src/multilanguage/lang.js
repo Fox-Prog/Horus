@@ -50,6 +50,20 @@ const languages = [
     btn_hourly: "Horaires",
     btn_done: "Valider",
     btn_cancel: "Annuler",
+    month_list: [
+      "Janvier",
+      "Février",
+      "Mars",
+      "Avril",
+      "Mai",
+      "Juin",
+      "Juillet",
+      "Août",
+      "Septembre",
+      "Octobre",
+      "Novembre",
+      "Décembre",
+    ],
 
     SECTION_3: "OPTIONS",
     tt_display_mode: "Affichage",
@@ -113,6 +127,9 @@ const languages = [
     SECTEUR_10: "BIG_PANEL",
     txt_dark_mode: "Sombre",
     txt_light_mode: "Clair",
+
+    SECTEUR_11: "CALENDAR",
+    days_list: ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"],
   },
 
   {
@@ -128,6 +145,20 @@ const languages = [
     btn_hourly: "Hours",
     btn_done: "Validate",
     btn_cancel: "Cancel",
+    month_list: [
+      "January",
+      "Febuary",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "Decembrer",
+    ],
 
     SECTION_3: "OPTIONS",
     tt_display_mode: "Display",
@@ -191,5 +222,8 @@ const languages = [
     SECTEUR_10: "BIG_PANEL",
     txt_dark_mode: "Dark",
     txt_light_mode: "Light",
+
+    SECTEUR_11: "CALENDAR",
+    days_list: ["Mon", "Tue", "Wen", "Thu", "Fri", "Sat", "Sun"],
   },
 ];

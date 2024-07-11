@@ -28,11 +28,12 @@
           class="mt-2"
           variant="tonal"
           @click="mode = mode === 'years' ? 'days' : 'years'"
-          ><h2>{{ year }}</h2></v-btn
+          ><h2>{{ relativeYear }}</h2></v-btn
         >
       </div>
     </div>
 
+    <!-- YEARS -->
     <div v-if="mode === 'years'" class="grid-template-base grid-template">
       <div
         :class="classOfYear(year)"
@@ -44,6 +45,7 @@
       </div>
     </div>
 
+    <!-- MONTHS -->
     <div v-if="mode === 'months'" class="grid-template-months grid-template">
       <div
         :class="classOfMonth(month)"
@@ -55,8 +57,11 @@
       </div>
     </div>
 
+    <!-- DAYS -->
     <div v-if="mode === 'days'" class="grid-template-base grid-template">
-      <div class="weekdays" v-for="day in weekDays" :key="day">{{ day }}</div>
+      <div class="weekdays" v-for="(day, index) in weekDays" :key="index">
+        {{ day }}
+      </div>
       <div class="prev-days" v-for="day in prevDays" :key="day">
         {{ day }}
       </div>
@@ -78,43 +83,55 @@
 <script setup>
 // Import vue fonctions
 import { ref, computed, defineProps, defineEmits } from "vue";
-const props = defineProps(["date"]);
-const emit = defineEmits(["date"]);
+const props = defineProps({
+  modelValue: {
+    type: Date,
+    required: true,
+  },
+  colors: {
+    type: Object,
+    required: true,
+  },
+});
+const emit = defineEmits(["date", "update:modelValue"]);
+
+// Import js fonctions
+import { getTranslate } from "@/multilanguage/lang";
+const t = getTranslate();
 
 function emitDate(d) {
   const dateSelected = new Date(relativeToday.value);
   dateSelected.setDate(d);
-  emit("date", dateSelected);
+  emit("update:modelValue", dateSelected);
 }
 // DISPLAY MODE
 const mode = ref("days");
 
 // TODAY
+const selectedDate = ref(props.modelValue);
 const realDateNow = ref(new Date());
 const realDayNow = realDateNow.value.getDate();
-const relativeToday = ref(new Date());
-
-const selectedDate = ref(props.date);
+const relativeToday = ref(selectedDate.value ? selectedDate.value : new Date());
 
 function classOfDay(d) {
   if (
-    d === realDayNow &&
-    realDateNow.value.getMonth() === relativeToday.value.getMonth() &&
-    realDateNow.value.getFullYear() === relativeToday.value.getFullYear()
-  ) {
-    return "today";
-  } else if (
     d === selectedDate.value.getDate() &&
     selectedDate.value.getMonth() === relativeToday.value.getMonth() &&
     selectedDate.value.getFullYear() === relativeToday.value.getFullYear()
   ) {
     return "selected";
+  } else if (
+    d === realDayNow &&
+    realDateNow.value.getMonth() === relativeToday.value.getMonth() &&
+    realDateNow.value.getFullYear() === relativeToday.value.getFullYear()
+  ) {
+    return "today";
   }
   return "";
 }
 
 // YEARS
-const year = computed(() => relativeToday.value.getFullYear());
+const relativeYear = computed(() => relativeToday.value.getFullYear());
 const years = computed(() => {
   const yearNow = realDateNow.value.getFullYear();
   let tab = [];
@@ -129,7 +146,12 @@ const years = computed(() => {
 });
 
 function classOfYear(y) {
-  if (y === year.value) {
+  if (y === relativeYear.value) {
+    return "selected";
+  } else if (
+    y === realDateNow.value.getFullYear() &&
+    y !== relativeYear.value
+  ) {
     return "today";
   }
   return "";
@@ -142,26 +164,18 @@ function changeYear(newYear) {
 }
 
 // MONTH
-const months = [
-  "Janvier",
-  "Février",
-  "Mars",
-  "Avril",
-  "Mai",
-  "Juin",
-  "Juillet",
-  "Août",
-  "Septembre",
-  "Octobre",
-  "Novembre",
-  "Décembre",
-];
+const months = t.month_list;
 
 const relativeMonthIndex = computed(() => relativeToday.value.getMonth());
 const relativeMonth = computed(() => months[relativeMonthIndex.value]);
 
 function classOfMonth(m) {
   if (m === relativeMonth.value) {
+    return "selected";
+  } else if (
+    m === months[realDateNow.value.getMonth()] &&
+    m !== relativeMonth.value
+  ) {
     return "today";
   }
   return "";
@@ -189,7 +203,12 @@ function monthAfter() {
 }
 
 // CALENDAR ELEMENTS
-const weekDays = ["D", "L", "M", "M", "J", "V", "S"];
+const weekDays = computed(() => {
+  if (screenW.value < 550) {
+    return t.days_list.map((d) => d.split("")[0]);
+  }
+  return t.days_list;
+});
 
 const lastDayOfMonth = computed(() =>
   new Date(
@@ -242,21 +261,34 @@ const nextDays = computed(() => {
   }
   return days;
 });
+
+// COLORS
+const txt_light = ref(props.colors.txt_light);
+const txt_dark = ref(props.colors.txt_dark);
+const interactive_color = ref(props.colors.interactive_color);
+const bg_color = ref(props.colors.bg_color);
+
+// SCREEN SIZE
+const screenW = ref(window.innerWidth);
+window.addEventListener("resize", () => {
+  screenW.value = window.innerWidth;
+});
 </script>
 
 <style>
 .calendar {
   width: 40rem;
-  height: 40rem;
+  height: 45rem;
   padding: 0;
   padding-bottom: 10px;
-  color: var(--txt-light);
+  color: v-bind(txt_light);
   box-shadow: 0.5rem 3rem rgba(0, 0, 0, 0, 4);
+  background-color: v-bind(bg_color);
 }
 
 .header {
   width: 100%;
-  background-color: var(--interactive-components);
+  background-color: v-bind(interactive_color);
 }
 
 .nav {
@@ -292,6 +324,7 @@ const nextDays = computed(() => {
   font-weight: 700;
   letter-spacing: 0.1rem;
   text-shadow: 0.3rem 0.5rem rgba(0, 0, 0, 0, 0.5);
+  color: v-bind(txt_dark);
 }
 
 .grid-template-base {
@@ -318,7 +351,7 @@ const nextDays = computed(() => {
 }
 
 .grid-template div:hover:not(.today, .weekdays, .prev-days, .next-days) {
-  background-color: var(--interactive-components);
+  background-color: v-bind(interactive_color);
   border: 0.2rem solid #777;
   cursor: pointer;
 }
@@ -329,13 +362,30 @@ const nextDays = computed(() => {
 }
 
 .today {
-  background-color: var(--interactive-components);
+  background-color: rgba(14, 110, 9, 0.121);
+  border: 0.2rem solid #10700484;
   cursor: pointer;
 }
 
 .selected {
-  background-color: rgba(122, 121, 121, 0.496);
-  border: 0.2rem solid #777;
+  background-color: v-bind(interactive_color);
   cursor: pointer;
+}
+
+@media (max-width: 750px) {
+  .calendar {
+    width: 30rem;
+    height: 35rem;
+  }
+  .weekdays {
+    font-size: 1.1rem;
+    font-weight: 500;
+  }
+}
+@media (max-width: 550px) {
+  .calendar {
+    width: 25rem;
+    height: 30rem;
+  }
 }
 </style>

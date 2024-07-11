@@ -86,7 +86,7 @@ import { averageDays } from "@/functions/recap_functions.js";
 import { addLine, removeLine } from "@/functions/bdd_functions";
 import { sumCA, sumBNF } from "@/functions/money_functions.js";
 import { setLoader } from "@/functions/dialog_functions";
-import { getTranslate, getLang } from "@/multilanguage/lang";
+import { getTranslate } from "@/multilanguage/lang";
 const t = getTranslate();
 
 // Color Mode
@@ -115,38 +115,7 @@ function handleDisplay() {
   }
 }
 
-const listMonth = computed(() => {
-  if (getLang() === "Français") {
-    return [
-      "Janvier",
-      "Février",
-      "Mars",
-      "Avril",
-      "Mai",
-      "Juin",
-      "Juillet",
-      "Août",
-      "Septembre",
-      "Octobre",
-      "Novembre",
-      "Décembre",
-    ];
-  }
-  return [
-    "January",
-    "Febuary",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "Decembrer",
-  ];
-});
+const listMonth = ref(t.month_list);
 const monthName = computed(() => {
   return listMonth.value[props.content[0].name];
 });
