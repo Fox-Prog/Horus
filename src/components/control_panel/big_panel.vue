@@ -3,7 +3,7 @@
     <!-- SETTINGS -->
     <v-btn
       v-if="props.btn_nav === 'settings'"
-      class="btn my-5"
+      class="btn mb-5"
       :class="cm"
       prepend-icon="mdi-cog"
       :variant="cm === 'dark_mode' ? 'outlined' : 'flat'"
@@ -20,7 +20,7 @@
     <!-- HOME -->
     <v-btn
       v-if="props.btn_nav === 'home'"
-      class="btn my-5"
+      class="btn mb-5"
       :class="cm"
       prepend-icon="mdi-home"
       :variant="cm === 'dark_mode' ? 'outlined' : 'flat'"
@@ -137,7 +137,7 @@ function handleLang() {
   width: 175px;
   height: 100%;
   background-color: var(--bg-color-1);
-  padding: 10px;
+  padding: 0 10px;
   border-radius: 2px;
 }
 </style>
