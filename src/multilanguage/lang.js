@@ -129,7 +129,16 @@ const languages = [
     txt_light_mode: "Clair",
 
     SECTEUR_11: "CALENDAR",
-    days_list: ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"],
+    days_list: ["Dim", "Lun", "Mar", "Mer", "Jeu", "Ven", "Sam"],
+    days_list_full: [
+      "Dimanche",
+      "Lundi",
+      "Mardi",
+      "Mercredi",
+      "Jeudi",
+      "Vendredi",
+      "Samedi",
+    ],
   },
 
   {
@@ -224,6 +233,15 @@ const languages = [
     txt_light_mode: "Light",
 
     SECTEUR_11: "CALENDAR",
-    days_list: ["Mon", "Tue", "Wen", "Thu", "Fri", "Sat", "Sun"],
+    days_list: ["Sun", "Mon", "Tue", "Wen", "Thu", "Fri", "Sat"],
+    days_list_full: [
+      "Sunday",
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+    ],
   },
 ];

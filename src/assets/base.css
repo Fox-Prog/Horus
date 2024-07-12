@@ -30,6 +30,9 @@
   --divider-light: var(--txt-light-dark);
 
   --box-shadow-color-light: rgba(105, 88, 173, 0.522);
+
+  /* Common */
+  --red-caution: #e5484d;
 }
 
 .dark_mode {

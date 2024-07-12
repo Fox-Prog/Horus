@@ -15,9 +15,9 @@
         width="49%"
         variant="elevated"
         rounded="sm"
-        color="#E5484D"
+        color="var(--red-caution)"
         @click="sendAccept()"
-        >{{ props.accept }}</v-btn
+        ><p style="color: var(--txt-dark-light)">{{ props.accept }}</p></v-btn
       >
       <v-btn
         width="49%"
@@ -29,7 +29,9 @@
             : 'var(--interactive-components-light)'
         "
         @click="sendCancel()"
-        >{{ props.cancel }}</v-btn
+        ><p :class="cm" style="color: var(--txt-light)">
+          {{ props.cancel }}
+        </p></v-btn
       >
     </div>
   </div>

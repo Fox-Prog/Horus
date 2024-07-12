@@ -330,13 +330,4 @@ async function goPaid() {
     }
   }
 }
-
-// console.log(store.state.lines.length);
-// store.state.lines.forEach((l) => {
-//   console.log(
-//     `Le ${l.date.getDate()}, th = ${l.client.th} / ca = ${l.client.ca.toFixed(
-//       2
-//     )} / bnf = ${l.client.bnf.toFixed(2)}`
-//   );
-// });
 </script>

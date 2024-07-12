@@ -5,7 +5,7 @@
       @selected="handleSelectedClient"
     ></clientField>
     <div class="form">
-      <v-dialog v-model="dialog">
+      <v-dialog v-model="dialog" persistent>
         <template v-slot:activator="{ props }">
           <v-btn
             v-bind="props"
@@ -24,13 +24,18 @@
             size="60"
             block
             ><h2 :class="cm" class="light-title number-font">
-              {{ dayDate.toLocaleDateString() }}
+              {{
+                daysDate.length > 1
+                  ? "Multi-Valeurs"
+                  : daysDate[0].toLocaleDateString()
+              }}
             </h2></v-btn
           >
         </template>
         <calendar
-          v-model="dayDate"
+          v-model="daysDate"
           @update:model-value="dialog = false"
+          @cancel="dialog = false"
           :colors="colors"
         ></calendar>
       </v-dialog>
@@ -110,11 +115,11 @@
         v-if="content.mode === 2"
         class="mt-3"
         variant="elevated"
-        color="#E5484D"
+        color="var(--red-caution)"
         size="40"
         block
         @click="emit('setDone')"
-        >{{ t.btn_cancel }}</v-btn
+        ><p style="color: var(--txt-dark-light)">{{ t.btn_cancel }}</p></v-btn
       >
     </div>
   </div>
@@ -178,8 +183,8 @@ const colors = computed(() => {
 });
 // Date
 const dialog = ref(false);
-const dayDate = ref(
-  content.mode === 2 ? new Date(content.line.date) : new Date()
+const daysDate = ref(
+  content.mode === 2 ? [new Date(content.line.date)] : [new Date()]
 );
 
 // Client
@@ -192,6 +197,7 @@ function handleSelectedClient(data) {
 // Invoice
 const billed = ref(content.mode === 2 ? content.line.client.billed : false);
 const paid = ref(content.mode === 2 ? content.line.client.paid : false);
+const dop = ref(content.mode === 2 ? content.line.client.dop : null);
 
 // Note
 const noteField = ref(content.mode === 2 && content.line.note ? true : false);
@@ -311,36 +317,48 @@ async function createLine() {
   const ca = calcCA(dtt, clientSelected.value.th);
   const bnf = calcBNF(ca, clientSelected.value.chrg);
 
-  const line = {
-    id: Date.now(),
-    date: dayDate.value,
-    hourly: hourly,
-    dtt: dtt,
-    note: note.value,
-    client: {
-      id: clientSelected.value.id,
-      name: clientSelected.value.name,
-      color: clientSelected.value.color,
-      th: clientSelected.value.th,
-      chrg: clientSelected.value.chrg,
-      ca: ca,
-      bnf: bnf,
-      billed: billed.value,
-      paid: paid.value,
-      dop: null,
-    },
-  };
-
   try {
-    if (content.mode === 1) {
-      await addLine(store, line, 1);
-    } else if (content.mode === 2) {
-      await addLine(store, line, 1);
-      await removeLine(store, content.line);
+    for (let date of daysDate.value) {
+      const line = {
+        id: Date.now(),
+        date: date,
+        hourly: hourly,
+        dtt: dtt,
+        note: note.value,
+        client: {
+          id: clientSelected.value.id,
+          name: clientSelected.value.name,
+          color: clientSelected.value.color,
+          th: clientSelected.value.th,
+          chrg: clientSelected.value.chrg,
+          ca: ca,
+          bnf: bnf,
+          billed: daysDate.value.length > 1 ? false : billed.value,
+          paid: daysDate.value.length > 1 ? false : paid.value,
+          dop: daysDate.value.length > 1 ? false : dop.value,
+        },
+      };
+      try {
+        await addLine(store, line, 1);
+      } catch (error) {
+        console.log(error);
+        throw error;
+      }
     }
+
+    if (content.mode === 2) {
+      try {
+        await removeLine(store, content.line);
+      } catch (error) {
+        console.log(error);
+        throw error;
+      }
+    }
+
     success.value = true;
     setLoader(store, { dialog: true, mode: "success" }, 0);
   } catch (error) {
+    console.log(error);
     setLoader(
       store,
       {
@@ -365,6 +383,7 @@ async function createLine() {
   }
 }
 
+// SHORTCUT
 function shortcut(event) {
   switch (event.key) {
     case "Enter":

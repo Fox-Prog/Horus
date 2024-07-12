@@ -74,6 +74,9 @@ import { useStore } from "vuex";
 const store = useStore();
 // Import js fonctions
 import { removeLine } from "@/functions/bdd_functions.js";
+import { getTranslate } from "@/multilanguage/lang";
+const t = getTranslate();
+
 // Import components
 import note_box from "@/components/dialog/note_box.vue";
 // Color Mode
@@ -96,15 +99,7 @@ function showTouchBtn() {
   }, 2000);
 }
 
-const listDay = [
-  "Dimanche",
-  "Lundi",
-  "Mardi",
-  "Mercredi",
-  "Jeudi",
-  "Vendredi",
-  "Samedi",
-];
+const listDay = t.days_list_full;
 
 const dayName = computed(() => {
   const day = new Date(props.line.date).getDay();

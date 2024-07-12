@@ -69,20 +69,21 @@
       <v-btn
         class="mt-3"
         variant="elevated"
-        color="#E5484D"
+        :color="'var(--red-caution)'"
         :width="props.mode === 2 ? '49%' : '100%'"
         @click="emit('error', true)"
-        >{{ t.btn_cancel }}</v-btn
-      >
+        ><p style="color: var(--txt-dark-light)">{{ t.btn_cancel }}</p>
+      </v-btn>
+
       <v-btn
         v-if="props.mode === 2"
         class="mt-3"
         type="submit"
         variant="elevated"
-        color="#E5484D"
+        :color="'var(--red-caution)'"
         width="49%"
         @click="infoMessage = !infoMessage"
-        >{{ t.btn_delete }}</v-btn
+        ><p style="color: var(--txt-dark-light)">{{ t.btn_delete }}</p></v-btn
       >
     </div>
 

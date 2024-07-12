@@ -1,6 +1,7 @@
 <template>
   <div class="calendar card-home">
-    <div class="header">
+    <!-- calendar-HEADER -->
+    <div class="calendar-header">
       <div class="nav">
         <v-btn
           icon="mdi-chevron-left"
@@ -69,7 +70,7 @@
         v-for="day in daysInMonth"
         :key="day"
         :class="classOfDay(day)"
-        @click="emitDate(day)"
+        @click="addDate(day)"
       >
         {{ day }}
       </div>
@@ -77,15 +78,44 @@
         {{ day }}
       </div>
     </div>
+
+    <!-- btn-bottom-card -->
+    <div class="btn-bottom-card mt-5 px-2">
+      <v-btn
+        width="49%"
+        height="3rem"
+        variant="elevated"
+        rounded="sm"
+        color="var(--red-caution)"
+        @click="emit('cancel')"
+        ><p style="color: var(--txt-dark-light)">{{ t.btn_cancel }}</p></v-btn
+      >
+      <v-btn
+        :disabled="!datesContent"
+        width="49%"
+        height="3rem"
+        variant="elevated"
+        rounded="sm"
+        :color="
+          cm === 'dark_mode'
+            ? 'var(--interactive-components-dark)'
+            : 'var(--interactive-components-light)'
+        "
+        @click="emit('update:modelValue', selectedDates)"
+        ><p :class="cm" style="color: var(--txt-light)">
+          {{ t.btn_done }}
+        </p></v-btn
+      >
+    </div>
   </div>
 </template>
 
 <script setup>
 // Import vue fonctions
-import { ref, computed, defineProps, defineEmits } from "vue";
+import { ref, computed, defineProps, defineEmits, onMounted } from "vue";
 const props = defineProps({
   modelValue: {
-    type: Date,
+    type: Array,
     required: true,
   },
   colors: {
@@ -93,34 +123,77 @@ const props = defineProps({
     required: true,
   },
 });
-const emit = defineEmits(["date", "update:modelValue"]);
+const emit = defineEmits(["cancel", "update:modelValue"]);
+
+// Import store
+import { useStore } from "vuex";
+const store = useStore();
+// Color Mode
+const cm = computed(() => store.state.colorMode);
 
 // Import js fonctions
 import { getTranslate } from "@/multilanguage/lang";
 const t = getTranslate();
 
-function emitDate(d) {
-  const dateSelected = new Date(relativeToday.value);
-  dateSelected.setDate(d);
-  emit("update:modelValue", dateSelected);
+// OUTPUT
+const selectedDates = ref([]);
+
+function initSelectedDates() {
+  for (let date of props.modelValue) {
+    let d = new Date(date);
+    d.setHours(0, 0, 0, 0);
+    selectedDates.value.push(d);
+  }
+  relativeToday.value = selectedDates.value[0];
 }
+
+function addDate(d) {
+  let newDate = new Date(relativeToday.value);
+  newDate.setDate(d);
+  newDate.setHours(0, 0, 0, 0);
+
+  // Check if date exist already
+  const ctrl = selectedDates.value.findIndex(
+    (date) => date.getTime() === newDate.getTime()
+  );
+  if (ctrl !== -1) {
+    const dateToDelete = selectedDates.value.findIndex(
+      (d) => d.getTime() === newDate.getTime()
+    );
+    selectedDates.value.splice(dateToDelete, 1);
+  } else {
+    selectedDates.value.push(newDate);
+  }
+
+  // UPDATE DAYS
+  daysInMonth.value = calcDaysInMonth();
+}
+
 // DISPLAY MODE
 const mode = ref("days");
+const datesContent = computed(() => {
+  if (selectedDates.value.length <= 0) {
+    return false;
+  }
+  return true;
+});
 
 // TODAY
-const selectedDate = ref(props.modelValue);
 const realDateNow = ref(new Date());
 const realDayNow = realDateNow.value.getDate();
-const relativeToday = ref(selectedDate.value ? selectedDate.value : new Date());
+const relativeToday = ref(new Date());
 
 function classOfDay(d) {
+  for (let date of selectedDates.value) {
+    if (
+      d === date.getDate() &&
+      date.getMonth() === relativeToday.value.getMonth() &&
+      date.getFullYear() === relativeToday.value.getFullYear()
+    ) {
+      return "selected";
+    }
+  }
   if (
-    d === selectedDate.value.getDate() &&
-    selectedDate.value.getMonth() === relativeToday.value.getMonth() &&
-    selectedDate.value.getFullYear() === relativeToday.value.getFullYear()
-  ) {
-    return "selected";
-  } else if (
     d === realDayNow &&
     realDateNow.value.getMonth() === relativeToday.value.getMonth() &&
     realDateNow.value.getFullYear() === relativeToday.value.getFullYear()
@@ -232,13 +305,14 @@ const lastDayIndex = computed(() =>
   ).getDay()
 );
 
-const daysInMonth = computed(() => {
+function calcDaysInMonth() {
   let days = [];
   for (let i = 1; i <= lastDayOfMonth.value; i++) {
     days.push(i);
   }
   return days;
-});
+}
+const daysInMonth = ref(calcDaysInMonth());
 
 const prevDays = computed(() => {
   let days = [];
@@ -273,6 +347,11 @@ const screenW = ref(window.innerWidth);
 window.addEventListener("resize", () => {
   screenW.value = window.innerWidth;
 });
+
+// HOOK
+onMounted(() => {
+  initSelectedDates();
+});
 </script>
 
 <style>
@@ -280,13 +359,12 @@ window.addEventListener("resize", () => {
   width: 40rem;
   height: 45rem;
   padding: 0;
-  padding-bottom: 10px;
   color: v-bind(txt_light);
   box-shadow: 0.5rem 3rem rgba(0, 0, 0, 0, 4);
   background-color: v-bind(bg_color);
 }
 
-.header {
+.calendar-header {
   width: 100%;
   background-color: v-bind(interactive_color);
 }
@@ -347,7 +425,6 @@ window.addEventListener("resize", () => {
   justify-content: center;
   align-items: center;
   text-shadow: 0 0.3rem O.5rem rgba(0, 0, 0, 0, 0.5);
-  border-radius: 2px;
 }
 
 .grid-template div:hover:not(.today, .weekdays, .prev-days, .next-days) {
