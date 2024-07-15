@@ -190,18 +190,19 @@ onMounted(() => {
 
 #deleteForm {
   position: absolute;
-  top: 8%;
-  right: 102%;
+  top: 30%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
-@media screen and (max-width: 600px) {
+@media (max-width: 600px) {
   #lines {
     flex-direction: column;
   }
   #deleteForm {
     position: absolute;
-    top: 30%;
-    left: 111%;
+    top: 40%;
+    left: 105%;
   }
 }
 </style>

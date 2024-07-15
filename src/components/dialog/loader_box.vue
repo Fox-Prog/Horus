@@ -23,7 +23,7 @@
       height="30px"
       block
       @click="handleErrorBtn"
-      >OK</v-btn
+      ><h4 class="light-title">OK</h4></v-btn
     >
   </div>
 </template>

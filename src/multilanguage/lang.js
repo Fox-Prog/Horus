@@ -100,10 +100,13 @@ const languages = [
     btn_img_cancel: "Annuler",
 
     SECTEUR_7: "LOADER_BOX",
+    txt_error_add_line: "Impossible d'enregistrer ces horaires",
+    txt_error_set_line: "Impossible de modifier ces horaires",
     txt_error_client_color: "Erreur lors du changement de couleur",
     txt_error_client_del: "Erreur lors de la suppression du client",
     txt_error_change_lang: "Erreur lors du changement de language",
     txt_error_mail: "Erreur lors de l'envoi du mail",
+    txt_error_add_record: "Impossible de démarrer l'enregistrement",
 
     SECTEUR_8: "SETTINGS",
     tt_settings_page: "Paramètres",
@@ -129,6 +132,7 @@ const languages = [
     txt_light_mode: "Clair",
 
     SECTEUR_11: "CALENDAR",
+    txt_multi_select: "Sélection multiple",
     days_list: ["Dim", "Lun", "Mar", "Mer", "Jeu", "Ven", "Sam"],
     days_list_full: [
       "Dimanche",
@@ -139,6 +143,14 @@ const languages = [
       "Vendredi",
       "Samedi",
     ],
+
+    SECTEUR_12: "RECORDER",
+    btn_tabs_hourly: "Horaires",
+    btn_tabs_recorder: "Enregistreur",
+    btn_start: "Démarrer",
+    btn_break: "Pause",
+    btn_restart: "Reprendre",
+    btn_stop: "Stop",
   },
 
   {
@@ -204,10 +216,13 @@ const languages = [
     btn_img_cancel: "Cancel",
 
     SECTEUR_7: "LOADER_BOX",
+    txt_error_add_line: "Unable to save these schedules",
+    txt_error_set_line: "Unable to modify these schedules",
     txt_error_client_color: "Error changing the client's color",
     txt_error_client_del: "Error deleting the client",
     txt_error_change_lang: "Error changing the language",
     txt_error_mail: "Error sending email",
+    txt_error_add_record: "Unable to start recording",
 
     SECTEUR_8: "SETTINGS",
     tt_settings_page: "Settings",
@@ -233,6 +248,7 @@ const languages = [
     txt_light_mode: "Light",
 
     SECTEUR_11: "CALENDAR",
+    txt_multi_select: "Multiple selection",
     days_list: ["Sun", "Mon", "Tue", "Wen", "Thu", "Fri", "Sat"],
     days_list_full: [
       "Sunday",
@@ -243,5 +259,13 @@ const languages = [
       "Friday",
       "Saturday",
     ],
+
+    SECTEUR_12: "RECORDER",
+    btn_tabs_hourly: "Hourly",
+    btn_tabs_recorder: "Recorder",
+    btn_start: "Start",
+    btn_break: "Break",
+    btn_restart: "Restart",
+    btn_stop: "Stop",
   },
 ];

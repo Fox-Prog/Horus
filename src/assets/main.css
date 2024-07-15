@@ -41,6 +41,7 @@
 .text-font {
   font-family: "OpenSans";
   font-weight: 600;
+  text-transform: none;
 }
 
 .number-font {

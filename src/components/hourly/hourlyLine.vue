@@ -73,7 +73,7 @@ const router = useRouter();
 import { useStore } from "vuex";
 const store = useStore();
 // Import js fonctions
-import { removeLine } from "@/functions/bdd_functions.js";
+import { removeLine } from "@/functions/bdd_lines_functions.js";
 import { getTranslate } from "@/multilanguage/lang";
 const t = getTranslate();
 

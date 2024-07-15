@@ -91,7 +91,7 @@ import {
   removeLinesOfClient,
   setClientToHourly,
 } from "@/functions/client_functions";
-import { addClient, removeClient } from "@/functions/bdd_functions.js";
+import { addClient, removeClient } from "@/functions/bdd_clients_functions.js";
 import { setLoader } from "@/functions/dialog_functions";
 import { getTranslate } from "@/multilanguage/lang";
 const t = getTranslate();

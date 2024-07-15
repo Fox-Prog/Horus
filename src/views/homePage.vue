@@ -8,9 +8,37 @@
   </div>
 
   <div class="body-second-middle-container">
-    <!-- Hourly Forms -->
-    <hourlyForm :mode="1"></hourlyForm>
+    <div class="window-form">
+      <v-tabs v-model="tab" grow bg-color="var(--interactive-components)">
+        <v-tab value="1" :elevation="tab === '1' ? 20 : 0"
+          ><h3
+            :class="tab === '1' ? 'light-title' : 'dark-title'"
+            class="text-font"
+          >
+            {{ t.btn_tabs_hourly }}
+          </h3></v-tab
+        >
+        <v-tab value="2" :elevation="tab === '2' ? 20 : 0"
+          ><h3
+            :class="tab === '2' ? 'light-title' : 'dark-title'"
+            class="text-font"
+          >
+            {{ t.btn_tabs_recorder }}
+          </h3></v-tab
+        >
+      </v-tabs>
 
+      <v-tabs-window v-model="tab">
+        <v-tabs-window-item class="form" value="1">
+          <!-- Hourly Forms -->
+          <hourlyForm :mode="1"></hourlyForm>
+        </v-tabs-window-item>
+        <v-tabs-window-item class="form" value="2">
+          <!-- Recorder -->
+          <recorderForm></recorderForm>
+        </v-tabs-window-item>
+      </v-tabs-window>
+    </div>
     <!-- Display selector -->
     <displaySelector
       @changeMode="handleDisplayMode"
@@ -66,6 +94,7 @@ import { useStore } from "vuex";
 const store = useStore();
 // Import components
 import hourlyForm from "@/components/hourly/hourlyForm.vue";
+import recorderForm from "@/components/recorder/recorderForm.vue";
 import displaySelector from "@/components/options/display_selector.vue";
 import yearCard from "@/components/time_display/year_card.vue";
 import clientCard from "@/components/client_display/client_card.vue";
@@ -79,6 +108,9 @@ import { getTranslate } from "@/multilanguage/lang";
 const t = getTranslate();
 // Color Mode
 const cm = computed(() => store.state.colorMode);
+
+// FORMS
+const tab = ref(null);
 
 // Display lines
 const savedLine = computed(() => {

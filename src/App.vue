@@ -9,9 +9,11 @@
 <script setup>
 import "@mdi/font/css/materialdesignicons.css";
 import { computed, onMounted } from "vue";
-import { getLinesLocal, getClientsLocal } from "@/functions/bdd_functions.js";
+import { getLinesLocal } from "@/functions/bdd_lines_functions.js";
+import { getClientsLocal } from "@/functions/bdd_clients_functions.js";
 import { getLang } from "@/multilanguage/lang.js";
 import { getColorMode } from "@/assets/color_functions";
+import { getRecStatus } from "./components/recorder/recorder_functions";
 import { useStore } from "vuex";
 const store = useStore();
 
@@ -37,6 +39,9 @@ function initIndexedDB() {
 
       const clientsTable = db.createObjectStore("clients", { keyPath: "id" });
       clientsTable.createIndex("clients", ["clients"], { unique: false });
+
+      const recordsTable = db.createObjectStore("records", { keyPath: "id" });
+      recordsTable.createIndex("records", ["records"], { unique: false });
     };
   } catch (err) {
     console.error("Error with IndexedDB: ", err);
@@ -48,6 +53,7 @@ const cm = computed(() => store.state.colorMode);
 
 onMounted(async () => {
   getColorMode(store);
+  getRecStatus(store);
   getLang();
   initIndexedDB();
   await getLinesLocal(store);

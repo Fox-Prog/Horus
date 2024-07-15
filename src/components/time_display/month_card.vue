@@ -83,7 +83,7 @@ import invoice_panel from "@/components/options/invoice_panel.vue";
 // Import js fonctions
 import { addTime, hoursToHdec } from "@/functions/time_functions.js";
 import { averageDays } from "@/functions/recap_functions.js";
-import { addLine, removeLine } from "@/functions/bdd_functions";
+import { addLine, removeLine } from "@/functions/bdd_lines_functions.js";
 import { sumCA, sumBNF } from "@/functions/money_functions.js";
 import { setLoader } from "@/functions/dialog_functions";
 import { getTranslate } from "@/multilanguage/lang";

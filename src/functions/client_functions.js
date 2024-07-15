@@ -1,4 +1,4 @@
-import { addLine, removeLine } from "@/functions/bdd_functions.js";
+import { addLine, removeLine } from "@/functions/bdd_lines_functions.js";
 import { calcCA, calcBNF } from "@/functions/money_functions";
 
 export async function removeLinesOfClient(store, client) {

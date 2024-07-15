@@ -33,6 +33,9 @@
 
   /* Common */
   --red-caution: #e5484d;
+  --green-btn: #388E3C;
+  --yellow-btn: #FBC02D;
+  --red-btn: #D32F2F;
 }
 
 .dark_mode {

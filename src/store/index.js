@@ -9,6 +9,8 @@ export default createStore({
     loaderTime: 450,
     hourlyData: {},
     colorMode: "dark_mode",
+    records: [],
+    recStatus: "off",
   },
   getters: {},
   mutations: {
@@ -46,6 +48,21 @@ export default createStore({
     setColorMode(state, color) {
       state.colorMode = color;
     },
+
+    addRecord(state, record) {
+      state.records.push(record);
+    },
+
+    setRecord(state, playload) {
+      const index = state.records.findIndex((c) => c.id === playload.id);
+      if (index !== -1) {
+        state.records[index] = playload;
+      }
+    },
+
+    setRecStatus(state, status) {
+      state.recStatus = status;
+    },
   },
   actions: {
     addLine({ commit }, line) {
@@ -76,6 +93,18 @@ export default createStore({
 
     setColorMode({ commit }, mode) {
       commit("setColorMode", mode);
+    },
+
+    addRecord({ commit }, record) {
+      commit("addRecord", record);
+    },
+
+    setRecord({ commit }, playload) {
+      commit("setRecord", playload);
+    },
+
+    setRecStatus({ commit }, status) {
+      commit("setRecStatus", status);
     },
   },
   modules: {},

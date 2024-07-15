@@ -1,5 +1,5 @@
 <template>
-  <div :class="cm" class="card-home">
+  <div :class="cm" class="card-home window-form">
     <clientField
       :clientName="content.mode === 2 ? content.line.client.name : null"
       @selected="handleSelectedClient"
@@ -26,7 +26,7 @@
             ><h2 :class="cm" class="light-title number-font">
               {{
                 daysDate.length > 1
-                  ? "Multi-Valeurs"
+                  ? t.txt_multi_select
                   : daysDate[0].toLocaleDateString()
               }}
             </h2></v-btn
@@ -139,11 +139,11 @@ import {
 const content = defineProps(["line", "mode"]);
 const emit = defineEmits(["setDone"]);
 // Import components
-import entryHourlyField from "@/components/hourly/hourlyField.vue";
 import clientField from "@/components/client_display/clientField.vue";
+import entryHourlyField from "@/components/hourly/hourlyField.vue";
 import calendar from "@/components/dialog/calendar_box.vue";
 // Import js fonctions
-import { addLine, removeLine } from "@/functions/bdd_functions.js";
+import { addLine, removeLine } from "@/functions/bdd_lines_functions.js";
 import { addTime } from "@/functions/time_functions.js";
 import { newForm } from "@/functions/forms_functions";
 import { calcCA, calcBNF } from "@/functions/money_functions";
@@ -364,10 +364,7 @@ async function createLine() {
       {
         dialog: true,
         mode: "err",
-        error:
-          content.mode === 1
-            ? "Impossible d'enregistrer ces horaires"
-            : "Impossible de modifier ces horaires",
+        error: content.mode === 1 ? t.txt_error_add_line : t.txt_error_set_line,
       },
       0
     );
@@ -405,18 +402,6 @@ onBeforeUnmount(() => {
 </script>
 
 <style>
-#date-picker {
-  border: solid 2px var(--border-color);
-}
-#date-picker .v-btn {
-  background-color: var(--bg-color-2);
-  color: var(--txt-dark);
-}
-
-#date-picker {
-  color: var(--txt-light);
-}
-
 #note-area {
   color: var(--txt-light);
 }

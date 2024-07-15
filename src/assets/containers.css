@@ -27,6 +27,11 @@
 
 /* __________ FORM __________ */
 
+.window-form {
+  width: 480px;
+  align-self: center;
+}
+
 .form {
   display: flex;
   flex-direction: column;
@@ -113,5 +118,12 @@
   }
   .bottom-navigation {
     display: flex;
+  }
+}
+
+@media (max-width: 600px) {
+  .window-form {
+    width: fit-content;
+    min-width: 280px;
   }
 }

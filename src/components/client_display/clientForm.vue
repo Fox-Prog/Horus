@@ -110,7 +110,7 @@ const emit = defineEmits(["done", "error"]);
 import { useStore } from "vuex";
 const store = useStore();
 // Import js fonctions
-import { addClient, removeClient } from "@/functions/bdd_functions.js";
+import { addClient, removeClient } from "@/functions/bdd_clients_functions.js";
 import {
   removeLinesOfClient,
   setClientToHourly,
