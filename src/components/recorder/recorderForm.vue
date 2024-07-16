@@ -1,7 +1,5 @@
 <template>
   <div :class="cm" class="card-home window-form">
-    <clientField></clientField>
-
     <!-- START -->
     <v-btn
       v-if="recStatus === 'off'"
@@ -24,11 +22,8 @@
         :color="
           recStatus === 'start' ? 'var(--yellow-btn)' : 'var(--green-btn)'
         "
-        @click="
-          recStatus === 'start'
-            ? setRecStatus(store, 'pause')
-            : setRecStatus(store, 'start')
-        "
+        :loading="loaderPause"
+        @click="recStatus === 'start' ? setMode(1) : createMode()"
         ><h3 v-if="recStatus === 'start'" class="text-font">
           {{ t.btn_break }}
         </h3>
@@ -43,7 +38,8 @@
         prepend-icon="mdi-stop"
         rounded="lg"
         color="var(--red-btn)"
-        @click="setRecStatus(store, 'off')"
+        :loading="loaderStop"
+        @click="stopMode(2)"
         ><h3 class="text-font">{{ t.btn_stop }}</h3></v-btn
       >
     </div>
@@ -58,56 +54,53 @@ import { useStore } from "vuex";
 const store = useStore();
 // Color Mode
 const cm = computed(() => store.state.colorMode);
-// Import components
-import clientField from "@/components/client_display/clientField.vue";
 // Import js fonctions
-import { addRecord } from "./bdd_recorder_functions";
-import { setRecStatus } from "@/components/recorder/recorder_functions";
-import { setLoader } from "@/functions/dialog_functions";
+import {
+  createRecord,
+  modifyRecord,
+  closeRecord,
+} from "@/components/recorder/recorder_functions.js";
 import { getTranslate } from "@/multilanguage/lang";
 const t = getTranslate();
 
 const recStatus = computed(() => store.state.recStatus);
+const recID = computed(() => store.state.recID);
+
+console.log(store.state.lines);
 
 // Loaders
 const loaderPlay = ref(false);
+const loaderPause = ref(false);
+const loaderStop = ref(false);
 
 // Create record
 function createMode() {
   loaderPlay.value = true;
+  loaderPause.value = true;
   setTimeout(() => {
-    createRecord();
+    createRecord(store, t);
+    loaderPlay.value = false;
+    loaderPause.value = false;
   }, 800);
 }
-
-async function createRecord() {
-  const record = {
-    id: Date.now(),
-    str: new Date(),
-  };
-
-  let success = false;
-
-  try {
-    await addRecord(store, record, 1);
-    success = true;
-  } catch (error) {
-    console.log(error);
-    setLoader(
-      store,
-      {
-        dialog: true,
-        mode: "err",
-        error: t.txt_error_add_record,
-      },
-      0
-    );
-    success = false;
-  } finally {
-    if (success) {
-      loaderPlay.value = false;
-      setRecStatus(store, "start");
+// Set record
+function setMode(mode) {
+  loaderPause.value = true;
+  setTimeout(() => {
+    modifyRecord(store, t, recID.value, mode);
+    loaderPause.value = false;
+  }, 800);
+}
+// Stop record
+function stopMode(mode) {
+  loaderStop.value = true;
+  setTimeout(() => {
+    if (recStatus.value === "start") {
+      modifyRecord(store, t, recID.value, mode);
+    } else {
+      closeRecord(store);
     }
-  }
+    loaderStop.value = false;
+  }, 800);
 }
 </script>

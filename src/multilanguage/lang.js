@@ -107,6 +107,8 @@ const languages = [
     txt_error_change_lang: "Erreur lors du changement de language",
     txt_error_mail: "Erreur lors de l'envoi du mail",
     txt_error_add_record: "Impossible de démarrer l'enregistrement",
+    txt_error_record: "Erreur enregistreur",
+    txt_error_load_data: "Erreur lors du chargements des données",
 
     SECTEUR_8: "SETTINGS",
     tt_settings_page: "Paramètres",
@@ -223,6 +225,8 @@ const languages = [
     txt_error_change_lang: "Error changing the language",
     txt_error_mail: "Error sending email",
     txt_error_add_record: "Unable to start recording",
+    txt_error_record: "Recorder error",
+    txt_error_load_data: "Error loading data",
 
     SECTEUR_8: "SETTINGS",
     tt_settings_page: "Settings",

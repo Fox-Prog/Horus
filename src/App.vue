@@ -11,11 +11,18 @@ import "@mdi/font/css/materialdesignicons.css";
 import { computed, onMounted } from "vue";
 import { getLinesLocal } from "@/functions/bdd_lines_functions.js";
 import { getClientsLocal } from "@/functions/bdd_clients_functions.js";
+import { getRecordsLocal } from "@/components/recorder/bdd_recorder_functions.js";
 import { getLang } from "@/multilanguage/lang.js";
 import { getColorMode } from "@/assets/color_functions";
-import { getRecStatus } from "./components/recorder/recorder_functions";
+import {
+  getRecStatus,
+  getRecID,
+} from "./components/recorder/bdd_recorder_functions";
+import { setLoader } from "@/functions/dialog_functions.js";
 import { useStore } from "vuex";
 const store = useStore();
+import { getTranslate } from "@/multilanguage/lang";
+const t = getTranslate();
 
 const indexedDB =
   window.indexedDB ||
@@ -52,12 +59,27 @@ function initIndexedDB() {
 const cm = computed(() => store.state.colorMode);
 
 onMounted(async () => {
-  getColorMode(store);
-  getRecStatus(store);
-  getLang();
-  initIndexedDB();
-  await getLinesLocal(store);
-  await getClientsLocal(store);
+  try {
+    getColorMode(store);
+    getRecStatus(store);
+    getRecID(store);
+    getLang();
+    initIndexedDB();
+    await getLinesLocal(store);
+    await getClientsLocal(store);
+    await getRecordsLocal(store);
+  } catch (error) {
+    console.log(error);
+    setLoader(
+      store,
+      {
+        dialog: true,
+        mode: "err",
+        error: t.txt_error_load_data,
+      },
+      0
+    );
+  }
 });
 </script>
 
