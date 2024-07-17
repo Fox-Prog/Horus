@@ -1,8 +1,8 @@
 <template>
   <div :class="cm" class="card-home window-form">
     <clientField
-      :clientName="content.mode === 2 ? content.line.client.name : null"
-      @selected="handleSelectedClient"
+      v-model="clientSelected"
+      @update:model-value="checkGlobalTrue()"
     ></clientField>
     <div class="form">
       <v-dialog v-model="dialog" persistent>
@@ -79,8 +79,7 @@
       <v-textarea
         v-if="noteField"
         :class="cm"
-        class="input-field"
-        id="note-area"
+        class="input-field note-area"
         v-model="note"
         variant="solo-filled"
         clearable
@@ -143,10 +142,8 @@ import clientField from "@/components/client_display/clientField.vue";
 import entryHourlyField from "@/components/hourly/hourlyField.vue";
 import calendar from "@/components/dialog/calendar_box.vue";
 // Import js fonctions
-import { addLine, removeLine } from "@/functions/bdd_lines_functions.js";
-import { addTime } from "@/functions/time_functions.js";
+import { createLines } from "@/functions/create_functions";
 import { newForm } from "@/functions/forms_functions";
-import { calcCA, calcBNF } from "@/functions/money_functions";
 import { setLoader } from "@/functions/dialog_functions";
 import { getTranslate } from "@/multilanguage/lang";
 const t = getTranslate();
@@ -189,10 +186,6 @@ const daysDate = ref(
 
 // Client
 const clientSelected = ref(content.mode === 2 ? content.line.client : null);
-function handleSelectedClient(data) {
-  clientSelected.value = data;
-  checkGlobalTrue();
-}
 
 // Invoice
 const billed = ref(content.mode === 2 ? content.line.client.billed : false);
@@ -287,76 +280,43 @@ function resetForm() {
 }
 
 // Création de l'objet ligne horaire
+const loaderTime = store.state.loaderTime;
+
 function createMode() {
   setLoader(store, { dialog: true, mode: "wait" }, 0);
   setTimeout(() => {
-    createLine();
+    callCreateLines();
   }, 200);
 }
 
-const success = ref(false);
-const loaderTime = store.state.loaderTime;
-
-async function createLine() {
-  const hourly = forms.value.map((f) => {
-    return {
-      id: Date.now(),
-      Hstr: f.Hstr,
-      Mstr: f.Mstr,
-      Hstp: f.Hstp,
-      Mstp: f.Mstp,
-    };
-  });
-
-  const durations = forms.value.map((f) => {
-    return f.duration;
-  });
-
-  const dtt = addTime(durations);
-
-  const ca = calcCA(dtt, clientSelected.value.th);
-  const bnf = calcBNF(ca, clientSelected.value.chrg);
+async function callCreateLines() {
+  const createData = {
+    note: note.value,
+    client: {
+      id: clientSelected.value.id,
+      name: clientSelected.value.name,
+      color: clientSelected.value.color,
+      th: clientSelected.value.th,
+      chrg: clientSelected.value.chrg,
+      billed: daysDate.value.length > 1 ? false : billed.value,
+      paid: daysDate.value.length > 1 ? false : paid.value,
+      dop: daysDate.value.length > 1 ? false : dop.value,
+    },
+  };
 
   try {
-    for (let date of daysDate.value) {
-      const line = {
-        id: Date.now(),
-        date: date,
-        hourly: hourly,
-        dtt: dtt,
-        note: note.value,
-        client: {
-          id: clientSelected.value.id,
-          name: clientSelected.value.name,
-          color: clientSelected.value.color,
-          th: clientSelected.value.th,
-          chrg: clientSelected.value.chrg,
-          ca: ca,
-          bnf: bnf,
-          billed: daysDate.value.length > 1 ? false : billed.value,
-          paid: daysDate.value.length > 1 ? false : paid.value,
-          dop: daysDate.value.length > 1 ? false : dop.value,
-        },
-      };
-      try {
-        await addLine(store, line, 1);
-      } catch (error) {
-        console.log(error);
-        throw error;
-      }
-    }
-
-    if (content.mode === 2) {
-      try {
-        await removeLine(store, content.line);
-      } catch (error) {
-        console.log(error);
-        throw error;
-      }
-    }
-
-    success.value = true;
+    await createLines(
+      store,
+      forms.value,
+      daysDate.value,
+      createData,
+      content.mode,
+      content.line
+    );
+    resetForm();
     setLoader(store, { dialog: true, mode: "success" }, 0);
+    setLoader(store, { dialog: false, mode: "success" }, loaderTime);
+    emit("setDone");
   } catch (error) {
     console.log(error);
     setLoader(
@@ -368,15 +328,7 @@ async function createLine() {
       },
       0
     );
-    success.value = false;
     emit("setDone");
-  } finally {
-    resetForm();
-
-    if (success.value === true) {
-      setLoader(store, { dialog: false, mode: "success" }, loaderTime);
-      emit("setDone");
-    }
   }
 }
 
@@ -385,7 +337,7 @@ function shortcut(event) {
   switch (event.key) {
     case "Enter":
       if (formDone.value === true) {
-        createLine();
+        createMode();
       }
   }
 }
@@ -400,9 +352,3 @@ onBeforeUnmount(() => {
   window.removeEventListener("keydown", shortcut);
 });
 </script>
-
-<style>
-#note-area {
-  color: var(--txt-light);
-}
-</style>

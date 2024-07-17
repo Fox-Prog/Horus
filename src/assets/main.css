@@ -97,3 +97,7 @@
 .btn .v-btn__append {
   color: var(--txt-light);
 }
+
+.note-area {
+  color: var(--txt-light);
+}

@@ -59,8 +59,13 @@
 <script setup>
 // Import vue fonctions
 import { ref, defineEmits, watch, computed, defineProps } from "vue";
-const props = defineProps(["clientName"]);
-const emit = defineEmits(["selected"]);
+const props = defineProps({
+  modelValue: {
+    type: Object,
+    required: false,
+  },
+});
+const emit = defineEmits(["update:modelValue"]);
 // Import components
 import clientForm from "@/components/client_display/clientForm.vue";
 // Import js fonctions
@@ -76,7 +81,7 @@ const dialog = ref(false);
 const mode = ref(null);
 const clients = computed(() => store.state.clients);
 const clientList = computed(() => clients.value.map((c) => c.name));
-const selectedClient = ref(props.clientName);
+const selectedClient = ref(props.modelValue ? props.modelValue.name : null);
 const clientData = computed(() =>
   clients.value.find((c) => c.name === selectedClient.value)
 );
@@ -87,16 +92,16 @@ function doneField(client) {
 
   if (client === null) {
     selectedClient.value = null;
-    emit("selected", null);
+    emit("update:modelValue", null);
   } else {
     selectedClient.value = client.name;
-    emit("selected", clientData.value);
+    emit("update:modelValue", clientData.value);
   }
 }
 
 watch(selectedClient, () => {
   if (selectedClient.value !== null) {
-    emit("selected", clientData.value);
+    emit("update:modelValue", clientData.value);
   }
 });
 </script>
