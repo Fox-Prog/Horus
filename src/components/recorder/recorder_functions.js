@@ -11,7 +11,7 @@ import {
 import { durationTime } from "@/functions/time_functions.js";
 
 // Import vue fonctions
-import { computed } from "vue";
+import { ref, computed } from "vue";
 
 // Create record
 export async function createRecord(store, t) {
@@ -51,7 +51,8 @@ export async function modifyRecord(store, t, recID, mode) {
   const playload = {
     id: Number(record.id),
     str: new Date(record.str),
-    stp: new Date("2024-07-20T00:00:00"),
+    stp: new Date(),
+    // "2024-07-21T16:26:12"
   };
 
   let success = false;
@@ -88,34 +89,50 @@ export async function modifyRecord(store, t, recID, mode) {
 // Close record
 export function saveRecord(store) {
   // Get data
-  const formInfos = computed(() =>
-    JSON.parse(localStorage.getItem("recordFormInfos"))
-  );
+  // const formInfos = computed(() =>
+  //   JSON.parse(localStorage.getItem("recordFormInfos"))
+  // );
 
   const records = computed(() => store.state.records);
+  const fRec = formatRecords(records.value);
+  console.log("fRec:", fRec);
 
-  checkTimeRange(records.value);
-
-  const forms = createForms(records.value);
+  const forms = createForms(fRec);
   console.log("forms:", forms);
 
-  const data = createData(store, formInfos.value);
-  console.log("data:", data);
+  test(forms);
+
+  // const data = createData(store, formInfos.value);
+  // console.log("data:", data);
 
   setRecStatus(store, "off");
 }
 
+function test(forms) {
+  console.log("Test ON");
+  for (let f of forms) {
+    const date = f.date;
+    console.log("date:", date);
+    const hourly = f.hourly;
+    console.log("hourly:", hourly);
+  }
+}
+
 // Data processing
-function checkTimeRange(records) {
+function formatRecords(records) {
+  let formatRecords = [];
+
   for (let r of records) {
     const sameYear = computed(
       () => r.str.getFullYear() === r.stp.getFullYear()
     );
     const sameMonth = computed(() => r.str.getMonth() === r.stp.getMonth());
     const sameDate = computed(() => r.str.getDate() === r.stp.getDate());
+    // If same day
     if (sameYear.value && sameMonth.value && sameDate.value) {
-      console.log("Jour identique");
+      formatRecords.push(r);
     } else {
+      // Not same day
       const interDates = [];
       let currentDate = new Date(r.str);
       const endDate = new Date(r.stp);
@@ -123,16 +140,47 @@ function checkTimeRange(records) {
         interDates.push(new Date(currentDate));
         currentDate.setDate(currentDate.getDate() + 1);
       }
+      interDates.push(new Date(endDate));
 
-      console.log("interDates:", interDates);
+      for (let d of interDates) {
+        const dCopied = new Date(d);
+        let ssd = {};
+        // First
+        if (d === interDates[0]) {
+          ssd = {
+            id: r.id,
+            str: new Date(dCopied),
+            stp: new Date(dCopied.setHours(23, 59, 0, 0)),
+          };
+          // Last
+        } else if (d === interDates.at(-1)) {
+          ssd = {
+            id: r.id,
+            stp: new Date(dCopied),
+            str: new Date(dCopied.setHours(0, 0, 0, 0)),
+          };
+          // Middle
+        } else {
+          ssd = {
+            id: r.id,
+            str: new Date(dCopied.setHours(0, 0, 0, 0)),
+            stp: new Date(dCopied.setHours(23, 59, 0, 0)),
+          };
+        }
+
+        formatRecords.push(ssd);
+      }
     }
   }
+
+  return formatRecords;
 }
 
 function createForms(records) {
-  let forms = [];
+  let forms = ref([]);
 
   for (let h of records) {
+    const date = new Date(h.str.setHours(0, 0, 0, 0));
     const Hstr = computed(() => {
       let result = String(h.str.getHours());
       return result.length < 2 ? `0${result}` : result;
@@ -159,25 +207,35 @@ function createForms(records) {
       duration: durationTime(Hstr.value, Mstr.value, Hstp.value, Mstp.value),
     };
 
-    forms.push(hourly);
+    const index = computed(() => {
+      for (let i = 0; i < forms.value.length; i++) {
+        if (forms.value[i][0] === date) {
+          return i;
+        }
+      }
+      forms.value.push({ date: date, hourly: [] });
+      return forms.value.length - 1;
+    });
+
+    forms.value[index.value].hourly.push(hourly);
   }
 
-  return forms;
+  return forms.value;
 }
 
-function createData(store, data) {
-  const client = store.state.clients.find((c) => c.name === data.clientName);
-  return {
-    client: {
-      billed: false,
-      chrg: client.chrg,
-      color: client.color,
-      dop: null,
-      id: client.id,
-      name: client.name,
-      paid: false,
-      th: client.th,
-    },
-    note: data.note,
-  };
-}
+// function createData(store, data) {
+//   const client = store.state.clients.find((c) => c.name === data.clientName);
+//   return {
+//     client: {
+//       billed: false,
+//       chrg: client.chrg,
+//       color: client.color,
+//       dop: null,
+//       id: client.id,
+//       name: client.name,
+//       paid: false,
+//       th: client.th,
+//     },
+//     note: data.note,
+//   };
+// }
