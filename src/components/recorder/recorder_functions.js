@@ -2,6 +2,7 @@
 import {
   addRecord,
   setRecord,
+  clearRecords,
 } from "@/components/recorder/bdd_recorder_functions.js";
 import { setLoader } from "@/functions/dialog_functions.js";
 import {
@@ -9,9 +10,12 @@ import {
   setRecID,
 } from "@/components/recorder/bdd_recorder_functions";
 import { durationTime } from "@/functions/time_functions.js";
+import { getTranslate } from "@/multilanguage/lang";
+const t = getTranslate();
 
 // Import vue fonctions
-import { ref, computed } from "vue";
+import { computed } from "vue";
+import { createLines } from "@/functions/create_functions";
 
 // Create record
 export async function createRecord(store, t) {
@@ -48,12 +52,18 @@ export async function createRecord(store, t) {
 // Set record
 export async function modifyRecord(store, t, recID, mode) {
   const record = store.state.records.find((r) => r.id === recID);
-  const playload = {
-    id: Number(record.id),
-    str: new Date(record.str),
-    stp: new Date(),
-    // "2024-07-21T16:26:12"
-  };
+  const playload =
+    mode === 3
+      ? {
+          id: Number(record.id),
+          str: new Date(record.str),
+          stp: new Date("2024-07-21T16:26:12"),
+        }
+      : {
+          id: Number(record.id),
+          str: new Date(record.str),
+          stp: new Date(),
+        };
 
   let success = false;
 
@@ -82,39 +92,55 @@ export async function modifyRecord(store, t, recID, mode) {
         // Mode stop
         saveRecord(store);
       }
+    } else {
+      setRecStatus(store, "off");
     }
   }
 }
 
-// Close record
-export function saveRecord(store) {
+// Save record
+export async function saveRecord(store) {
+  const loaderTime = store.state.loaderTime;
+
+  setLoader(store, { dialog: true, mode: "wait" }, 0);
+
   // Get data
-  // const formInfos = computed(() =>
-  //   JSON.parse(localStorage.getItem("recordFormInfos"))
-  // );
+  const formInfos = computed(() =>
+    JSON.parse(localStorage.getItem("recordFormInfos"))
+  );
 
   const records = computed(() => store.state.records);
   const fRec = formatRecords(records.value);
-  console.log("fRec:", fRec);
 
   const forms = createForms(fRec);
-  console.log("forms:", forms);
 
-  test(forms);
+  const data = createData(store, formInfos.value);
 
-  // const data = createData(store, formInfos.value);
-  // console.log("data:", data);
-
-  setRecStatus(store, "off");
-}
-
-function test(forms) {
-  console.log("Test ON");
-  for (let f of forms) {
-    const date = f.date;
-    console.log("date:", date);
-    const hourly = f.hourly;
-    console.log("hourly:", hourly);
+  let success = false;
+  try {
+    for (let f of forms) {
+      await createLines(store, f.hourly, f.date, data, 1, null);
+    }
+    await clearRecords(store);
+    setLoader(store, { dialog: true, mode: "success" }, 0);
+    success = true;
+  } catch (error) {
+    console.log(error);
+    setLoader(
+      store,
+      {
+        dialog: true,
+        mode: "err",
+        error: `${t.txt_error_record}: ${t.txt_error_add_line}`,
+      },
+      0
+    );
+    success = false;
+  } finally {
+    if (success) {
+      setLoader(store, { dialog: false, mode: "success" }, loaderTime);
+    }
+    setRecStatus(store, "off");
   }
 }
 
@@ -177,10 +203,11 @@ function formatRecords(records) {
 }
 
 function createForms(records) {
-  let forms = ref([]);
+  let forms = {};
 
   for (let h of records) {
-    const date = new Date(h.str.setHours(0, 0, 0, 0));
+    const strCopied = new Date(h.str);
+    const date = new Date(strCopied.setHours(0, 0, 0, 0));
     const Hstr = computed(() => {
       let result = String(h.str.getHours());
       return result.length < 2 ? `0${result}` : result;
@@ -207,35 +234,28 @@ function createForms(records) {
       duration: durationTime(Hstr.value, Mstr.value, Hstp.value, Mstp.value),
     };
 
-    const index = computed(() => {
-      for (let i = 0; i < forms.value.length; i++) {
-        if (forms.value[i][0] === date) {
-          return i;
-        }
-      }
-      forms.value.push({ date: date, hourly: [] });
-      return forms.value.length - 1;
-    });
+    if (!forms[date]) {
+      forms[date] = { date: [date], hourly: [] };
+    }
 
-    forms.value[index.value].hourly.push(hourly);
+    forms[date].hourly.push(hourly);
   }
-
-  return forms.value;
+  return Object.values(forms);
 }
 
-// function createData(store, data) {
-//   const client = store.state.clients.find((c) => c.name === data.clientName);
-//   return {
-//     client: {
-//       billed: false,
-//       chrg: client.chrg,
-//       color: client.color,
-//       dop: null,
-//       id: client.id,
-//       name: client.name,
-//       paid: false,
-//       th: client.th,
-//     },
-//     note: data.note,
-//   };
-// }
+function createData(store, data) {
+  const client = store.state.clients.find((c) => c.name === data.clientName);
+  return {
+    client: {
+      billed: false,
+      chrg: client.chrg,
+      color: client.color,
+      dop: null,
+      id: client.id,
+      name: client.name,
+      paid: false,
+      th: client.th,
+    },
+    note: data.note,
+  };
+}
