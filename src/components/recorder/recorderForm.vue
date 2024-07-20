@@ -88,7 +88,7 @@
 
 <script setup>
 // Import vue fonctions
-import { ref, computed } from "vue";
+import { ref, computed, watch } from "vue";
 // Import store
 import { useStore } from "vuex";
 const store = useStore();
@@ -106,7 +106,7 @@ import { getTranslate } from "@/multilanguage/lang";
 const t = getTranslate();
 
 const recStatus = computed(() => store.state.recStatus);
-const recID = computed(() => store.state.recID);
+const recID = computed(() => parseInt(store.state.recID));
 
 // Loaders
 const loaderPlay = ref(false);
@@ -180,5 +180,20 @@ function updateFormInfo() {
       note: noteData,
     })
   );
+}
+
+watch(
+  () => recStatus.value,
+  () => {
+    if (recStatus.value === "off") {
+      resetNote();
+    }
+  }
+);
+
+function resetNote() {
+  noteField.value = false;
+  note.value = "";
+  updateFormInfo();
 }
 </script>

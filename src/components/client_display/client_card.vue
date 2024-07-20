@@ -32,7 +32,7 @@
       :text="t.txt_imb_del_lines_from_clientCard"
       :accept="t.btn_img_continu"
       :cancel="t.btn_img_cancel"
-      @accept="deleteClient"
+      @accept="deleteMode"
       @cancel="infoMessage = false"
     ></info_message_box>
   </v-dialog>
@@ -145,11 +145,37 @@ const chrg = lines.value[0].client.chrg.replace(".", ",");
 const listCA = computed(() => lines.value.map((l) => l.client.ca));
 const listBNF = computed(() => lines.value.map((l) => l.client.bnf));
 
+function deleteMode() {
+  setLoader(store, { dialog: true, mode: "wait" }, 0);
+  setTimeout(() => {
+    deleteClient();
+  }, 800);
+}
+
 async function deleteClient() {
+  let success = false;
+
   try {
     await removeLinesOfClient(store, props.clientLines[1].client.id);
+    setLoader(store, { dialog: true, mode: "success" }, 0);
+    success = true;
   } catch (error) {
     console.log(error);
+    setLoader(
+      store,
+      {
+        dialog: true,
+        mode: "err",
+        error: t.txt_error_delete_line,
+      },
+      0
+    );
+    success = false;
+  } finally {
+    if (success) {
+      setLoader(store, { dialog: false, mode: "success" }, loaderTime);
+    }
+    infoMessage.value = false;
   }
 }
 

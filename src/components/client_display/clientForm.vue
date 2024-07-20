@@ -94,7 +94,7 @@
         :text="t.txt_imb_del_client_and_lines_from_clientForm"
         :accept="t.btn_img_continu"
         :cancel="t.btn_img_cancel"
-        @accept="deleteClient"
+        @accept="deleteMode()"
         @cancel="infoMessage = false"
       ></info_message_box>
     </v-dialog>
@@ -217,11 +217,21 @@ async function createClient() {
   }
 }
 
+function deleteMode() {
+  setLoader(store, { dialog: true, mode: "wait" }, 0);
+  setTimeout(() => {
+    deleteClient();
+  }, 800);
+}
+
 async function deleteClient() {
+  let success = false;
+
   try {
     await removeLinesOfClient(store, props.client.id);
     await removeClient(store, props.client);
-    emit("done", null);
+    setLoader(store, { dialog: true, mode: "success" }, 0);
+    success = true;
   } catch (error) {
     console.log(error);
     setLoader(
@@ -229,7 +239,14 @@ async function deleteClient() {
       { dialog: true, mode: "err", error: t.txt_error_client_del },
       0
     );
-    emit("error", true);
+    success = false;
+  } finally {
+    if (success) {
+      setLoader(store, { dialog: false, mode: "success" }, loaderTime);
+      emit("done", null);
+    } else {
+      emit("error", true);
+    }
   }
 }
 </script>

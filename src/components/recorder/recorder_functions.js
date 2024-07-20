@@ -57,7 +57,7 @@ export async function modifyRecord(store, t, recID, mode) {
       ? {
           id: Number(record.id),
           str: new Date(record.str),
-          stp: new Date("2024-07-21T16:26:12"),
+          stp: new Date("2025-10-23T11:26:12"),
         }
       : {
           id: Number(record.id),
@@ -89,8 +89,11 @@ export async function modifyRecord(store, t, recID, mode) {
         // Mode set
         setRecStatus(store, "pause");
       } else {
-        // Mode stop
-        saveRecord(store);
+        // Mode
+        setLoader(store, { dialog: true, mode: "wait" }, 0);
+        setTimeout(() => {
+          saveRecord(store);
+        }, 800);
       }
     } else {
       setRecStatus(store, "off");
@@ -101,8 +104,6 @@ export async function modifyRecord(store, t, recID, mode) {
 // Save record
 export async function saveRecord(store) {
   const loaderTime = store.state.loaderTime;
-
-  setLoader(store, { dialog: true, mode: "wait" }, 0);
 
   // Get data
   const formInfos = computed(() =>
@@ -162,7 +163,10 @@ function formatRecords(records) {
       const interDates = [];
       let currentDate = new Date(r.str);
       const endDate = new Date(r.stp);
-      while (currentDate < endDate) {
+      while (
+        new Date(currentDate).setHours(0, 0, 0, 0) <
+        new Date(endDate).setHours(0, 0, 0, 0)
+      ) {
         interDates.push(new Date(currentDate));
         currentDate.setDate(currentDate.getDate() + 1);
       }

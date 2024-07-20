@@ -5,12 +5,13 @@ export async function removeLinesOfClient(store, client) {
   // Need ID of client
   const lines = store.state.lines.filter((l) => l.client.id === client);
   if (lines.length > 0) {
-    for (const l of lines) {
-      try {
+    try {
+      for (const l of lines) {
         await removeLine(store, l);
-      } catch (error) {
-        console.log(error);
       }
+    } catch (error) {
+      console.log(error);
+      throw error;
     }
   }
 }

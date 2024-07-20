@@ -31,7 +31,7 @@
       :text="`${t.txt_imb_del_lines_from_month_p1} ${monthName} ${t.txt_imb_del_lines_from_month_p2}`"
       :accept="t.btn_img_continu"
       :cancel="t.btn_img_cancel"
-      @accept="deleteMonth"
+      @accept="deleteMode()"
       @cancel="infoMessage = false"
     ></info_message_box>
   </v-dialog>
@@ -167,16 +167,40 @@ const linesList = computed(() => {
   );
 });
 
-async function deleteMonth() {
-  for (const l of linesList.value) {
-    try {
-      await removeLine(store, l);
-    } catch (error) {
-      console.log(error);
-    }
-  }
+function deleteMode() {
+  setLoader(store, { dialog: true, mode: "wait" }, 0);
+  setTimeout(() => {
+    deleteMonth();
+  }, 800);
+}
 
-  infoMessage.value = false;
+async function deleteMonth() {
+  let success = false;
+
+  try {
+    for (const l of linesList.value) {
+      await removeLine(store, l);
+    }
+    setLoader(store, { dialog: true, mode: "success" }, 0);
+    success = true;
+  } catch (error) {
+    console.log(error);
+    setLoader(
+      store,
+      {
+        dialog: true,
+        mode: "err",
+        error: t.txt_error_delete_line,
+      },
+      0
+    );
+    success = false;
+  } finally {
+    if (success) {
+      setLoader(store, { dialog: false, mode: "success" }, loaderTime);
+    }
+    infoMessage.value = false;
+  }
 }
 
 // INVOICE
