@@ -1,5 +1,6 @@
 <template>
   <div class="btn-bottom-card">
+    <!-- Btn Billed -->
     <v-btn
       width="49%"
       variant="tonal"
@@ -10,6 +11,7 @@
       @click="emitInvoice"
       >{{ t.btn_billed }}</v-btn
     >
+    <!-- Btn Paid -->
     <v-btn
       width="49%"
       variant="tonal"
@@ -47,6 +49,7 @@ const cm = computed(() => store.state.colorMode);
 import { getTranslate } from "@/multilanguage/lang";
 const t = getTranslate();
 
+// Invoice / Billed
 const colorInvoice = computed(() => {
   if (props.billed === "allTrue") {
     return "green";
@@ -55,7 +58,11 @@ const colorInvoice = computed(() => {
   }
   return cm.value === "dark_mode" ? "white" : "gray";
 });
+function emitInvoice() {
+  emit("billed", true);
+}
 
+// Paid
 const colorPaid = computed(() => {
   if (props.paid === "allTrue") {
     return "green";
@@ -64,10 +71,6 @@ const colorPaid = computed(() => {
   }
   return cm.value === "dark_mode" ? "white" : "gray";
 });
-
-function emitInvoice() {
-  emit("billed", true);
-}
 function emitPaid() {
   emit("paid", true);
 }

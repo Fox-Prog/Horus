@@ -5,27 +5,66 @@
         style="position: absolute; right: 0"
         v-bind="activatorProps"
         rounded="lg"
-        size="60"
+        :size="props.size"
         variant="text"
         icon="mdi-dots-vertical"
+        :color="
+          props.mode === 'month'
+            ? cm === 'dark_mode'
+              ? 'var(--txt-light)'
+              : ''
+            : ''
+        "
       ></v-btn>
     </template>
 
+    <!-- Delete btn -->
     <delete_btn
       key="1"
-      size="60"
+      :size="props.size"
       variant="flat"
       @click="emit('delete')"
     ></delete_btn>
-    <set_btn key="2" size="60" @click="emit('setColor')"></set_btn>
+
+    <!-- Color btn -->
+    <v-btn
+      v-if="props.mode === 'client'"
+      key="2"
+      icon="mdi-palette"
+      :size="props.size"
+      rounded="sm"
+      variant="flat"
+      color="blue"
+      density="compact"
+      @click="emit('setColor')"
+    ></v-btn>
+
+    <!-- PDF btn -->
+    <v-btn
+      v-if="props.mode === 'month'"
+      key="2"
+      icon="mdi-file-document-plus-outline"
+      :size="props.size"
+      rounded="sm"
+      variant="flat"
+      color="blue"
+      density="compact"
+      @click="emit('getPDF')"
+    ></v-btn>
   </v-speed-dial>
 </template>
 
 <script setup>
 // Import vue fonctions
-import { defineEmits } from "vue";
-const emit = defineEmits(["delete", "setColor"]);
+import { computed, defineProps, defineEmits } from "vue";
+const props = defineProps(["size", "mode"]);
+const emit = defineEmits(["delete", "setColor", "getPDF"]);
 
+// Import store
+import { useStore } from "vuex";
+const store = useStore();
+const cm = computed(() => store.state.colorMode);
+
+// Import components
 import delete_btn from "@/components/options/delete_btn.vue";
-import set_btn from "@/components/options/color_btn.vue";
 </script>

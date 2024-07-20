@@ -13,15 +13,14 @@
     </h2>
     <v-divider class="mx-3" vertical></v-divider>
     <h3 :class="cm" class="dark-title number-font">{{ totalHours }}</h3>
-
-    <delete_btn
-      style="position: absolute; right: 0"
+    <ddm
       size="40"
-      variant="text"
+      mode="month"
       @mouseenter="lock = true"
       @mouseleave="lock = false"
-      @click="infoMessage = !infoMessage"
-    ></delete_btn>
+      @delete="infoMessage = !infoMessage"
+      @getPDF="generatePDF()"
+    ></ddm>
   </v-btn>
 
   <v-dialog v-model="infoMessage" persistent>
@@ -72,14 +71,18 @@
 // Import vue fonctions
 import { ref, defineProps, computed } from "vue";
 const props = defineProps(["content", "chrg", "clientID", "year"]);
+// Import store
 import { useStore } from "vuex";
 const store = useStore();
+// Import router
+import { useRouter } from "vue-router";
+const router = useRouter();
 // Import components
 import ligne from "@/components/hourly/hourlyLine.vue";
 import recapBoard from "@/components/recapBoard.vue";
-import delete_btn from "@/components/options/delete_btn.vue";
 import info_message_box from "@/components/dialog/info_message_box.vue";
 import invoice_panel from "@/components/options/invoice_panel.vue";
+import ddm from "@/components/options/drop_down_menu.vue";
 // Import js fonctions
 import { addTime, hoursToHdec } from "@/functions/time_functions.js";
 import { averageDays } from "@/functions/recap_functions.js";
@@ -353,5 +356,12 @@ async function goPaid() {
       setLoader(store, { dialog: false, mode: "success" }, loaderTime);
     }
   }
+}
+
+function generatePDF() {
+  store.dispatch("setHourlyData", {
+    props: props.content,
+  });
+  router.push("/pdf");
 }
 </script>

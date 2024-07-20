@@ -11,6 +11,8 @@
     @click="handleDisplay"
     ><h1 class="client-font">{{ props.clientLines[0].name }}</h1>
     <ddm
+      size="60"
+      mode="client"
       @mouseenter="lock = true"
       @mouseleave="lock = false"
       @delete="infoMessage = !infoMessage"

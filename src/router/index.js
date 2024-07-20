@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import homePage from "@/views/homePage.vue";
 import setPage from "@/views/setPage.vue";
 import settingsPage from "@/views/settingsPage.vue";
+import pdfGenerator from "@/views/pdfGenerator.vue";
 import testPage from "@/views/testPage.vue";
 const routes = [
   {
@@ -18,6 +19,11 @@ const routes = [
     path: "/settings",
     name: "settingsPage",
     component: settingsPage,
+  },
+  {
+    path: "/pdf",
+    name: "pdfGenerator",
+    component: pdfGenerator,
   },
   {
     path: "/test",

@@ -36,9 +36,9 @@
           {{ t.btn_restart }}
         </h3></v-btn
       >
-      <v-btn @click="recStatus === 'start' ? setMode(3) : createMode()"
+      <!-- <v-btn @click="recStatus === 'start' ? setMode(3) : createMode()"
         >STOP TEST</v-btn
-      >
+      > -->
       <!-- STOP -->
       <v-btn
         stacked
