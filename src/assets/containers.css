@@ -90,7 +90,7 @@
   }
 }
 
-@media (min-width: 920px) {
+@media (min-width: 1000px) {
   .bottom-nav-space {
     display: none;
   }
@@ -99,7 +99,7 @@
   }
 }
 
-@media (max-width: 920px) {
+@media (max-width: 1000px) {
   .body-first-left-container {
     display: none;
   }

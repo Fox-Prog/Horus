@@ -77,6 +77,23 @@
       :items="lgs"
       @update:model-value="handleLang"
     ></v-select>
+
+    <!-- STATS -->
+    <v-btn
+      class="btn mb-5"
+      :class="cm"
+      prepend-icon="mdi-chart-line"
+      :variant="cm === 'dark_mode' ? 'outlined' : 'flat'"
+      rounded="sm"
+      width="100%"
+      :color="
+        cm === 'dark_mode'
+          ? 'var(--interactive-components-dark)'
+          : 'var(--interactive-components-light)'
+      "
+      @click="router.push('/stats')"
+      >{{ t.btn_statsVue }}</v-btn
+    >
   </div>
 </template>
 

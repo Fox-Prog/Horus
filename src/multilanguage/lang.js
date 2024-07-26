@@ -154,6 +154,9 @@ const languages = [
     btn_break: "Pause",
     btn_restart: "Reprendre",
     btn_stop: "Stop",
+
+    SECTEUR_13: "STATS",
+    btn_statsVue: "Statistiques",
   },
 
   {
@@ -273,5 +276,8 @@ const languages = [
     btn_break: "Break",
     btn_restart: "Restart",
     btn_stop: "Stop",
+
+    SECTEUR_13: "STATS",
+    btn_statsVue: "Statistics",
   },
 ];
