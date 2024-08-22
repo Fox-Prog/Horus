@@ -31,6 +31,33 @@
           @click="mode = mode === 'years' ? 'days' : 'years'"
           ><h2>{{ relativeYear }}</h2></v-btn
         >
+        <!-- Multi select mode -->
+        <div class="multiselect-container">
+          <v-switch
+            hide-details
+            :color="
+              cm === 'dark_mode'
+                ? 'var(--interactive-components-light)'
+                : 'var(--interactive-components-dark)'
+            "
+            v-model="multiSelect"
+          ></v-switch>
+          <v-tooltip
+            v-model="tooltip"
+            :text="multiSelect ? t.txt_tooltip_multi : t.txt_tooltip_single"
+          >
+            <template v-slot:activator="{ props }">
+              <v-btn
+                v-bind="props"
+                class="ml-2"
+                :icon="multiSelect ? 'mdi-dots-hexagon' : 'mdi-circle-small'"
+                variant="text"
+                :ripple="false"
+                @click="toogleTooltip()"
+              ></v-btn>
+            </template>
+          </v-tooltip>
+        </div>
       </div>
     </div>
 
@@ -69,7 +96,7 @@
       <div
         v-for="day in daysInMonth"
         :key="day"
-        :class="classOfDay(day)"
+        :class="['day-' + day, classOfDay(day)]"
         @click="addDate(day)"
       >
         {{ day }}
@@ -135,6 +162,16 @@ const cm = computed(() => store.state.colorMode);
 import { getTranslate } from "@/multilanguage/lang";
 const t = getTranslate();
 
+// Select mode
+const multiSelect = ref(false);
+const tooltip = ref(false);
+function toogleTooltip() {
+  tooltip.value = true;
+  setTimeout(() => {
+    tooltip.value = false;
+  }, 1000);
+}
+
 // OUTPUT
 const selectedDates = ref([]);
 
@@ -152,17 +189,21 @@ function addDate(d) {
   newDate.setDate(d);
   newDate.setHours(0, 0, 0, 0);
 
-  // Check if date exist already
-  const ctrl = selectedDates.value.findIndex(
-    (date) => date.getTime() === newDate.getTime()
-  );
-  if (ctrl !== -1) {
-    const dateToDelete = selectedDates.value.findIndex(
-      (d) => d.getTime() === newDate.getTime()
+  if (multiSelect.value) {
+    // Check if date exist already
+    const ctrl = selectedDates.value.findIndex(
+      (date) => date.getTime() === newDate.getTime()
     );
-    selectedDates.value.splice(dateToDelete, 1);
+    if (ctrl !== -1) {
+      const dateToDelete = selectedDates.value.findIndex(
+        (d) => d.getTime() === newDate.getTime()
+      );
+      selectedDates.value.splice(dateToDelete, 1);
+    } else {
+      selectedDates.value.push(newDate);
+    }
   } else {
-    selectedDates.value.push(newDate);
+    selectedDates.value = [newDate];
   }
 
   // UPDATE DAYS
@@ -200,7 +241,7 @@ function classOfDay(d) {
   ) {
     return "today";
   }
-  return "";
+  return "neutral";
 }
 
 // YEARS
@@ -381,7 +422,6 @@ onMounted(() => {
   flex-direction: column;
   align-items: center;
   text-align: center;
-  margin-bottom: 30px;
   text-shadow: 0.3rem 0.5rem rgba(0, 0, 0, 0, 0.5);
 }
 .date h1 {
@@ -395,6 +435,11 @@ onMounted(() => {
   font-weight: 400;
   text-transform: uppercase;
   letter-spacing: 0.2rem;
+}
+
+.multiselect-container {
+  display: flex;
+  align-items: center;
 }
 
 .weekdays {
@@ -428,7 +473,6 @@ onMounted(() => {
 }
 
 .grid-template div:hover:not(.today, .weekdays, .prev-days, .next-days) {
-  background-color: v-bind(interactive_color);
   border: 0.2rem solid #777;
   cursor: pointer;
 }
@@ -446,6 +490,12 @@ onMounted(() => {
 
 .selected {
   background-color: v-bind(interactive_color);
+  cursor: pointer;
+}
+
+.neutral {
+  background-color: none;
+  border: none;
   cursor: pointer;
 }
 

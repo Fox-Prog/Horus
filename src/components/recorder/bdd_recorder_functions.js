@@ -182,6 +182,25 @@ export function setRecID(store, recID) {
   localStorage.setItem("recID", recID);
 }
 
+// Recorder Value
+export function getRecValue(store) {
+  const recValue = localStorage.getItem("recValue");
+
+  if (!recValue) {
+    localStorage.setItem("recValue", 0);
+    store.dispatch("setRecValue", 0);
+    return 0;
+  }
+
+  store.dispatch("setRecValue", recValue);
+  return recValue;
+}
+
+export function setRecValue(store, recValue) {
+  store.dispatch("setRecValue", recValue);
+  localStorage.setItem("recValue", recValue);
+}
+
 // Clear indexedDB
 export async function clearRecords(store) {
   try {

@@ -50,6 +50,7 @@
             ? [form.Hstr, form.Mstr, form.Hstp, form.Mstp, null]
             : [null, null, null, null]
         "
+        :fl="forms.length"
         @data="setForms"
         @remove="removeForm"
       ></entryHourlyField>
@@ -60,7 +61,7 @@
           width="49%"
           variant="outlined"
           :color="noteField ? 'red' : '#6e56cf'"
-          rounded="lg"
+          rounded="sm"
           :prepend-icon="noteField ? 'mdi-close' : 'mdi-text-box-plus-outline'"
           @click="handleNote()"
           ><h3 class="text-font">{{ t.btn_note }}</h3></v-btn
@@ -70,7 +71,7 @@
           width="49%"
           variant="outlined"
           color="#6e56cf"
-          rounded="lg"
+          rounded="sm"
           prepend-icon="mdi-plus-circle-outline"
           @click="forms.push(newForm(forms))"
           ><h3 class="text-font">{{ t.btn_hourly }}</h3></v-btn

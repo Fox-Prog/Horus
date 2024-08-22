@@ -19,54 +19,43 @@ import { createLines } from "@/functions/create_functions";
 
 // Create record
 export async function createRecord(store, t) {
-  const record = {
-    id: Date.now(),
-    str: new Date(),
-  };
+  return new Promise((resolve, reject) => {
+    const record = {
+      id: Date.now(),
+      str: new Date(),
+    };
 
-  let success = false;
-
-  try {
-    await addRecord(store, record, 1);
-    setRecID(store, record.id);
-    success = true;
-  } catch (error) {
-    console.log(error);
-    setLoader(
-      store,
-      {
-        dialog: true,
-        mode: "err",
-        error: t.txt_error_add_record,
-      },
-      0
-    );
-    success = false;
-  } finally {
-    if (success) {
+    try {
+      addRecord(store, record, 1);
+      setRecID(store, record.id);
       setRecStatus(store, "start");
+      resolve();
+    } catch (error) {
+      console.log(error);
+      setLoader(
+        store,
+        {
+          dialog: true,
+          mode: "err",
+          error: t.txt_error_add_record,
+        },
+        0
+      );
+      reject(error);
     }
-  }
+  });
 }
 
 // Set record
 export async function modifyRecord(store, t, recID, mode) {
   const record = store.state.records.find((r) => r.id === recID);
-  const playload =
-    mode === 3
-      ? {
-          id: Number(record.id),
-          str: new Date(record.str),
-          stp: new Date("2025-10-23T11:26:12"),
-        }
-      : {
-          id: Number(record.id),
-          str: new Date(record.str),
-          stp: new Date(),
-        };
+  const playload = {
+    id: Number(record.id),
+    str: new Date(record.str),
+    stp: new Date(),
+  };
 
   let success = false;
-
   try {
     await setRecord(store, playload);
     success = true;

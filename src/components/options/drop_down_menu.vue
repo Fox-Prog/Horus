@@ -40,7 +40,7 @@
     ></v-btn>
 
     <!-- PDF btn -->
-    <v-btn
+    <!-- <v-btn
       v-if="props.mode === 'month'"
       key="2"
       icon="mdi-file-document-plus-outline"
@@ -50,7 +50,7 @@
       color="blue"
       density="compact"
       @click="emit('getPDF')"
-    ></v-btn>
+    ></v-btn> -->
   </v-speed-dial>
 </template>
 

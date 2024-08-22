@@ -5,7 +5,7 @@ export function minsToHours(sum) {
   const Mtt = sum % 60;
   const sendMtt = Mtt < 10 ? `0${Mtt}` : Mtt;
 
-  return `${sendHtt} : ${sendMtt}`;
+  return `${sendHtt}:${sendMtt}`;
 }
 
 // Convertion heures en décimal

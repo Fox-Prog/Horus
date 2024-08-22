@@ -19,7 +19,7 @@
         variant="text"
         rounded="lg"
         density="compact"
-        @click="id === 1 ? resetData() : removeForm()"
+        @click="fl > 1 ? removeForm() : resetData()"
       ></v-btn>
     </div>
   </v-form>
@@ -29,7 +29,7 @@
 <script setup>
 // Import vue fonctions
 import { ref, computed, defineEmits, defineProps, watch, onMounted } from "vue";
-const props = defineProps(["id", "reset", "data"]);
+const props = defineProps(["id", "reset", "data", "fl"]);
 const emit = defineEmits(["data", "remove"]);
 // Import components
 import field from "@/components/input_field.vue";

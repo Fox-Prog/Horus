@@ -79,7 +79,7 @@
     ></v-select>
 
     <!-- STATS -->
-    <v-btn
+    <!-- <v-btn
       class="btn mb-5"
       :class="cm"
       prepend-icon="mdi-chart-line"
@@ -93,7 +93,7 @@
       "
       @click="router.push('/stats')"
       >{{ t.btn_statsVue }}</v-btn
-    >
+    > -->
   </div>
 </template>
 

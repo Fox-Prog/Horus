@@ -12,6 +12,7 @@ export default createStore({
     records: [],
     recStatus: "off",
     recID: null,
+    recValue: null,
   },
   getters: {},
   mutations: {
@@ -75,6 +76,9 @@ export default createStore({
     setRecID(state, ID) {
       state.recID = ID;
     },
+    setRecValue(state, value) {
+      state.recValue = value;
+    },
   },
   actions: {
     // Lines
@@ -128,6 +132,9 @@ export default createStore({
     },
     setRecID({ commit }, ID) {
       commit("setRecID", ID);
+    },
+    setRecValue({ commit }, Value) {
+      commit("setRecValue", Value);
     },
   },
   modules: {},

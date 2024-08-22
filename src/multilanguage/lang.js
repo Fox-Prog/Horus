@@ -146,6 +146,8 @@ const languages = [
       "Vendredi",
       "Samedi",
     ],
+    txt_tooltip_single: "Sélectionnez une seule date",
+    txt_tooltip_multi: "Sélectionnez plusieurs dates",
 
     SECTEUR_12: "RECORDER",
     btn_tabs_hourly: "Horaires",
@@ -268,6 +270,8 @@ const languages = [
       "Friday",
       "Saturday",
     ],
+    txt_tooltip_single: "Select a single date",
+    txt_tooltip_multi: "Select multiple date",
 
     SECTEUR_12: "RECORDER",
     btn_tabs_hourly: "Hourly",
