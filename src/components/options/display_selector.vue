@@ -16,6 +16,8 @@
         {{ t.tt_display_mode }}
       </h3>
       <v-switch
+        title="display_mode_selector"
+        name="display_mode_selector"
         hide-details
         :color="
           cm === 'dark_mode'

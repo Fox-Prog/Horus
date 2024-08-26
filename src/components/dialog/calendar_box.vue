@@ -204,6 +204,7 @@ function addDate(d) {
     }
   } else {
     selectedDates.value = [newDate];
+    emit("update:modelValue", selectedDates);
   }
 
   // UPDATE DAYS
@@ -512,7 +513,7 @@ onMounted(() => {
 @media (max-width: 550px) {
   .calendar {
     width: 25rem;
-    height: 30rem;
+    height: 35rem;
   }
 }
 </style>

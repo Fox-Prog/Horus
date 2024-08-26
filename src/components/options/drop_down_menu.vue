@@ -2,6 +2,8 @@
   <v-speed-dial location="top center" transition="scale-transition">
     <template v-slot:activator="{ props: activatorProps }">
       <v-btn
+        title="month_options"
+        name="month_options"
         style="position: absolute; right: 0"
         v-bind="activatorProps"
         rounded="lg"

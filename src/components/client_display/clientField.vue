@@ -31,6 +31,8 @@
         @click="(dialog = true), (mode = 2)"
       ></v-btn>
       <v-btn
+        title="add_new_client"
+        name="add_new_client"
         class="btn ms-2"
         size="40px"
         :color="

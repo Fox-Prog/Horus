@@ -125,6 +125,8 @@ const languages = [
     },
     labelMailArea: "Saisissez votre message ici",
     sendMail: "Envoyer",
+    tt_information_panel: "Informations",
+    txt_update_version: "Mise à jour: ",
 
     SECTEUR_9: "CHECK-FIELD",
     requireMsg: "Ce champ est requis",
@@ -249,6 +251,8 @@ const languages = [
     },
     labelMailArea: "Enter your message here",
     sendMail: "Send",
+    tt_information_panel: "Renseignements",
+    txt_update_version: "Update: ",
 
     SECTEUR_9: "CHECK-FIELD",
     requireMsg: "Field is required",

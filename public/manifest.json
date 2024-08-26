@@ -1,0 +1,29 @@
+{
+    "name": "Horus",
+    "background_color": "#1b1525",
+    "theme_color": "#1b1525",
+    "icons": [
+        {
+            "src": "/icons/icon512.png",
+            "type": "image/png",
+            "purpose": "any maskable",
+            "sizes": "512x512"
+        },
+        {
+            "src": "/icons/icon512.webp",
+            "type": "image/webp",
+            "purpose": "any maskable",
+            "sizes": "512x512"
+        },
+        {
+            "src": "/icons/icon192.webp",
+            "type": "image/webp",
+            "purpose": "any maskable",
+            "sizes": "192x192"
+        }
+    ],
+
+    "id": "/?source=pwa",
+    "start_url": "/?source=pwa",
+    "display": "standalone"
+}

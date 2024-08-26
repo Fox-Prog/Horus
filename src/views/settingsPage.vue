@@ -9,7 +9,7 @@
     <big_panel btn_nav="home"></big_panel>
   </div>
 
-  <div class="body-center">
+  <div class="body-center" style="flex-direction: column">
     <!-- Language selector -->
     <div :class="cm" class="settings-card card-home">
       <!-- Email form -->
@@ -104,6 +104,17 @@
             </h2></v-btn
           >
         </v-form>
+      </div>
+    </div>
+    <!-- Informations -->
+    <div :class="cm" class="settings-card card-home mt-8">
+      <h2 :class="cm" class="dark-title mb-2">{{ t.tt_information_panel }}</h2>
+      <div class="info-container">
+        <div class="info-version">
+          <p class="light-title">V1.0</p>
+          <p class="light-title">{{ t.txt_update_version }} 26.08.2024</p>
+        </div>
+        <p class="light-title">Fox_Prog</p>
       </div>
     </div>
   </div>
@@ -248,5 +259,16 @@ window.addEventListener("resize", () => {
   .form-flex-block {
     display: block;
   }
+}
+
+.info-container {
+  width: 100%;
+  text-align: left;
+}
+
+.info-version {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
 }
 </style>

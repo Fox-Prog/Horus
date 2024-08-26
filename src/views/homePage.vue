@@ -1,6 +1,12 @@
 <template>
   <div class="header-container">
     <h1 :class="cm" class="big-title-font dark-title">Horus</h1>
+    <p
+      class="light-title big-title-font"
+      style="font-size: 1rem; letter-spacing: 8px"
+    >
+      beta
+    </p>
   </div>
 
   <div class="body-first-left-container">

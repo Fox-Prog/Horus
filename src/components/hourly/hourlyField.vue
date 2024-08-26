@@ -13,6 +13,8 @@
         <field class="selector" v-model="Mstp" :contents="MM2"></field>
       </div>
       <v-btn
+        title="delete_hourly"
+        name="delete_hourly"
         id="deleteForm"
         icon="mdi mdi-close"
         color="red"
