@@ -40,3 +40,8 @@ export function durationTime(Hstr, Mstr, Hstp, Mstp) {
 
   return `${hours}:${minutes}`;
 }
+
+// Formating hours / minutes
+export function formatHM(HM) {
+  return String(HM).length < 2 ? `0${HM}` : HM;
+}

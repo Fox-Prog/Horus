@@ -99,18 +99,18 @@ const cm = computed(() => store.state.colorMode);
 // Import components
 import clientField from "@/components/client_display/clientField.vue";
 // Import js fonctions
-import { addTime, durationTime } from "@/functions/time_functions";
 import {
   createRecord,
   modifyRecord,
   saveRecord,
+  updateChrono,
+  resetRecord,
 } from "@/components/recorder/recorder_functions.js";
 import { getTranslate } from "@/multilanguage/lang";
 const t = getTranslate();
 
 const recStatus = computed(() => store.state.recStatus);
 const recID = computed(() => parseInt(store.state.recID));
-// const recValue = computed(() => store.state.recValue);
 const showChrono = ref(recStatus.value !== "off" ? true : false);
 
 // Loaders
@@ -120,6 +120,7 @@ const loaderStop = ref(false);
 
 // Create record
 function createMode() {
+  chronoActive.value = true;
   loaderPlay.value = true;
   loaderPause.value = true;
   setTimeout(async () => {
@@ -131,6 +132,7 @@ function createMode() {
 }
 // Set record
 function setMode(mode) {
+  chronoActive.value = false;
   localStorage.setItem("chrono", chrono.value);
   loaderPause.value = true;
   setTimeout(() => {
@@ -140,6 +142,7 @@ function setMode(mode) {
 }
 // Stop record
 function stopMode(mode) {
+  chronoActive.value = false;
   localStorage.setItem("chrono", null);
   showChrono.value = false;
   loaderStop.value = true;
@@ -179,84 +182,30 @@ function handleNote() {
 }
 
 // Chrono
+const chronoActive = ref(recStatus.value === "start" ? true : false);
 const chrono = ref("00:00:00");
 
-function updateChrono() {
-  const savedChrono = localStorage.getItem("chrono");
-
-  if (recStatus.value === "start") {
-    try {
-      const str = new Date(
-        store.state.records.find((r) => r.id === recID.value).str
-      );
-      const now = new Date();
-
-      const dtt = durationTime(
-        String(str.getHours()).length < 2
-          ? `0${str.getHours()}`
-          : str.getHours(),
-        String(str.getMinutes()).length < 2
-          ? `0${str.getMinutes()}`
-          : str.getMinutes(),
-        String(now.getHours()).length < 2
-          ? `0${now.getHours()}`
-          : now.getHours(),
-        String(now.getMinutes()).length < 2
-          ? `0${now.getMinutes()}`
-          : now.getMinutes()
-      );
-
-      const hh =
-        dtt.split(":")[0].length < 2
-          ? `0${dtt.split(":")[0]}`
-          : dtt.split(":")[0];
-      const mm =
-        dtt.split(":")[1].length < 2
-          ? `0${dtt.split(":")[1]}`
-          : dtt.split(":")[1];
-      const ss =
-        String(now.getSeconds()).length < 2
-          ? `0${now.getSeconds()}`
-          : now.getSeconds();
-
-      if (savedChrono !== "null") {
-        const addChrono = addTime([
-          `${savedChrono.split(":")[0]}:${savedChrono.split(":")[1]}`,
-          `${hh}:${mm}`,
-        ]);
-        chrono.value = `${addChrono.split(":")[0]}:${
-          addChrono.split(":")[1]
-        }:${ss}`;
-      } else {
-        chrono.value = `${hh}:${mm}:${ss}`;
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  } else {
-    if (savedChrono !== "null") {
-      chrono.value = savedChrono;
-    } else {
-      chrono.value = "00:00:00";
-    }
-  }
-}
-
 setInterval(() => {
-  updateChrono();
+  if (chronoActive.value === true) {
+    chrono.value = updateChrono(store);
+  }
 }, 1000);
 
 // Local storage
 function updateFormInfo() {
-  const noteData = note.value;
-  localStorage.setItem(
-    "recordFormInfos",
-    JSON.stringify({
-      clientName: clientSelected.value ? clientSelected.value.name : null,
-      noteField: noteField.value,
-      note: noteData,
-    })
-  );
+  if (clientSelected.value !== null) {
+    const noteData = note.value;
+    localStorage.setItem(
+      "recordFormInfos",
+      JSON.stringify({
+        clientName: clientSelected.value ? clientSelected.value.name : null,
+        noteField: noteField.value,
+        note: noteData,
+      })
+    );
+  } else {
+    resetRecord(store);
+  }
 }
 
 watch(
@@ -264,6 +213,7 @@ watch(
   () => {
     if (recStatus.value === "off") {
       resetNote();
+      showChrono.value = false;
     }
   }
 );
@@ -275,7 +225,7 @@ function resetNote() {
 }
 
 onMounted(() => {
-  updateChrono();
+  chrono.value = updateChrono(store);
 });
 </script>
 
