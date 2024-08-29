@@ -41,6 +41,21 @@
     }
   ],
 
+  "screenshots": [
+    {
+      "src": "/screenshots/srcn_pc.webp",
+      "sizes": "1852x1187",
+      "type": "image/webp",
+      "form_factor": "wide"
+    },
+    {
+      "src": "/screenshots/srcn_tel.webp",
+      "sizes": "377x817",
+      "type": "image/webp",
+      "form_factor": "narrow"
+    }
+  ],
+
   "id": "/?source=pwa",
   "start_url": "/?source=pwa",
   "display": "standalone"

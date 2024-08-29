@@ -19,14 +19,17 @@
         {{ h.Hstr }}h{{ h.Mstr }} - {{ h.Hstp }}h{{ h.Mstp }}
       </h3>
     </div>
+    <!-- <div class="cm" id="multi-line-liseray"></div> -->
   </div>
   <v-expand-transition>
-    <div id="expand-lines-container" v-if="display">
+    <div class="cm" id="expand-lines-container" v-if="display">
       <ligne
         v-for="line in props.line.realLines"
         :key="line.id"
         :line="line"
       ></ligne>
+      <div id="liseray-r"></div>
+      <div id="liseray-l"></div>
     </div>
   </v-expand-transition>
 </template>

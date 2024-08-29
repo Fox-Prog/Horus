@@ -15,6 +15,8 @@
 
   --box-shadow-color-dark: rgba(105, 88, 173, 0.095);
 
+  --hover-dark: #e2ddfe24;
+
   /* Light mode */
   --bg-light-1: #fdfcfe;
   --bg-light-2: #faf8ff;
@@ -31,11 +33,13 @@
 
   --box-shadow-color-light: rgba(105, 88, 173, 0.522);
 
+  --hover-light: #6550b92c;
+
   /* Common */
   --red-caution: #e5484d;
-  --green-btn: #388E3C;
-  --yellow-btn: #FBC02D;
-  --red-btn: #D32F2F;
+  --green-btn: #388e3c;
+  --yellow-btn: #fbc02d;
+  --red-btn: #d32f2f;
 }
 
 .dark_mode {
@@ -53,6 +57,8 @@
   --divider-color: var(--divider-dark);
 
   --box-shadow-color: var(--box-shadow-color-dark);
+
+  --hover-color: var(--hover-dark);
 }
 .light_mode {
   --bg-color-1: var(--bg-light-1);
@@ -69,4 +75,6 @@
   --divider-color: var(--divider-light);
 
   --box-shadow-color: var(--box-shadow-color-light);
+
+  --hover-color: var(--hover-light);
 }

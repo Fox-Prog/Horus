@@ -69,6 +69,18 @@
         <clientCard :clientLines="clientLines"></clientCard>
       </div>
     </div>
+
+    <div class="empty-img-container" v-if="savedLine.length === 0">
+      <h1 class="dark-title client-font">Bienvenue</h1>
+      <h3 class="light-title text-font">
+        Cette application vous permet de gérer vos heures de travail
+      </h3>
+      <h3 class="light-title text-font">
+        Elle est téléchargeable sur n'importe quel appareil depuis votre
+        navigateur
+      </h3>
+      <img src="/icons/icon512.png" alt="no data" />
+    </div>
   </div>
 
   <!-- Compact panel -->
@@ -198,5 +210,25 @@ watch(
   display: flex;
   flex-direction: column;
   justify-content: center;
+}
+
+.empty-img-container {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+}
+
+.empty-img-container img {
+  width: 200px;
+  height: 200px;
+}
+
+@media (min-width: 650px) {
+  .empty-img-container img {
+    width: 400px;
+    height: 400px;
+  }
 }
 </style>
