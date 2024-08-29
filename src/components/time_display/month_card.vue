@@ -54,13 +54,13 @@
         :ca="sumCA(listCA)"
         :bnf="sumBNF(listBNF)"
       ></recapBoard>
-      <ligne
-        v-for="line in props.content
-          .slice(1)
-          .sort((a, b) => (a.date > b.date ? 1 : b.date > a.date ? -1 : 0))"
+      <dispatcher
+        v-for="line in linesOrganized.sort((a, b) =>
+          a.date > b.date ? 1 : b.date > a.date ? -1 : 0
+        )"
         :key="line.id"
         :line="line"
-      ></ligne>
+      ></dispatcher>
     </div>
   </v-expand-transition>
 
@@ -78,7 +78,7 @@ const store = useStore();
 import { useRouter } from "vue-router";
 const router = useRouter();
 // Import components
-import ligne from "@/components/hourly/hourlyLine.vue";
+import dispatcher from "@/components/hourly/hourlyDispatch.vue";
 import recapBoard from "@/components/recapBoard.vue";
 import info_message_box from "@/components/dialog/info_message_box.vue";
 import invoice_panel from "@/components/options/invoice_panel.vue";
@@ -91,6 +91,66 @@ import { sumCA, sumBNF } from "@/functions/money_functions.js";
 import { setLoader } from "@/functions/dialog_functions";
 import { getTranslate } from "@/multilanguage/lang";
 const t = getTranslate();
+
+// Reorganize lines
+const linesOrganized = computed(() => {
+  const lines = [];
+  const dates = props.content.slice(1).map((l) => new Date(l.date).getDate());
+  const repeat = dates.filter(
+    (item, index, arr) =>
+      arr.indexOf(item) !== index && arr.lastIndexOf(item) === index
+  );
+
+  // Extract all unique date
+  for (let l of props.content.slice(1)) {
+    if (!repeat.includes(new Date(l.date).getDate())) {
+      lines.push(l);
+    }
+  }
+
+  // Traitement of multidates
+  for (let d of repeat) {
+    lines.push(
+      reorganizeLines(
+        props.content.slice(1).filter((l) => new Date(l.date).getDate() === d)
+      )
+    );
+  }
+  return lines.sort((a, b) => {
+    const A = new Date(a.date).getDate();
+    const B = new Date(b.date).getDate();
+    return A - B;
+  });
+});
+
+function reorganizeLines(lines) {
+  let newHourly = [];
+  for (let l of lines) {
+    for (let h of l.hourly) {
+      newHourly.push({
+        id: Date.now(),
+        Hstr: h.Hstr,
+        Mstr: h.Mstr,
+        Hstp: h.Hstp,
+        Mstp: h.Mstp,
+      });
+    }
+  }
+  newHourly.sort((a, b) => {
+    const A = parseInt(a.Hstr, 10);
+    const B = parseInt(b.Hstr, 10);
+    return A - B;
+  });
+
+  return {
+    id: Date.now(),
+    type: "multi",
+    date: lines[0].date,
+    hourly: newHourly,
+    dtt: addTime(lines.map((l) => l.dtt)),
+    realLines: lines,
+  };
+}
 
 // Color Mode
 const cm = computed(() => store.state.colorMode);

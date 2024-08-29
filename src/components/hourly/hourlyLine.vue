@@ -1,6 +1,6 @@
 <template>
   <div
-    id="line"
+    class="line"
     @mouseover="touch ? pass : (setBtn = true)"
     @mouseleave="touch ? pass : (setBtn = false)"
     @click="touch ? showTouchBtn() : pass"
@@ -59,7 +59,6 @@
       </h3>
     </div>
   </div>
-  <v-divider></v-divider>
 </template>
 
 <script setup>
@@ -134,33 +133,5 @@ async function deleteLine() {
 </script>
 
 <style>
-#line {
-  position: relative;
-  display: flex;
-  margin-bottom: 10px;
-}
-#h3-container {
-  display: flex;
-  flex-direction: column;
-  width: 150px;
-}
-#day {
-  display: flex;
-}
-#total-hour-line {
-  display: flex;
-  flex-direction: column;
-  margin-right: 10px;
-  padding: 0px 5px 0px 5px;
-  border-radius: 3px;
-  background-color: var(--bg-color-4);
-  align-items: center;
-  min-width: 130px;
-}
-#set-btn-container {
-  position: absolute;
-  display: flex;
-  width: 100%;
-  height: 100%;
-}
+@import "hourlyStyle.css";
 </style>

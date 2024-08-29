@@ -2,6 +2,7 @@
 import { addLine, removeLine } from "@/functions/bdd_lines_functions.js";
 import { addTime } from "@/functions/time_functions.js";
 import { calcCA, calcBNF } from "@/functions/money_functions";
+import { computed } from "vue";
 
 // Create lexport async function createLines(
 
@@ -42,14 +43,27 @@ export async function createLines(
     for (let date of dates) {
       let line;
       let join = false;
-      const exLine = store.state.lines.find(
-        (l) =>
-          new Date(l.date).setHours(0, 0, 0, 0) ===
-          new Date(date).setHours(0, 0, 0, 0)
-      );
 
-      if (exLine && mode === 1) {
-        const newHourly = exLine.hourly
+      const exLine = computed(() => {
+        const sameDate = store.state.lines.find(
+          (l) =>
+            new Date(l.date).setHours(0, 0, 0, 0) ===
+            new Date(date).setHours(0, 0, 0, 0)
+        );
+
+        if (sameDate) {
+          if (sameDate.client.id === data.client.id) {
+            return sameDate;
+          } else {
+            return undefined;
+          }
+        } else {
+          return undefined;
+        }
+      });
+
+      if (exLine.value && mode === 1) {
+        const newHourly = exLine.value.hourly
           .map((h) => {
             return {
               id: Date.now(),
@@ -70,16 +84,18 @@ export async function createLines(
           id: Date.now(),
           date: date,
           hourly: newHourly,
-          dtt: addTime([exLine.dtt, dtt]),
-          note: exLine.note ? `${exLine.note} / ${data.note}` : data.note,
+          dtt: addTime([exLine.value.dtt, dtt]),
+          note: exLine.value.note
+            ? `${exLine.value.note} / ${data.note}`
+            : data.note,
           client: {
             id: data.client.id,
             name: data.client.name,
             color: data.client.color,
             th: data.client.th,
             chrg: data.client.chrg,
-            ca: exLine.client.ca + ca,
-            bnf: exLine.client.bnf + bnf,
+            ca: exLine.value.client.ca + ca,
+            bnf: exLine.value.client.bnf + bnf,
             billed: false,
             paid: false,
             dop: null,
@@ -117,7 +133,7 @@ export async function createLines(
 
       if (join) {
         try {
-          await removeLine(store, exLine);
+          await removeLine(store, exLine.value);
         } catch (error) {
           console.log(error);
           throw error;

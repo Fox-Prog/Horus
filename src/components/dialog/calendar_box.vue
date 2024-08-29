@@ -204,7 +204,7 @@ function addDate(d) {
     }
   } else {
     selectedDates.value = [newDate];
-    emit("update:modelValue", selectedDates);
+    emit("update:modelValue", selectedDates.value);
   }
 
   // UPDATE DAYS
