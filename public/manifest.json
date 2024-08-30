@@ -43,14 +43,26 @@
 
   "screenshots": [
     {
-      "src": "/screenshots/srcn_pc.webp",
-      "sizes": "1852x1187",
+      "src": "/screenshots/srcn_pc_1.webp",
+      "sizes": "1852x1050",
       "type": "image/webp",
       "form_factor": "wide"
     },
     {
-      "src": "/screenshots/srcn_tel.webp",
-      "sizes": "377x817",
+      "src": "/screenshots/srcn_pc_2.webp",
+      "sizes": "1852x1050",
+      "type": "image/webp",
+      "form_factor": "wide"
+    },
+    {
+      "src": "/screenshots/srcn_sm_1.webp",
+      "sizes": "372x812",
+      "type": "image/webp",
+      "form_factor": "narrow"
+    },
+    {
+      "src": "/screenshots/srcn_sm_2.webp",
+      "sizes": "372x812",
       "type": "image/webp",
       "form_factor": "narrow"
     }

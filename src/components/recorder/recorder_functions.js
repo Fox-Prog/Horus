@@ -322,7 +322,7 @@ export function updateChrono(store) {
         store.state.records.find((r) => r.id === recID.value).str
       );
       const now = new Date();
-      // const now = new Date(new Date().setDate(28));
+      // const now = new Date(new Date().setHours(19, 50, 2, 0));
       let dtt;
 
       if (str.getDate() === now.getDate()) {
