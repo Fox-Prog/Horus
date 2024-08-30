@@ -25,6 +25,16 @@
   max-width: 100%;
 }
 
+.settings-card {
+  width: 75%;
+}
+
+@media (max-width: 750px) {
+  .settings-card {
+    width: 100%;
+  }
+}
+
 /* __________ FORM __________ */
 
 .window-form {

@@ -70,17 +70,7 @@
       </div>
     </div>
 
-    <div class="empty-img-container" v-if="savedLine.length === 0">
-      <h1 class="dark-title client-font">Bienvenue</h1>
-      <h3 class="light-title text-font">
-        Cette application vous permet de gérer vos heures de travail
-      </h3>
-      <h3 class="light-title text-font">
-        Elle est téléchargeable sur n'importe quel appareil depuis votre
-        navigateur
-      </h3>
-      <img src="/icons/icon512.png" alt="no data" />
-    </div>
+    <welcome_card v-if="savedLine.length === 0"></welcome_card>
   </div>
 
   <!-- Compact panel -->
@@ -119,6 +109,7 @@ import clientCard from "@/components/client_display/client_card.vue";
 import loader_box from "@/components/dialog/loader_box.vue";
 import big_panel from "@/components/control_panel/big_panel.vue";
 import compact_panel from "@/components/control_panel/compact_panel.vue";
+import welcome_card from "@/components/dialog/welcome_card.vue";
 // Import js fonctions
 import { yearFocus, clientFocus } from "@/functions/sort_functions.js";
 import { setLoader } from "@/functions/dialog_functions";
@@ -210,25 +201,5 @@ watch(
   display: flex;
   flex-direction: column;
   justify-content: center;
-}
-
-.empty-img-container {
-  display: flex;
-  flex-direction: column;
-  text-align: center;
-  align-items: center;
-  justify-content: center;
-}
-
-.empty-img-container img {
-  width: 200px;
-  height: 200px;
-}
-
-@media (min-width: 650px) {
-  .empty-img-container img {
-    width: 400px;
-    height: 400px;
-  }
 }
 </style>

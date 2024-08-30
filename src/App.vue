@@ -49,6 +49,9 @@ function initIndexedDB() {
 
       const recordsTable = db.createObjectStore("records", { keyPath: "id" });
       recordsTable.createIndex("records", ["records"], { unique: false });
+
+      const workerTable = db.createObjectStore("worker", { keyPath: "id" });
+      workerTable.createIndex("worker", ["worker"], { unique: false });
     };
   } catch (err) {
     console.error("Error with IndexedDB: ", err);

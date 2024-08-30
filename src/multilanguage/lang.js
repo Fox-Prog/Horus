@@ -127,6 +127,18 @@ const languages = [
     sendMail: "Envoyer",
     tt_information_panel: "Informations",
     txt_update_version: "Mise à jour: ",
+    tt_pts_1: "Stockage des données",
+    txt_pts_1:
+      "Vos données sont stockées localement dans une base de données du navigateur. Cela signifie qu'en cas de réinstallation ou de suppression des données du navigateur, toutes les informations de l'application seront perdues.",
+    tt_pts_2: "Enregistrement en temps réel",
+    txt_pts_2:
+      "Lorsque vous utilisez l'enregistreur en temps réel, vous pouvez fermer l'application sans risque. L'enregistrement se poursuivra en arrière-plan et les données seront sauvegardées.",
+    tt_pts_3: "Fonctionnalités à venir",
+    txt_pts_3:
+      "De nouvelles fonctionnalités sont en cours de développement, comme la possibilité de générer des fichiers PDF de vos heures de travail ou même de créer des factures.",
+    tt_pts_4: "Contact & Retour d'information",
+    txt_pts_4:
+      "Si vous avez des suggestions d'amélioration ou rencontrez un problème, n'hésitez pas à me contacter via le formulaire disponible ici.",
 
     SECTEUR_9: "CHECK-FIELD",
     requireMsg: "Ce champ est requis",
@@ -161,6 +173,15 @@ const languages = [
 
     SECTEUR_13: "STATS",
     btn_statsVue: "Statistiques",
+
+    SECTEUR_14: "WELCOME",
+    tt_welcome: "Bienvenue",
+    txt_welcome_1:
+      "Cette application est conçue pour vous aider à gérer et comptabiliser facilement vos heures de travail, que vous soyez sur ordinateur, tablette ou smartphone.",
+    txt_welcome_2: " Notez qu'il s'agit d'une version bêta.",
+    txt_welcome_3:
+      " Dans le menu Paramètres, vous trouverez un formulaire de contact ainsi que des informations détaillées sur l'utilisation de l'application.",
+    txt_welcome_4: "Bonne utilisation !",
   },
 
   {
@@ -253,6 +274,18 @@ const languages = [
     sendMail: "Send",
     tt_information_panel: "Renseignements",
     txt_update_version: "Update: ",
+    tt_pts_1: "Data Storage",
+    txt_pts_1:
+      "Your data is stored locally in the browser's database. This means that if the browser's data is cleared or the app is reinstalled, all of the app's data will be lost.",
+    tt_pts_2: "Real-Time Recording",
+    txt_pts_2:
+      "When using the real-time recorder, you can safely close the app. The recording will continue in the background, and your data will be saved.",
+    tt_pts_3: "Upcoming Features",
+    txt_pts_3:
+      "New features are in development, such as the ability to generate PDF files of your working hours or even create invoices.",
+    tt_pts_4: "Contact & Feedback",
+    txt_pts_4:
+      "If you have any suggestions for improvement or encounter any issues, please feel free to contact me through the form available here.",
 
     SECTEUR_9: "CHECK-FIELD",
     requireMsg: "Field is required",
@@ -287,5 +320,14 @@ const languages = [
 
     SECTEUR_13: "STATS",
     btn_statsVue: "Statistics",
+
+    SECTEUR_14: "WELCOME",
+    tt_welcome: "Welcome",
+    txt_welcome_1:
+      "This app is designed to help you easily manage and track your working hours, whether you're on a computer, tablet, or smartphone.",
+    txt_welcome_2: "Please note that this is a beta version.",
+    txt_welcome_3:
+      "In the Settings menu, you'll find a contact form as well as detailed information on how to use the app.",
+    txt_welcome_4: "Enjoy using the app!",
   },
 ];

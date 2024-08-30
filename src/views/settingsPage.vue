@@ -107,16 +107,7 @@
       </div>
     </div>
     <!-- Informations -->
-    <div :class="cm" class="settings-card card-home mt-8">
-      <h2 :class="cm" class="dark-title mb-2">{{ t.tt_information_panel }}</h2>
-      <div class="info-container">
-        <div class="info-version">
-          <p class="light-title">V1.0</p>
-          <p class="light-title">{{ t.txt_update_version }} 26.08.2024</p>
-        </div>
-        <p class="light-title">Fox_Prog</p>
-      </div>
-    </div>
+    <information_panel></information_panel>
   </div>
 
   <!-- Compact panel -->
@@ -142,6 +133,7 @@ const store = useStore();
 import loader_box from "@/components/dialog/loader_box.vue";
 import big_panel from "@/components/control_panel/big_panel.vue";
 import compact_panel from "@/components/control_panel/compact_panel.vue";
+import information_panel from "@/components/dialog/information_card.vue";
 // Import js fonctions
 import { setLoader } from "@/functions/dialog_functions";
 import { getTranslate } from "@/multilanguage/lang.js";
@@ -244,31 +236,13 @@ window.addEventListener("resize", () => {
 </script>
 
 <style>
-.settings-card {
-  width: 75%;
-}
-
 .form-flex-block {
   display: flex;
 }
 
 @media (max-width: 750px) {
-  .settings-card {
-    width: 100%;
-  }
   .form-flex-block {
     display: block;
   }
-}
-
-.info-container {
-  width: 100%;
-  text-align: left;
-}
-
-.info-version {
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
 }
 </style>
