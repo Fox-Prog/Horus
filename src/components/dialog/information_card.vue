@@ -30,8 +30,8 @@
 
     <div class="info-container">
       <div class="info-version">
-        <p class="light-title">V1.2</p>
-        <p class="light-title">{{ t.txt_update_version }} 03.02.2025</p>
+        <p class="light-title">V1.3</p>
+        <p class="light-title">{{ t.txt_update_version }} 03.10.2025</p>
       </div>
       <p class="light-title mt-5">Fox_Prog</p>
     </div>
