@@ -30,7 +30,7 @@ const t = getTranslate();
   text-align: center;
   align-items: center;
   justify-content: center;
-  background-color: var(--bg-dark-2);
+  background-color: rgb(44, 36, 57);
   border-radius: 5px;
   box-shadow: 0px 0px 20px 0px var(--box-shadow-color);
   padding: 20px;

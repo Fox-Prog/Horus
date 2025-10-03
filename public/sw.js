@@ -1,4 +1,4 @@
-const prefix = "V1";
+const prefix = "V2";
 const cache_files = [
   "/index.html",
   "/manifest.json",

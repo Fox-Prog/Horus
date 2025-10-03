@@ -123,6 +123,10 @@ const cm = computed(() => store.state.colorMode);
 
 // Import components
 import info_message_box from "@/components/dialog/info_message_box.vue";
+import {
+  clearRecords,
+  setRecStatus,
+} from "@/components/recorder/bdd_recorder_functions";
 const infoMessage = ref(false);
 
 // V-MODEL
@@ -140,7 +144,7 @@ function checkForm() {
   if (
     clientName.value &&
     unicName(clientName.value) === true &&
-    th.value > 0 &&
+    th.value >= 0 &&
     regex.test(chrg.value)
   ) {
     formDone.value = true;
@@ -228,9 +232,17 @@ async function deleteClient() {
   let success = false;
 
   try {
+    setLoader(store, { dialog: true, mode: "success" }, 0);
+    const recStatus = store.state.recStatus;
+    if (recStatus !== "off") {
+      const recInfos = JSON.parse(localStorage.getItem("recordFormInfos"));
+      if (recInfos.clientName === props.client.name) {
+        await clearRecords(store);
+        setRecStatus(store, "off");
+      }
+    }
     await removeLinesOfClient(store, props.client.id);
     await removeClient(store, props.client);
-    setLoader(store, { dialog: true, mode: "success" }, 0);
     success = true;
   } catch (error) {
     console.log(error);
