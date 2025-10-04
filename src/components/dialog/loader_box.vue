@@ -23,13 +23,13 @@
       height="30px"
       block
       @click="handleErrorBtn"
-      ><h4 class="light-title">OK</h4></v-btn
+      ><span class="light-title">OK</span></v-btn
     >
   </div>
 </template>
 
 <script setup>
-import { computed, defineProps, defineEmits } from "vue";
+import { computed } from "vue";
 const props = defineProps(["mode", "error"]);
 const emit = defineEmits(["errorChecked"]);
 // Import store

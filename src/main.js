@@ -1,7 +1,8 @@
+console.log('main.js loaded')
 import { createApp } from "vue";
 import App from "./App.vue";
-import store from "./store";
 import router from "./router";
+import store from "./store";
 
 import "vuetify/styles";
 import { createVuetify } from "vuetify";
@@ -14,3 +15,4 @@ const vuetify = createVuetify({
 });
 
 createApp(App).use(router).use(store).use(vuetify).mount("#app");
+

@@ -60,7 +60,7 @@
 
 <script setup>
 // Import vue fonctions
-import { ref, defineEmits, watch, computed, defineProps } from "vue";
+import { ref, watch, computed } from "vue";
 const props = defineProps({
   modelValue: {
     type: Object,

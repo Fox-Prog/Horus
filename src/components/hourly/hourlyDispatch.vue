@@ -8,7 +8,6 @@
 
 <script setup>
 // Import vue fonctions
-import { defineProps } from "vue";
 const props = defineProps(["line"]);
 // Import components
 import ligne from "@/components/hourly/hourlyLine.vue";

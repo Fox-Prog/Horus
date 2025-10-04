@@ -18,7 +18,7 @@
 
 <script setup>
 // Import vue fonctions
-import { ref, computed, defineProps, watch } from "vue";
+import { ref, computed, watch } from "vue";
 const props = defineProps(["contents"]);
 // Import store
 import { useStore } from "vuex";

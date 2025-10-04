@@ -73,7 +73,7 @@
 
 <script setup>
 // Import vue fonctions
-import { ref, defineProps, computed } from "vue";
+import { ref, computed } from "vue";
 const props = defineProps(["clientLines"]);
 // Import store
 import { useStore } from "vuex";

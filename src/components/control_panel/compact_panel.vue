@@ -68,7 +68,7 @@
 
 <script setup>
 // Import vue fonctions
-import { computed, defineProps } from "vue";
+import { computed } from "vue";
 const props = defineProps(["btn_nav"]);
 // Import store
 import { useStore } from "vuex";

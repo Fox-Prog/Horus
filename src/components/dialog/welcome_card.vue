@@ -13,7 +13,7 @@
     <h3 class="text-font">
       {{ t.txt_welcome_4 }}
     </h3>
-    <img src="../../../public/icons/icon512.png" alt="logo" />
+    <img src="/icons/icon512.png" alt="logo" />
   </div>
 </template>
 

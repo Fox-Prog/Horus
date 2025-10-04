@@ -9,15 +9,15 @@
       ></v-divider>
       <h3 :class="cm" class="text-font title-flex dark-title">
         {{ t.lb_total_hours }}
-        <h4 :class="cm" class="number-font light-title ms-3">
+        <span :class="cm" class="number-font light-title ms-3">
           {{ props.tth }}
-        </h4>
+        </span>
       </h3>
       <h3 :class="cm" class="text-font title-flex dark-title">
         {{ t.lb_day_avg }}
-        <h4 :class="cm" class="number-font light-title ms-3">
+        <span :class="cm" class="number-font light-title ms-3">
           {{ props.avgDays }}
-        </h4>
+        </span>
       </h3>
       <h3
         v-if="props.jFrame"
@@ -25,13 +25,13 @@
         class="text-font title-flex dark-title"
       >
         {{ t.lb_day_max }}
-        <h4 :class="cm" class="number-font light-title ms-3">
+        <span :class="cm" class="number-font light-title ms-3">
           {{ `${props.jFrame.dttMax.replace(":", "h")}` }}
-        </h4>
+        </span>
         <div style="width: 5px"></div>
-        <h4 :class="cm" class="number-font dark-title">
+        <span :class="cm" class="number-font dark-title">
           {{ ` - le ${props.jFrame.dayMax.getDate()}` }}
-        </h4>
+        </span>
       </h3>
       <h3
         v-if="props.jFrame"
@@ -39,13 +39,13 @@
         class="text-font title-flex dark-title"
       >
         {{ t.lb_day_min }}
-        <h4 :class="cm" class="number-font light-title ms-3">
+        <span :class="cm" class="number-font light-title ms-3">
           {{ `${props.jFrame.dttMin.replace(":", "h")}` }}
-        </h4>
+        </span>
         <div style="width: 5px"></div>
-        <h4 :class="cm" class="number-font dark-title">
+        <span :class="cm" class="number-font dark-title">
           {{ ` - le ${props.jFrame.dayMin.getDate()}` }}
-        </h4>
+        </span>
       </h3>
     </div>
     <v-divider
@@ -63,27 +63,27 @@
       ></v-divider>
       <h3 :class="cm" class="text-font title-flex dark-title">
         {{ t.lb_ca }}
-        <h4 :class="cm" class="number-font light-title ms-1">
+        <span :class="cm" class="number-font light-title ms-1">
           {{ props.ca.toFixed(2).replace(".", ",") }} €
-        </h4>
+        </span>
       </h3>
       <h3 v-if="props.th" :class="cm" class="text-font title-flex dark-title">
         {{ t.lb_th_dot }}
-        <h4 :class="cm" class="number-font light-title ms-1">
+        <span :class="cm" class="number-font light-title ms-1">
           {{ props.th }} €
-        </h4>
+        </span>
       </h3>
       <h3 v-if="props.chrg" :class="cm" class="text-font title-flex dark-title">
         {{ t.lb_chrg_dot }}
-        <h4 :class="cm" class="number-font light-title ms-1">
+        <span :class="cm" class="number-font light-title ms-1">
           {{ props.chrg }} %
-        </h4>
+        </span>
       </h3>
       <h3 :class="cm" class="text-font title-flex dark-title">
         {{ t.lb_bnf }}
-        <h4 :class="cm" class="number-font light-title ms-1">
+        <span :class="cm" class="number-font light-title ms-1">
           {{ props.bnf.toFixed(2).replace(".", ",") }} €
-        </h4>
+        </span>
       </h3>
     </div>
   </div>
@@ -91,7 +91,7 @@
 
 <script setup>
 // Import vue fonctions
-import { computed, defineProps } from "vue";
+import { computed } from "vue";
 const props = defineProps([
   "tth",
   "avgDays",

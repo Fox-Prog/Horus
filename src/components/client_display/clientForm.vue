@@ -103,7 +103,7 @@
 
 <script setup>
 // Import vue fonctions
-import { ref, computed, defineProps, defineEmits, watch, onMounted } from "vue";
+import { ref, computed, watch, onMounted } from "vue";
 const props = defineProps(["mode", "client"]);
 const emit = defineEmits(["done", "error"]);
 // Import store

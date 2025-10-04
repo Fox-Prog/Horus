@@ -6,7 +6,7 @@
 
 <script setup>
 // Import vue fonctions
-import { computed, defineProps } from "vue";
+import { computed } from "vue";
 const props = defineProps(["note"]);
 // Import store
 import { useStore } from "vuex";

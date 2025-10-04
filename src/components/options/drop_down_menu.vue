@@ -58,7 +58,7 @@
 
 <script setup>
 // Import vue fonctions
-import { computed, defineProps, defineEmits } from "vue";
+import { computed } from "vue";
 const props = defineProps(["size", "mode"]);
 const emit = defineEmits(["delete", "setColor", "getPDF"]);
 

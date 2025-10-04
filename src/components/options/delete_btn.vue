@@ -11,6 +11,5 @@
 
 <script setup>
 // Import vue fonctions
-import { defineProps } from "vue";
 const props = defineProps(["size", "variant"]);
 </script>

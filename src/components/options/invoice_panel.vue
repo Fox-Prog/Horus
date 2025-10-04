@@ -37,7 +37,7 @@
 
 <script setup>
 // Import vue fonctions
-import { computed, defineProps, defineEmits } from "vue";
+import { computed } from "vue";
 const props = defineProps(["billed", "paid", "dop"]);
 const emit = defineEmits(["billed", "paid"]);
 // Import store

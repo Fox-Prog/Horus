@@ -39,7 +39,7 @@
 
 <script setup>
 // Import vue fonctions
-import { ref, computed, defineProps, defineEmits } from "vue";
+import { ref, computed } from "vue";
 const props = defineProps(["mode", "title", "text", "accept", "cancel"]);
 const emit = defineEmits(["accept", "cancel"]);
 // Import store

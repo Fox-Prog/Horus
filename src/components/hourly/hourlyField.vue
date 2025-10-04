@@ -30,7 +30,7 @@
 
 <script setup>
 // Import vue fonctions
-import { ref, computed, defineEmits, defineProps, watch, onMounted } from "vue";
+import { ref, computed, watch, onMounted } from "vue";
 const props = defineProps(["id", "reset", "data", "fl"]);
 const emit = defineEmits(["data", "remove"]);
 // Import components

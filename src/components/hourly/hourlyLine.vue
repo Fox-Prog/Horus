@@ -63,7 +63,7 @@
 
 <script setup>
 // Import vue fonctions
-import { computed, defineProps, ref } from "vue";
+import { computed, ref } from "vue";
 const props = defineProps(["line"]);
 // Import router
 import { useRouter } from "vue-router";

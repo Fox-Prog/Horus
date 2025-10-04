@@ -57,7 +57,7 @@
 
 <script setup>
 // Import vue fonctions
-import { ref, computed, onMounted, defineEmits } from "vue";
+import { ref, computed, onMounted } from "vue";
 const emit = defineEmits(["changeMode", "search"]);
 // Import js fonctions
 import { getTranslate } from "@/multilanguage/lang";

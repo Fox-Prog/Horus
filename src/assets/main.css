@@ -70,19 +70,19 @@
 
 @font-face {
   font-family: "Orbitron";
-  src: url("/public/fonts/Orbitron.ttf");
+  src: url("/fonts/Orbitron.ttf");
 }
 @font-face {
   font-family: "ShareTech";
-  src: url("/public/fonts/ShareTech.ttf");
+  src: url("/fonts/ShareTech.ttf");
 }
 @font-face {
   font-family: "Alegreya";
-  src: url("/public/fonts/Alegreya.ttf");
+  src: url("/fonts/Alegreya.ttf");
 }
 @font-face {
   font-family: "OpenSans";
-  src: url("/public/fonts/OpenSans.ttf");
+  src: url("/fonts/OpenSans.ttf");
 }
 
 .input-field .v-field__input,

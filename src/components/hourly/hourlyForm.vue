@@ -132,9 +132,7 @@ import {
   onBeforeUnmount,
   ref,
   computed,
-  watch,
-  defineProps,
-  defineEmits,
+  watch
 } from "vue";
 const content = defineProps(["line", "mode"]);
 const emit = defineEmits(["setDone"]);
