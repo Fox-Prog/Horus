@@ -153,7 +153,7 @@ watch(
 );
 
 // Email form
-import emailjs from "emailjs-com";
+import emailjs from "@emailjs/browser";
 
 const form = ref(false);
 const name = ref(null);
